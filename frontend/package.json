@@ -1,0 +1,36 @@
+{
+  "name": "material-ui-vite",
+  "version": "5.0.0",
+  "private": true,
+  "homepage": "https://jrii972.github.io/crom",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^7.0.1",
+    "@mui/joy": "^5.0.0-beta.52",
+    "@mui/material": "^7.0.1",
+    "@mui/x-charts": "^7.28.0",
+    "@mui/x-data-grid": "^7.28.2",
+    "@mui/x-date-pickers": "^7.28.2",
+    "@mui/x-tree-view": "^7.28.1",
+    "dayjs": "^1.11.13",
+    "gh-pages": "^6.3.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "^7.4.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "latest",
+    "typescript": "^5.8.2",
+    "vite": "latest"
+  }
+}

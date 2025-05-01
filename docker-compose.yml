@@ -39,5 +39,18 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dev-frontend
+    volumes:
+      - ./frontend:/app:cached
+    ports:
+      - '3000:3000'
+    command: npm run dev
+    depends_on:
+      - php
+
 volumes:
   db_data:

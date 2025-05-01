@@ -9,7 +9,7 @@ define('DB_USER', 'user');
 define('DB_PASS', 'userpassword');
 
 // CORS headers
-header('Access-Control-Allow-Origin: http://localhost:4000'); // Adjust for your React app's URL
+header('Access-Control-Allow-Origin: http://localhost:3000'); // Adjust for your React app's URL
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type, X-CSRF-Token');
 header('Access-Control-Allow-Credentials: true');
