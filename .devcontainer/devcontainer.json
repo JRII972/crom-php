@@ -1,0 +1,25 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "PHP · MariaDB · phpMyAdmin",
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "php",
+  "workspaceFolder": "/var/www/html",
+
+  // Install these extensions in the container
+  "extensions": [
+    "bmewburn.vscode-intelephense-client",   // PHP intelligence
+    "felixfbecker.php-debug",                // Xdebug support
+    "cweijan.vscode-database-client2",       // Database Client
+    "junstyle.php-cs-fixer"                  // Code formatting
+  ],
+
+  // PHP CLI in the container
+  "settings": {
+    "php.validate.executablePath": "/usr/local/bin/php",
+    "php.executablePath": "/usr/local/bin/php",
+    "intelephense.files.maxSize": 5000000
+  },
+
+  // After the container is built
+  "postCreateCommand": "composer install || true"
+}
