@@ -1,0 +1,29 @@
+/* Thin */
+@font-face {
+    font-family: 'Ravenholm';
+    font-weight: 300;
+    font-style: normal;
+    src: url('/fonts/Ravenholm-Thin.ttf') format('truetype');
+  }
+  /* Bold */
+  @font-face {
+    font-family: 'Ravenholm';
+    font-weight: 700;
+    font-style: normal;
+    src: url('/fonts/Ravenholm-Bold.ttf') format('truetype');
+  }
+  /* Inline (poids intermédiaire ou display) */
+  @font-face {
+    font-family: 'Ravenholm Inline';
+    font-weight: 400;
+    font-style: normal;
+    src: url('/fonts/Ravenholm-Inline.ttf') format('truetype');
+  }
+  /* Color (attention : support variable selon le navigateur) */
+  @font-face {
+    font-family: 'Ravenholm Color';
+    font-weight: 400;
+    font-style: normal;
+    src: url('/fonts/Ravenholm-Color.ttf') format('truetype');
+  }
+  

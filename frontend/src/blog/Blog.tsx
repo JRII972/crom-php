@@ -9,10 +9,6 @@ import Footer from './components/Footer';
 
 export default function Blog(props: { disableCustomTheme?: boolean }) {
   return (
-    <AppTheme {...props}>
-      <CssBaseline enableColorScheme />
-
-      <AppAppBar />
       <Container
         maxWidth="lg"
         component="main"
@@ -21,7 +17,5 @@ export default function Blog(props: { disableCustomTheme?: boolean }) {
         <MainContent />
         <Latest />
       </Container>
-      <Footer />
-    </AppTheme>
   );
 }

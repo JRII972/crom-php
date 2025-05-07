@@ -1,4 +1,4 @@
-const parties = [
+export const parties = [
   {
     "id": 101,
     "date": "2025-04-04",
@@ -6,13 +6,14 @@ const parties = [
     "jeu": "Warhammer",
     "type": "Cmp",
     "lieu": "FSV",
-    "commentaire": "Plongez dans une guerre sans fin contre le Chaos. L’Empire a besoin de héros !",
+    "short_coment": "Plongez dans une guerre sans fin contre le Chaos. L’Empire a besoin de héros !",
     "max_player": 5,
     "players": ["Alice", "Bastien", "Camille", "Damien"],
     "number_of_players_registered": 4,
     "locked": false,
-    "image": "https://warhammer.com/images/chaos_space_marines.jpg",
-    "image_alt": "Chaos Space Marines in battle"
+    "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
+    "image_alt": "Chaos Space Marines in battle",
+    "coment": "Warhammer est un jeu de rôle immersif dans un univers de dark fantasy où l’humanité lutte contre les forces du Chaos dans un monde médiéval brutal. Les joueurs incarnent des héros de l’Empire, confrontés à des cultistes, des mutants et des démons. Le système de jeu, riche et détaillé, met l’accent sur des combats tactiques et des choix aux conséquences souvent tragiques. L’ambiance est sombre, presque désespérée, mais c’est dans cette adversité que les personnages trouvent leur gloire. Parfait pour ceux qui aiment les récits épiques et les dilemmes moraux complexes."
   },
   {
     "id": 102,
@@ -21,13 +22,14 @@ const parties = [
     "jeu": "L’Appel de Cthulhu",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Un mystère indicible vous attend. Survivrez-vous à la folie des Grands Anciens ?",
+    "short_coment": "Un mystère indicible vous attend. Survivrez-vous à la folie des Grands Anciens ?",
     "max_player": 6,
     "players": ["Karine", "Laurent", "Manon", "Nicolas", "Ophélie", "Pascal"],
     "number_of_players_registered": 6,
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/great_old_one_cthulhu.jpg",
-    "image_alt": "Depiction of the Great Old One Cthulhu"
+    "image_alt": "Depiction of the Great Old One Cthulhu",
+    "coment": "L’Appel de Cthulhu est un monument du jeu de rôle, ancré dans l’horreur cosmique de H.P. Lovecraft. Les joueurs, souvent des investigateurs ordinaires, plongent dans des enquêtes où chaque découverte menace leur santé mentale. Le système privilégie l’ambiance et la narration, avec des mécaniques simples mais efficaces pour simuler la fragilité humaine face à l’inconnu. Ce jeu excelle dans la création de tension, où la survie est rare et la victoire toujours amère. Idéal pour les amateurs de mystères oppressants et d’histoires où l’humanité est insignifiante."
   },
   {
     "id": 103,
@@ -36,13 +38,14 @@ const parties = [
     "jeu": "Donjons et Dragons",
     "type": "Cmp",
     "lieu": "MDA",
-    "commentaire": "Une quête épique commence dans les terres oubliées. Affrontez dragons et mystères !",
+    "short_coment": "Une quête épique commence dans les terres oubliées. Affrontez dragons et mystères !",
     "max_player": 5,
     "players": ["François", "Gabrielle", "Hugo", "Isabelle"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://dnd.wizards.com/images/dragon_horde.jpg",
-    "image_alt": "A horde of dragons guarding treasure"
+    "image_alt": "A horde of dragons guarding treasure",
+    "coment": "Donjons et Dragons (D&D) est le jeu de rôle par excellence, définissant le genre depuis les années 1970. Dans cet univers de high fantasy, les joueurs explorent des royaumes remplis de dragons, de sorciers et de trésors cachés. La 5e édition offre un équilibre parfait entre accessibilité pour les novices et profondeur pour les vétérans, avec des mécaniques fluides pour le combat et la narration. Les campagnes, comme celle-ci, permettent des aventures épiques sur plusieurs sessions, où chaque choix forge une légende. Un incontournable pour les amateurs de fantasy héroïque."
   },
   {
     "id": 104,
@@ -51,13 +54,14 @@ const parties = [
     "jeu": "Vampire: La Mascarade",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Dans l’ombre d’Orléans, les vampires règlent leurs comptes. Serez-vous prédateur ou proie ?",
+    "short_coment": "Dans l’ombre d’Orléans, les vampires règlent leurs comptes. Serez-vous prédateur ou proie ?",
     "max_player": 4,
     "players": ["Pascal", "Quentin", "Roxane", "Sébastien"],
     "number_of_players_registered": 4,
     "locked": true,
     "image": "https://worldofdarkness.com/images/vampire_masquerade_clan.jpg",
-    "image_alt": "Vampire clan meeting in the shadows"
+    "image_alt": "Vampire clan meeting in the shadows",
+    "coment": "Vampire: La Mascarade plonge les joueurs dans un monde gothique-punk où les vampires manipulent les mortels tout en luttant pour leur humanité. Chaque personnage appartient à un clan avec ses propres pouvoirs et intrigues, rendant les interactions sociales aussi cruciales que les affrontements. Le système narratif met l’accent sur les dilemmes moraux et les jeux de pouvoir, avec une ambiance de trahison constante. Cette session courte promet une immersion rapide dans un univers de complots nocturnes. Parfait pour ceux qui aiment les histoires de pouvoir et de séduction sombre."
   },
   {
     "id": 105,
@@ -66,13 +70,14 @@ const parties = [
     "jeu": "Donjons et Dragons",
     "type": "Cmp",
     "lieu": "MDA",
-    "commentaire": "La quête se poursuit : un artefact perdu menace l’équilibre du monde.",
+    "short_coment": "La quête se poursuit : un artefact perdu menace l’équilibre du monde.",
     "max_player": 5,
     "players": ["François", "Gabrielle", "Hugo", "Isabelle"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://dnd.wizards.com/images/ancient_artifact.jpg",
-    "image_alt": "An ancient artifact glowing with power"
+    "image_alt": "An ancient artifact glowing with power",
+    "coment": "Donjons et Dragons transporte les joueurs dans des aventures où chaque décision peut changer le destin d’un monde. Cette campagne continue met en scène une quête pour un artefact ancien, mêlant exploration, énigmes et combats épiques. Le système de D&D favorise la créativité, permettant aux joueurs de façonner leurs personnages et leurs stratégies. Les terres fantastiques regorgent de dangers, mais aussi de moments mémorables forgés par la coopération. Un choix idéal pour les amoureux d’histoires grandioses et d’univers immersifs."
   },
   {
     "id": 106,
@@ -81,13 +86,14 @@ const parties = [
     "jeu": "Chroniques Oubliées",
     "type": "1Sht",
     "lieu": "MDA",
-    "commentaire": "Une aventure rapide et héroïque dans un monde médiéval fantastique. À vos dés !",
+    "short_coment": "Une aventure rapide et héroïque dans un monde médiéval fantastique. À vos dés !",
     "max_player": 6,
     "players": ["Alice", "François", "Karine", "Pascal", "Manon"],
     "number_of_players_registered": 5,
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/medieval_knight.jpg",
-    "image_alt": "A medieval knight in armor"
+    "image_alt": "A medieval knight in armor",
+    "coment": "Chroniques Oubliées est un jeu de rôle français accessible, parfait pour des aventures médiévales fantastiques. Son système simplifié, basé sur des profils de personnages modulables, permet de plonger rapidement dans l’action. Les joueurs incarnent des héros classiques – chevaliers, mages ou voleurs – dans des quêtes héroïques remplies de combats et de magie. Cette session courte est idéale pour découvrir le jeu ou vivre une aventure sans engagement à long terme. Un excellent choix pour les débutants comme pour les vétérans en quête de fun immédiat."
   },
   {
     "id": 107,
@@ -96,13 +102,14 @@ const parties = [
     "jeu": "Warhammer",
     "type": "Cmp",
     "lieu": "FSV",
-    "commentaire": "Les ténèbres s’épaississent. Défendez l’Empire contre une nouvelle menace !",
+    "short_coment": "Les ténèbres s’épaississent. Défendez l’Empire contre une nouvelle menace !",
     "max_player": 5,
     "players": ["Alice", "Bastien", "Camille", "Damien"],
     "number_of_players_registered": 4,
     "locked": false,
-    "image": "https://warhammer.com/images/empire_soldiers.jpg",
-    "image_alt": "Empire soldiers defending against darkness"
+    "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
+    "image_alt": "Empire soldiers defending against darkness",
+    "coment": "Warhammer offre une plongée dans un univers où la survie de l’Empire repose sur le courage de quelques héros. Cette campagne met les joueurs face à des menaces grandissantes, où chaque bataille peut être la dernière. Le système de jeu, avec ses carrières variées, permet de créer des personnages uniques, du soldat au sorcier. L’ambiance gritty et les récits épiques capturent l’essence d’un monde au bord du gouffre. Un must pour ceux qui aiment les aventures sombres et les défis héroïques."
   },
   {
     "id": 108,
@@ -111,13 +118,14 @@ const parties = [
     "jeu": "Vampire: La Mascarade",
     "type": "1Sht",
     "lieu": "MDA",
-    "commentaire": "Une nuit de trahisons et de pouvoir. Survivrez-vous à la Mascarade ?",
+    "short_coment": "Une nuit de trahisons et de pouvoir. Survivrez-vous à la Mascarade ?",
     "max_player": 6,
     "players": ["Pascal", "Quentin", "Roxane", "Sébastien", "Théo"],
     "number_of_players_registered": 5,
     "locked": false,
     "image": "https://worldofdarkness.com/images/vampire_night.jpg",
-    "image_alt": "A dark night with lurking vampires"
+    "image_alt": "A dark night with lurking vampires",
+    "coment": "Vampire: La Mascarade est un jeu où les intrigues politiques et les luttes internes des vampires dominent. Les joueurs incarnent des créatures de la nuit, partagés entre leur soif de sang et leur quête d’identité. Le système narratif encourage les dialogues intenses et les choix déchirants, avec des clans aux philosophies distinctes. Cette session courte est une immersion dans un monde de manipulation et de danger constant. Idéal pour ceux qui veulent explorer des récits sombres et des personnages complexes."
   },
   {
     "id": 109,
@@ -126,13 +134,14 @@ const parties = [
     "jeu": "L’Appel de Cthulhu",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Un culte ancien refait surface. Enquêtez avant que la réalité ne s’effondre !",
+    "short_coment": "Un culte ancien refait surface. Enquêtez avant que la réalité ne s’effondre !",
     "max_player": 5,
     "players": ["Damien", "Élodie", "Hugo", "Manon", "Nicolas"],
     "number_of_players_registered": 5,
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/cult_ritual.jpg",
-    "image_alt": "A sinister cult performing a ritual"
+    "image_alt": "A sinister cult performing a ritual",
+    "coment": "L’Appel de Cthulhu excelle à créer une atmosphère d’angoisse où chaque indice découvert rapproche les joueurs de l’abîme. Dans cette session, un culte ancien menace la réalité, et les investigateurs doivent agir vite. Le système de jeu, centré sur la santé mentale, rend chaque révélation aussi dangereuse qu’un combat. Les mécaniques simples laissent place à une narration riche, parfaite pour des histoires immersives. Un jeu incontournable pour les fans d’horreur et d’enquêtes paranormales."
   },
   {
     "id": 110,
@@ -141,13 +150,14 @@ const parties = [
     "jeu": "Donjons et Dragons",
     "type": "Cmp",
     "lieu": "MDA",
-    "commentaire": "Les héros affrontent un ennemi ancestral. Le destin du royaume est en jeu.",
+    "short_coment": "Les héros affrontent un ennemi ancestral. Le destin du royaume est en jeu.",
     "max_player": 5,
     "players": ["François", "Gabrielle", "Hugo", "Isabelle"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://dnd.wizards.com/images/ancient_enemy.jpg",
-    "image_alt": "Heroes facing an ancient enemy"
+    "image_alt": "Heroes facing an ancient enemy",
+    "coment": "Donjons et Dragons brille par sa capacité à tisser des récits épiques, comme cette campagne où un ennemi ancestral menace tout un royaume. Les joueurs, qu’ils soient guerriers ou sorciers, collaborent pour surmonter des défis variés, des pièges mortels aux batailles titanesques. Le système de la 5e édition est flexible, permettant des moments de roleplay profonds et des combats stratégiques. Cette aventure promet des souvenirs mémorables et des héros légendaires. Parfait pour les passionnés de fantasy et de narration collaborative."
   },
   {
     "id": 111,
@@ -156,13 +166,14 @@ const parties = [
     "jeu": "Warhammer",
     "type": "Cmp",
     "lieu": "FSV",
-    "commentaire": "Bataille finale : l’Empire tremble sous les assauts du Chaos. Qui survivra ?",
+    "short_coment": "Bataille finale : l’Empire tremble sous les assauts du Chaos. Qui survivra ?",
     "max_player": 5,
     "players": ["Alice", "Bastien", "Camille", "Damien"],
     "number_of_players_registered": 4,
     "locked": false,
-    "image": "https://warhammer.com/images/final_battle.jpg",
-    "image_alt": "The final battle against Chaos forces"
+    "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
+    "image_alt": "The final battle against Chaos forces",
+    "coment": "Warhammer est synonyme de batailles désespérées dans un univers où l’espoir est rare. Cette campagne culmine dans une bataille finale contre le Chaos, où chaque choix peut sceller le destin de l’Empire. Le système de jeu offre une grande variété de carrières, permettant des personnages uniques et des stratégies diversifiées. L’ambiance est lourde, mais les moments de bravoure héroïque brillent d’autant plus. Un jeu pour ceux qui aiment les récits sombres et les combats où tout est en jeu."
   },
   {
     "id": 112,
@@ -171,29 +182,31 @@ const parties = [
     "jeu": "Chroniques Oubliées",
     "type": "Event",
     "lieu": "FSV",
-    "commentaire": "Événement spécial : une épopée unique avec défis et récompenses exclusives !",
+    "short_coment": "Événement spécial : une épopée unique avec défis et récompenses exclusives !",
     "max_player": 6,
     "players": ["Bastien", "Camille", "Laurent", "Roxane", "Théo", "Élodie"],
     "number_of_players_registered": 6,
     "locked": true,
     "image": "https://chroniquesoubliees.fr/images/epic_quest.jpg",
-    "image_alt": "Heroes on an epic quest"
+    "image_alt": "Heroes on an epic quest",
+    "coment": "Chroniques Oubliées est un jeu de rôle médiéval-fantastique qui brille par sa simplicité et son dynamisme. Cet événement spécial promet une aventure unique, avec des défis taillés pour des héros audacieux. Le système, basé sur des profils personnalisables, permet de se concentrer sur l’histoire et l’action sans règles complexes. Les joueurs vivront une épopée mémorable, ponctuée de combats épiques et de moments de gloire. Idéal pour une expérience intense et accessible à tous les niveaux."
   },
-  {
-    "id": 113,
-    "date": "2025-05-03",
-    "maitre_de_jeu": "Sophie",
-    "jeu": "Vampire: La Mascarade",
-    "type": "1Sht",
-    "lieu": "MDA",
-    "commentaire": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
-    "max_player": 5,
-    "players": ["Karine", "Laurent", "Ophélie", "Pascal"],
-    "number_of_players_registered": 4,
-    "locked": false,
-    "image": "https://worldofdarkness.com/images/clan_war.jpg",
-    "image_alt": "Vampire clans in a bloody conflict"
-  },
+    {
+      "id": 113,
+      "date": "2025-05-03",
+      "maitre_de_jeu": "Sophie",
+      "jeu": "Vampire: La Mascarade",
+      "type": "1Sht",
+      "lieu": "MDA",
+      "short_coment": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
+      "max_player": 5,
+      "players": ["Karine", "Laurent", "Ophélie", "Pascal"],
+      "number_of_players_registered": 4,
+      "locked": false,
+      "image": "https://worldofdarkness.com/images/clan_war.jpg",
+      "image_alt": "Vampire clans in a bloody conflict",
+      "coment": "Vampire: La Mascarade transporte les joueurs dans un monde où les vampires règnent dans l’ombre, déchirés par des luttes de pouvoir. Cette session met en scène un affrontement entre clans, où alliances et trahisons façonnent l’histoire. Le système narratif favorise les interactions sociales et les dilemmes éthiques, avec des mécaniques fluides pour les pouvoirs vampiriques. L’ambiance est lourde, presque cinématographique, parfaite pour une nuit de tension. Un jeu captivant pour les amateurs de drames gothiques et d’intrigues."
+    },
   {
     "id": 114,
     "date": "2025-05-09",
@@ -201,13 +214,14 @@ const parties = [
     "jeu": "L’Appel de Cthulhu",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Un manuscrit maudit révèle des secrets interdits. La sanity est en jeu !",
+    "short_coment": "Un manuscrit maudit révèle des secrets interdits. La sanity est en jeu !",
     "max_player": 4,
     "players": ["Hugo", "Isabelle", "Jérôme", "Manon"],
     "number_of_players_registered": 4,
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/cursed_manuscript.jpg",
-    "image_alt": "A cursed manuscript with forbidden secrets"
+    "image_alt": "A cursed manuscript with forbidden secrets",
+    "coment": "L’Appel de Cthulhu est un jeu où la curiosité est aussi dangereuse que les monstres eux-mêmes. Cette session tourne autour d’un manuscrit maudit, entraînant les joueurs dans une enquête oppressante. Le système de jeu, avec sa gestion de la santé mentale, crée une tension palpable à chaque découverte. Les mécaniques simples mettent l’accent sur l’histoire, rendant chaque moment mémorable. Un choix parfait pour ceux qui aiment les récits d’horreur psychologique et les mystères insondables."
   },
   {
     "id": 115,
@@ -216,13 +230,14 @@ const parties = [
     "jeu": "Donjons et Dragons",
     "type": "Cmp",
     "lieu": "MDA",
-    "commentaire": "Conclusion épique : le sort du monde repose sur vos épaules.",
+    "short_coment": "Conclusion épique : le sort du monde repose sur vos épaules.",
     "max_player": 5,
     "players": ["François", "Gabrielle", "Hugo", "Isabelle"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://dnd.wizards.com/images/epic_conclusion.jpg",
-    "image_alt": "Heroes in an epic world-saving battle"
+    "image_alt": "Heroes in an epic world-saving battle",
+    "coment": "Donjons et Dragons atteint des sommets dans cette campagne où le destin du monde est en jeu. Les joueurs, héros aguerris, affrontent des défis ultimes dans une conclusion épique. Le système de la 5e édition permet des combats tactiques et des moments de roleplay riches, avec une grande liberté pour façonner l’histoire. Cette aventure est le point culminant d’une saga, promettant des émotions fortes et des souvenirs durables. Un must pour les fans de fantasy épique et de narration collaborative."
   },
   {
     "id": 116,
@@ -231,13 +246,14 @@ const parties = [
     "jeu": "Warhammer",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !",
+    "short_coment": "Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !",
     "max_player": 6,
     "players": ["Alice", "Bastien", "Camille", "Pascal", "Roxane"],
     "number_of_players_registered": 5,
     "locked": false,
-    "image": "https://warhammer.com/images/brutal_battle.jpg",
-    "image_alt": "A brutal battle in the Old World"
+    "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
+    "image_alt": "A brutal battle in the Old World",
+    "coment": "Warhammer propose une plongée brutale dans le Vieux Monde, où chaque bataille est un test de courage. Cette session courte met les joueurs au cœur d’un affrontement sans merci contre les forces du Chaos. Le système, avec ses carrières variées, permet de créer des personnages hauts en couleur, prêts à tout pour la gloire. L’ambiance est sombre, mais les actes héroïques brillent dans l’adversité. Un jeu idéal pour ceux qui aiment l’action intense et les récits tragiques."
   },
   {
     "id": 117,
@@ -246,13 +262,14 @@ const parties = [
     "jeu": "Vampire: La Mascarade",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Une nuit de trahisons et de pouvoir. Survivrez-vous à la Mascarade ?",
+    "short_coment": "Une nuit de trahisons et de pouvoir. Survivrez-vous à la Mascarade ?",
     "max_player": 5,
     "players": ["Karine", "Laurent", "Ophélie", "Quentin", "Sébastien"],
     "number_of_players_registered": 5,
     "locked": true,
     "image": "https://worldofdarkness.com/images/vampire_betrayal.jpg",
-    "image_alt": "A vampire betraying another in the night"
+    "image_alt": "A vampire betraying another in the night",
+    "coment": "Vampire: La Mascarade est un jeu où chaque nuit est une danse de pouvoir et de trahison. Les joueurs incarnent des vampires luttant pour leur place dans une société secrète, où la moindre erreur peut être fatale. Le système narratif met l’accent sur les interactions et les choix moraux, avec des pouvoirs vampiriques ajoutant une touche dramatique. Cette session promet une immersion dans un monde de complots et de passions sombres. Parfait pour les fans de récits gothiques et de drames intenses."
   },
   {
     "id": 118,
@@ -261,13 +278,14 @@ const parties = [
     "jeu": "Chroniques Oubliées",
     "type": "1Sht",
     "lieu": "MDA",
-    "commentaire": "Une quête héroïque contre un dragon oublié. Prenez votre courage à deux mains !",
+    "short_coment": "Une quête héroïque contre un dragon oublié. Prenez votre courage à deux mains !",
     "max_player": 6,
     "players": ["Damien", "Élodie", "François", "Gabrielle"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/dragon_slayer.jpg",
-    "image_alt": "A hero slaying a forgotten dragon"
+    "image_alt": "A hero slaying a forgotten dragon",
+    "coment": "Chroniques Oubliées offre une aventure fantastique accessible, où les héros affrontent des défis légendaires comme ce dragon oublié. Le système, simple et intuitif, permet de se concentrer sur l’histoire et les combats épiques sans se perdre dans les règles. Les joueurs peuvent personnaliser leurs personnages pour vivre une quête taillée pour l’héroïsme. Cette session courte est parfaite pour une soirée d’action et de bravoure. Un excellent choix pour tous ceux qui veulent une dose de fantasy sans complication."
   },
   {
     "id": 119,
@@ -276,13 +294,14 @@ const parties = [
     "jeu": "L’Appel de Cthulhu",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Un culte ancien refait surface. Enquêtez avant que la réalité ne s’effondre !",
+    "short_coment": "Un culte ancien refait surface. Enquêtez avant que la réalité ne s’effondre !",
     "max_player": 5,
     "players": ["Damien", "Élodie", "Hugo", "Manon"],
     "number_of_players_registered": 4,
     "locked": false,
     "image": "https://cthulhu-rpg.com/artwork/ancient_cult.jpg",
-    "image_alt": "An ancient cult resurfacing"
+    "image_alt": "An ancient cult resurfacing",
+    "coment": "L’Appel de Cthulhu plonge les joueurs dans une enquête où l’horreur cosmique menace de tout engloutir. Cette session, centrée sur un culte ancien, promet une tension constante et des révélations terrifiantes. Le système de jeu, avec sa mécanique de santé mentale, rend chaque découverte risquée, ajoutant une profondeur psychologique unique. Les mécaniques simples favorisent une narration immersive, parfaite pour des histoires oppressantes. Un jeu incontournable pour les amateurs de frissons et de mystères insondables."
   },
   {
     "id": 120,
@@ -291,13 +310,14 @@ const parties = [
     "jeu": "Donjons et Dragons",
     "type": "1Sht",
     "lieu": "MDA",
-    "commentaire": "Une aventure unique dans un donjon perdu. Trésors et dangers garantis !",
+    "short_coment": "Une aventure unique dans un donjon perdu. Trésors et dangers garantis !",
     "max_player": 6,
     "players": ["Alice", "Bastien", "Camille", "Sébastien", "Théo"],
     "number_of_players_registered": 5,
     "locked": false,
     "image": "https://dnd.wizards.com/images/lost_dungeon.jpg",
-    "image_alt": "Explorers in a lost dungeon"
+    "image_alt": "Explorers in a lost dungeon",
+    "coment": "Donjons et Dragons excelle dans les aventures courtes comme celle-ci, où un donjon perdu regorge de trésors et de périls. Les joueurs explorent, combattent et résolvent des énigmes dans un cadre classique de high fantasy. Le système de la 5e édition offre une grande flexibilité, permettant des personnages variés et des stratégies créatives. Cette session est parfaite pour une soirée d’action et de découverte, avec des moments mémorables garantis. Idéal pour les fans de fantasy et d’aventures palpitantes."
   },
   {
     "id": 121,
@@ -306,13 +326,14 @@ const parties = [
     "jeu": "Vampire: La Mascarade",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
+    "short_coment": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
     "max_player": 4,
     "players": ["Karine", "Laurent", "Ophélie", "Pascal"],
     "number_of_players_registered": 4,
     "locked": true,
     "image": "https://worldofdarkness.com/images/bloody_clans.jpg",
-    "image_alt": "Vampire clans in a bloody confrontation"
+    "image_alt": "Vampire clans in a bloody confrontation",
+    "coment": "Vampire: La Mascarade offre une immersion dans un monde où les vampires se livrent à des guerres secrètes pour le pouvoir. Cette session met en lumière un affrontement entre clans, où chaque joueur doit naviguer dans un réseau de trahisons. Le système narratif, avec ses mécaniques de disciplines vampiriques, enrichit les interactions et les conflits. L’ambiance gothique et les dilemmes moraux créent une expérience unique. Un jeu parfait pour ceux qui aiment les récits de pouvoir et les intrigues sombres."
   },
   {
     "id": 122,
@@ -321,13 +342,14 @@ const parties = [
     "jeu": "Chroniques Oubliées",
     "type": "1Sht",
     "lieu": "FSV",
-    "commentaire": "Une quête héroïque contre un dragon oublié. Prenez votre courage à deux mains !",
+    "short_coment": "Une quête héroïque contre un dragon oublié. Prenez votre courage à deux mains !",
     "max_player": 6,
     "players": ["Damien", "Élodie", "François", "Gabrielle", "Théo"],
     "number_of_players_registered": 5,
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/forgotten_dragon.jpg",
-    "image_alt": "A forgotten dragon menacing heroes"
+    "image_alt": "A forgotten dragon menacing heroes",
+    "coment": "Chroniques Oubliées est un jeu de rôle qui allie simplicité et heroic fantasy, idéal pour des quêtes épiques comme celle-ci contre un dragon oublié. Le système fluide permet de créer des personnages variés et de plonger directement dans l’aventure. Les combats sont dynamiques, et les défis narratifs captivants, offrant un équilibre parfait entre action et roleplay. Cette session courte promet une soirée mémorable, accessible à tous. Un excellent choix pour les amateurs de fantasy classique et d’histoires héroïques."
   },
   {
     "id": 123,
@@ -336,13 +358,14 @@ const parties = [
     "jeu": "Warhammer",
     "type": "1Sht",
     "lieu": "MDA",
-    "commentaire": "Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !",
+    "short_coment": "Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !",
     "max_player": 5,
     "players": ["Alice", "Bastien", "Camille", "Pascal", "Roxane"],
     "number_of_players_registered": 5,
     "locked": true,
-    "image": "https://warhammer.com/images/glory_or_death.jpg",
-    "image_alt": "Warriors fighting for glory or death"
+    "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
+    "image_alt": "Warriors fighting for glory or death",
+    "coment": "Warhammer conclut ce calendrier avec une bataille brutale dans son univers dark fantasy. Les joueurs, héros de l’Empire, affrontent des ennemis implacables dans une session courte mais intense. Le système de jeu, avec ses carrières et ses mécaniques tactiques, permet des affrontements riches en stratégie. L’ambiance est oppressante, mais les moments de triomphe sont d’autant plus gratifiants. Un jeu parfait pour ceux qui veulent une dose d’action sombre et d’héroïsme désespéré."
   }
 ];
 
