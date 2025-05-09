@@ -5,15 +5,17 @@ import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
 import theme from './theme';
 
+import AppTheme from './shared-theme/AppTheme';
+
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <AppTheme>
       {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline />
       <App />
-    </ThemeProvider>
+    </AppTheme>
   </React.StrictMode>,
 );

@@ -18,6 +18,11 @@ import {
   Divider,
   CardActions,
   Collapse,
+  useMediaQuery,
+  useTheme,
+  Stack,
+  Grid,
+  useColorScheme,
 } from '@mui/material';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import GameSession from '../../types/GameSession';
@@ -33,11 +38,102 @@ interface PartyCardProps {
 
 // TODO: FIX card size adjust
 
+const PartyCardSubInfo: FC<{ 
+  partie: GameSession; 
+  commentSize: string; 
+  isMobileScreen: boolean }> = ({ partie, commentSize, isMobileScreen }) => {
+  
+  if (!partie) return null;
+  // if (!isMobileScreen) return (
+  //   <Box
+  //     sx={{
+  //       display: 'inline-flex',
+  //       flexDirection: 'row',
+  //       alignItems: 'center',
+  //     }}
+  //   >
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.maitre_de_jeu}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.type}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.lieu}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     {playerNumber(partie, commentSize, isMobileScreen)}
+  //   </Box>
+  // );
+  
+  return (
+    <Grid container spacing={0} sx={{ alignItems: 'center', justifyContent: 'center' }}>
+
+    <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+      <Typography variant="subtitle2" sx={{ fontSize: commentSize, whiteSpace: 'nowrap' }}>
+        {partie.maitre_de_jeu} 4444444444
+      </Typography>
+      <Divider
+        orientation="vertical"
+        variant="middle"
+        flexItem
+        sx={{ mx: 0.5 }}
+      />
+      <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+        {partie.type}
+        {/* TODO: Changer ce qui est ecrit en fonction de l'espace disponible */}
+      </Typography>
+    </Stack>
+
+      <Divider
+        orientation="vertical"
+        variant="middle"
+        flexItem
+        sx={{ mx: 0.5 }}
+      />
+    <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+      <Typography variant="subtitle2" sx={{ fontSize: commentSize,  whiteSpace: 'nowrap'  }}>
+        {partie.lieu}
+      </Typography>
+      <Divider
+        orientation="vertical"
+        variant="middle"
+        flexItem
+        sx={{ mx: 0.5 }}
+      />
+      {playerNumber(partie, commentSize, isMobileScreen)}
+    </Stack>
+    </Grid>
+  );
+}
+
 const PartyCard: FC<PartyCardProps> = ({ partie }) => {
   // états
   const [loaded, setLoaded] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const theme = useTheme();
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const { mode, systemMode, setMode } = useColorScheme();
+  const actualMode = systemMode || mode;
 
   //TODO: Scroll quand survolle
   // 1) ref pour le contenu du Collapse
@@ -71,31 +167,48 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
     setLoaded(true);
   };
 
+  // Change les tailles de la carte en fonction de la taille de l'écran
+  const cardStyles = {
+    minWidth: isMobileScreen ? 160 : 200,
+    height: isMobileScreen ? 300 : 350,
+    display: 'flex',
+    alignItems: 'stretch',
+    maxWidth: isMobileScreen ? 400 : 550,
+    px: isMobileScreen ? 1 : 2,
+  };
+
+  const cardImageSize = isMobileScreen ? 100 : 140;
+  const titleSize = isMobileScreen ? '1em' : '1.15em';
+  const subTitleSize = isMobileScreen ? '0.8em' : '0.9em';
+  const subTitleLineHeight = isMobileScreen ? '0.8em' : '0.9em';
+  const commentSize = isMobileScreen ? '0.75em' : '0.85em';
+  const playerListPadding = isMobileScreen ? 0 : 0;
+
   return (
     <Card
-      sx={{
-        minWidth: 200,
-        height: 350,
-        display: 'flex',
-        alignItems: 'stretch',
-        maxWidth: 550,
-      }}
+      sx={cardStyles}
       key={partie.id}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+
+      variant={actualMode === 'light' ? 'outlined' : ''}
     >
-      <Box sx={{ width: 200 }}>
+      <Box sx={{ 
+        display: 'flex',
+        flexDirection: 'column',
+        width: cardStyles.minWidth, 
+        justifyContent: 'space-between' }}>
         <CardActionArea
         component={Link}
         to={"./partie/" + partie.id}
         >
           {!loaded && !error && (
-            <Skeleton variant="rectangular" width="100%" height={140} />
+            <Skeleton variant="rectangular" width="100%" height={cardImageSize} />
           )}
           {!error && (
             <CardMedia
               component="img"
-              height={140}
+              height={cardImageSize}
               image={partie.image}
               alt={partie.image_alt}
               onLoad={handleImageLoad}
@@ -105,7 +218,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
           )}
           {error && (
             <Box
-              height={140}
+              height={cardImageSize}
               display="flex"
               alignItems="center"
               justifyContent="center"
@@ -118,7 +231,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
               sx={{
                   textalign: 'center',
                   alignItems: 'center',
-                  fontSize: '1.3em',
+                  fontSize: titleSize,
                   whiteSpace: 'nowrap',
               }}
             >
@@ -126,45 +239,16 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
             </Typography>
             <Typography gutterBottom variant="overline" component="div" 
               sx={{
-                  lineHeight: '1.2',
+                  fontSize: subTitleSize,
+                  lineHeight: subTitleLineHeight,
                   alignItems: 'center',
               }}
               >
               {partie.jeu}
             </Typography>
 
-            <Box
-              sx={{
-                display: 'inline-flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="subtitle2">
-                {partie.maitre_de_jeu}
-              </Typography>
-              <Divider
-                orientation="vertical"
-                variant="middle"
-                flexItem
-                sx={{ mx: 0.5 }}
-              />
-              <Typography variant="subtitle2">{partie.type}</Typography>
-              <Divider
-                orientation="vertical"
-                variant="middle"
-                flexItem
-                sx={{ mx: 0.5 }}
-              />
-              <Typography variant="subtitle2">{partie.lieu}</Typography>
-              <Divider
-                orientation="vertical"
-                variant="middle"
-                flexItem
-                sx={{ mx: 0.5 }}
-              />
-              {playerNumber(partie)}
-            </Box>
+            <PartyCardSubInfo partie={partie} commentSize={commentSize} isMobileScreen={isMobileScreen}/>
+            
             <Typography
               variant="body2"
               sx={{
@@ -174,6 +258,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
                 WebkitLineClamp: 3,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
+                fontSize: commentSize,
               }}
             >
               {partie.short_coment}
@@ -183,9 +268,8 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
 
         <CardActions
           sx={{
-            px: 2,
-            pt: 1.5,
-            pb: 1.2,
+            pt: playerListPadding,
+            pb: playerListPadding,
             display: 'flex',
             flexWrap: 'wrap',
             gap: 0.5,
@@ -198,6 +282,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
             maxWidth={200} // Largeur maximale en pixels
             spaceWidth={5} // Espace avant le séparateur en pixels
             separator=", " // Séparateur entre les noms
+            fontSize={commentSize} // Taille de la police
           />
         </CardActions>
       </Box>

@@ -60,13 +60,12 @@ function playerNumber(partie:GameSession) {
 export default function PartiesCard(parties:GameSession[]) {
   const sessions = groupByDate(Object.values(parties));
   
-  console.log(groupedParties)
   return (
     <Box sx={{ width: '100%'}}>
 
       {/* Section dédier au proposition */}
       <Box>
-        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
+        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0, mx:2 }}>
           Qui pourrais vous intérrésser
         </Typography>
 
@@ -82,7 +81,7 @@ export default function PartiesCard(parties:GameSession[]) {
 
       {/* Section semaine prochaine */}
       <Box>
-        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
+        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0, mx: 2 }}>
           La semaine prochaine
         </Typography>
 
@@ -96,7 +95,7 @@ export default function PartiesCard(parties:GameSession[]) {
 
       {groupedParties.map((week:WeekSessions) => (
         <Box key={week.titre}>
-          <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
+          <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0, mx: 2 }}>
             {week.titre}
           </Typography>
           {/* <Typography variant="subtitle1" sx={{ mb: 2, marginTop:0, paddingLeft:'1em' }}>
@@ -120,5 +119,6 @@ export default function PartiesCard(parties:GameSession[]) {
 
 
     </Box>
-  );
+  ); 
+  
 }

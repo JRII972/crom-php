@@ -25,6 +25,7 @@ import OptionsMenu from './OptionsMenu';
 import SideMenuUser from './SideMenuUser';
 import SelectContent from './SelectContent';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import { LogoIcon } from '../utils/utils';
 
 const drawerWidth = 240;
 
@@ -58,15 +59,13 @@ export default function SideMenu() {
         }}
       >
         {/* <SideMenuUser /> */}
-        <SelectContent />
-        {/* <MenuItem value="">
+        {/* <SelectContent /> */}
+        <MenuItem value="">
           <ListItemAvatar>
-            <Avatar alt="Sitemark web">
-              <DevicesRoundedIcon sx={{ fontSize: '1rem' }} />
-            </Avatar>
+            <Avatar color="inherit" alt="Logo BDR" src="/data/images/logo-bdr.png"  sx={{ fontSize: '3rem', bgcolor: 'transparent' }} />
           </ListItemAvatar>
-          <ListItemText primary="Sitemark-web" secondary="Web app" />
-        </MenuItem> */}
+          {/* <ListItemText primary="Les Batisseurs de rève" secondary="CROM" /> */}
+        </MenuItem>
       </Box>
       <Divider />
       <Box

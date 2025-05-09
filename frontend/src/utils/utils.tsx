@@ -6,14 +6,14 @@ import LockOutlineIcon from '@mui/icons-material/LockOutline';
 
 import { GameSession } from '../party-tab/PartiesCards';
 
-export function playerNumber(partie:GameSession) {
+export function playerNumber(partie:GameSession, fontSize?:string, isMobileScreen:boolean = false) {
   if (partie.locked) {
     return(
-      <LockOutlineIcon fontSize="small"/>
+      <LockOutlineIcon fontSize={fontSize ? fontSize : "small"}/>
     )
   } else {
     return(
-      <Typography gutterBottom variant="subtitle2" component="div" m="0 0 0 0">
+      <Typography gutterBottom variant="subtitle2" component="div" m="0 0 0 0" fontSize={fontSize ? fontSize : ""} sx={{ whiteSpace: 'nowrap' }}>
         {partie.number_of_players_registered}/{partie.max_player} joueurs
       </Typography>
     )

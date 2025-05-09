@@ -39,12 +39,11 @@ function formatDateToFrench(date: Date): string {
 
 
 export default function CardsRolls({ title, sessions }: { title: string; sessions: GameSession[] }): React.ReactElement {
-  console.log(sessions)
   return (
     <Stack 
       direction='column'
       spacing={1} 
-      sx={{ paddingBottom:'1em', paddingTop:'1em'}}>
+      sx={{ paddingBottom:'1em', paddingTop:'1em', mx: 1}}>
       <Box sx={{ display:'inline-flex', gap:'1em'}}>
         <Typography variant="subtitle1" sx={{ 
           paddingLeft:'1em',

@@ -4,15 +4,14 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { alpha } from '@mui/material/styles';
+import { alpha, useColorScheme, useTheme } from '@mui/material/styles';
 
-import AppTheme from '../shared-theme/AppTheme';
 import SideMenu from './SideMenu';
 import AppNavbar from './AppNavbar';
 import Header from './Header';
 import { useCurrentMeta } from '../utils/utils';
 
-export interface MainPageProps extends React.ComponentProps<typeof AppTheme> {
+export interface MainPageProps {
   /** Titre affiché dans le header */
   title: string;
   /** État de connexion de l’utilisateur (ex. true si connecté) */
@@ -25,10 +24,23 @@ const MainPage: React.FC<MainPageProps> = ({
   title,
   connected,
   children,
-  ...themeProps
 }) => {
+
+  // const theme = useTheme();
+  
+  // // Access background.defaultChannel based on the theme mode
+  // const { mode, systemMode, setMode } = useColorScheme();
+  // console.log('Theme Mode:', mode);
+  // console.log('System Mode:', systemMode);
+  // const isDarkMode = theme.palette.mode === 'dark';
+  // const backgroundDefaultChannel = theme.palette.background;
+  // console.log('Background Default Channel:', backgroundDefaultChannel);
+
+  // console.log('Theme Mode:', isDarkMode ? 'Dark' : 'Light');
+  // console.log('Background Default Channel:', backgroundDefaultChannel);
+
   return (
-    <AppTheme {...themeProps}>
+    <>
       {/* TODO: Fix this import and material symbol */}
       <link
         rel="stylesheet"
@@ -40,19 +52,16 @@ const MainPage: React.FC<MainPageProps> = ({
         <AppNavbar />
         <Box
           component="main"
-          sx={(theme) => ({
+          sx={{
             flexGrow: 1,
-            backgroundColor: theme.vars
-              ? `rgba(${theme.vars.palette.background.defaultChannel} / 1)`
-              : alpha(theme.palette.background.default, 1),
+            bgcolor: 'background.lightPurple',
             overflow: 'auto',
-          })}
+          }}
         >
           <Stack
             spacing={2}
             sx={{
               alignItems: 'center',
-              backgroundColor: '#fee',
               pb: 5,
               mt: { xs: 8, md: 0 },
             }}
@@ -73,7 +82,7 @@ const MainPage: React.FC<MainPageProps> = ({
           </Stack>
         </Box>
       </Box>
-    </AppTheme>
+    </>
   );
 };
 

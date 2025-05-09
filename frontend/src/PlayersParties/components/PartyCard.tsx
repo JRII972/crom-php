@@ -74,7 +74,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
   return (
     <Card
       sx={{
-        minWidth: 200,
+        minWidth: 150,
         height: 350,
         display: 'flex',
         alignItems: 'stretch',
@@ -84,7 +84,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Box sx={{ width: 200 }}>
+      <Box sx={{ width: 150 }}>
         <CardActionArea
         component={Link}
         to={"./partie/" + partie.id}
@@ -95,7 +95,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
           {!error && (
             <CardMedia
               component="img"
-              height={140}
+              height={100}
               image={partie.image}
               alt={partie.image_alt}
               onLoad={handleImageLoad}

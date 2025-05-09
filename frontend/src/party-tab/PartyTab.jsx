@@ -11,11 +11,13 @@ import PartiesTables from './PartiesTables';
 import PartiesRecomendations from './PartiesRecomendations';
 import MainPage from '../components/MainPage';
 import PartiesCard from './PartiesCards'
-import { Stack } from '@mui/material';
+import { Stack, useMediaQuery, useTheme } from '@mui/material';
 
 
 export default function PartyTab(props) {
-
+    
+    const theme = useTheme();
+    const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [view, setView] = React.useState(localStorage.getItem( 'partyPageSate' ) || 'list');
 
     const handleChange = (event, nextView) => {
@@ -24,18 +26,18 @@ export default function PartyTab(props) {
     };
 
     
-    
+    const stackWidht = isMobileScreen ? '100%' : '90%';
 
     return (
         <Stack
-                    spacing={2}
-                    sx={{
-                    alignItems: 'center',
-                    mx: 3,
-                    pb: 5,
-                    mt: { xs: 8, md: 0, width: '90%' },
-                    }}
-                >
+            spacing={2}
+            sx={{
+            alignItems: 'center',
+            px: 0,
+            pb: 5,
+            width: stackWidht ,
+            }}
+        >
             {/* <Paper elevation={3}>
                 <Box margin={1}>
                     <Typography variant='subtitle2'>

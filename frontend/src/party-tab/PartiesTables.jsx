@@ -47,7 +47,7 @@ export default function PartiesTables(parties) {
     const [expanded, setExpanded] = useState(false);
 
     return(
-      <div>
+      <Box sx={{ width: '100%', px: 1}}>
       {Object.keys(sessions).map((date) => (
         // TODO Mettre un meilleur ID 
         <Box sx={{ width: '100%', paddingBottom: '1em'}} key={'session-'+date}>
@@ -62,6 +62,6 @@ export default function PartiesTables(parties) {
         <Divider sx={{marginTop: '2em'}} orientation="horizontal" variant="middle" flexItem  />
         </Box>
         ))}
-      </div>
+      </Box>
       )
   }

@@ -16,6 +16,7 @@ interface PlayersDisplayProps {
   maxWidth: number; // Largeur maximale en pixels
   spaceWidth?: number; // Largeur de l'espace entre les noms en pixels (avant le séparateur)
   separator?: string; // Séparateur entre les noms (ex. ", ", "- ")
+  fontSize?: string; // Taille de la police (ex. "12px", "1rem")
 }
 
 // Utilitaire pour mesurer la largeur d'un texte en pixels
@@ -121,6 +122,7 @@ const PlayersDisplay: React.FC<PlayersDisplayProps> = ({
   maxWidth,
   spaceWidth = 5,
   separator = ', ',
+  fontSize = '',
 }) => {
   const [lines, setLines] = useState<Line[]>([]);
 
@@ -135,9 +137,9 @@ const PlayersDisplay: React.FC<PlayersDisplayProps> = ({
   }, [players, maxWidth, spaceWidth, separator]);
 
   return (
-    <Stack className="players-container" style={{ width: `${maxWidth}px` }}>
+    <Stack  style={{ width: `${maxWidth}px` }}>
       {lines.length === 0 && (
-        <Typography variant="overline" sx={{ lineHeight: 1.2, textAlign: 'center' }}>
+        <Typography variant="overline" sx={{ lineHeight: 1.2, textAlign: 'center', fontSize:fontSize }}>
           Aucun joueur
         </Typography>
       )}
@@ -145,7 +147,7 @@ const PlayersDisplay: React.FC<PlayersDisplayProps> = ({
         <Typography
           key={index}
           variant="overline"
-          sx={{ lineHeight: 1.2, textAlign: 'center', whiteSpace: 'nowrap' }}
+          sx={{ lineHeight: 1.2, textAlign: 'center', whiteSpace: 'nowrap', fontSize:fontSize  }}
         >
           {line.players.join(separator)}
         </Typography>
@@ -154,17 +156,17 @@ const PlayersDisplay: React.FC<PlayersDisplayProps> = ({
   );
 };
 
-// CSS intégré pour le style
-const styles = `
-  .players-container {
-    box-sizing: border-box;
-    font-family: Roboto, sans-serif;
-  }
-`;
+// // CSS intégré pour le style
+// const styles = `
+//   .players-container {
+//     box-sizing: border-box;
+//     font-family: Roboto, sans-serif;
+//   }
+// `;
 
-// Injecter les styles dans le DOM
-const styleSheet = document.createElement('style');
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
+// // Injecter les styles dans le DOM
+// const styleSheet = document.createElement('style');
+// styleSheet.textContent = styles;
+// document.head.appendChild(styleSheet);
 
 export default PlayersDisplay;
