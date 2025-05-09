@@ -52,7 +52,7 @@ export default function PartiesTables(parties) {
         // TODO Mettre un meilleur ID 
         <Box sx={{ width: '100%', paddingBottom: '1em'}} key={'session-'+date}>
         <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-            Partie du {date}
+            Partie du {date} 
         </Typography>
         {isMobile() ? <PartyAccordillonTable 
                         party={sessions[date]}

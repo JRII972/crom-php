@@ -88,7 +88,7 @@ const PartyCardSubInfo: FC<{
 
     <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography variant="subtitle2" sx={{ fontSize: commentSize, whiteSpace: 'nowrap' }}>
-        {partie.maitre_de_jeu} 4444444444
+        {partie.maitre_de_jeu}
       </Typography>
       <Divider
         orientation="vertical"
@@ -192,41 +192,59 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
       onMouseLeave={handleMouseLeave}
 
       variant={actualMode === 'light' ? 'outlined' : ''}
+      sx={{
+        p: 1,
+       }}
     >
       <Box sx={{ 
         display: 'flex',
         flexDirection: 'column',
         width: cardStyles.minWidth, 
         justifyContent: 'space-between' }}>
+
         <CardActionArea
-        component={Link}
-        to={"./partie/" + partie.id}
+          component={Link}
+          to={"./partie/" + partie.id}
         >
-          {!loaded && !error && (
-            <Skeleton variant="rectangular" width="100%" height={cardImageSize} />
-          )}
-          {!error && (
-            <CardMedia
-              component="img"
-              height={cardImageSize}
-              image={partie.image}
-              alt={partie.image_alt}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              sx={{ display: loaded ? 'block' : 'none' }}
-            />
-          )}
-          {error && (
-            <Box
-              height={cardImageSize}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <BrokenImageIcon fontSize="large" color="disabled" />
-            </Box>
-          )}
-          <CardContent>
+          <Box
+           sx={{
+            p: 0.5,
+           }}
+          >
+            {!loaded && !error && (
+              <Skeleton variant="rectangular" width="100%" height={cardImageSize} />
+            )}
+            {!error && (
+              <CardMedia
+                component="img"
+                height={cardImageSize}
+                image={partie.image}
+                alt={partie.image_alt}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+                sx={{ display: loaded ? 'block' : 'none' }}
+              />
+            )}
+            {error && (
+              <Box
+                height={cardImageSize}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <BrokenImageIcon fontSize="large" color="disabled" />
+              </Box>
+            )}
+          </Box>
+
+          <Divider sx={{ my: 1 }}/>
+
+          <CardContent
+            sx={{
+              backgroundColor: 'background.card',
+              p: 1,
+            }}
+          >
             <Typography variant="h5" component="div" 
               sx={{
                   textalign: 'center',
@@ -274,6 +292,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
             flexWrap: 'wrap',
             gap: 0.5,
             justifyContent: 'center',
+            backgroundColor: 'background.card',
           }}
         >
           

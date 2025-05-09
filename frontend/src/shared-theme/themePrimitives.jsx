@@ -43,6 +43,19 @@ export const brandAnalogousRed = {
   900: '#81174c',
 };
 
+export const silver = {
+  50: '#fff9ec',
+  100: '#fdf3e7',
+  200: '#f6ece0',
+  300: '#e7ded2',
+  400: '#c4bbaf',
+  500: '#a59c90',
+  600: '#7b7368',
+  700: '#675f55',
+  800: '#474036',
+  900: '#251f16',
+};
+
 
 export const gray = {
   50: 'hsl(220, 35%, 97%)',
@@ -133,7 +146,8 @@ export const colorSchemes = {
       background: {
         default: 'hsl(0, 0%, 99%)',
         lightRed: brandAnalogousRed[50],
-        lightPurple: brandAnalogousPurple[50],
+        surface: 'hsl(0, 0%, 99%)',
+        card: gray[50],
         paper: brand[50], //#F9F5FA
       },
       text: {
@@ -184,8 +198,9 @@ export const colorSchemes = {
       divider: alpha(gray[700], 0.6),
       background: {
         default: gray[900],
-        lightPurple: brand[900],
-        paper: brand[800],
+        surface: gray[900],        
+        card: `${alpha(gray[700], 0.4)}`,
+        paper: gray[800],
       },
       text: {
         primary: 'hsl(0, 0%, 100%)',

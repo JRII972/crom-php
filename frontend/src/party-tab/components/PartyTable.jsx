@@ -43,6 +43,7 @@ const groupByDate = (array) => {
 };
 
 export default function PartyTable({party}) {
+  console.log('PartyTable', party[0].date);
     return(
       <TableContainer component={Paper}>
         <Table sx={{ width: "100%" }} aria-label="customized table" stickyHeader>

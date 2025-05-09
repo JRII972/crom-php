@@ -54,7 +54,7 @@ const MainPage: React.FC<MainPageProps> = ({
           component="main"
           sx={{
             flexGrow: 1,
-            bgcolor: 'background.lightPurple',
+            bgcolor: 'background.surface',
             overflow: 'auto',
           }}
         >
