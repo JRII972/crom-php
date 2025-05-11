@@ -10,6 +10,7 @@ import SideMenu from './SideMenu';
 import AppNavbar from './AppNavbar';
 import Header from './Header';
 import { useCurrentMeta } from '../utils/utils';
+import { useMediaQuery } from '@mui/material';
 
 export interface MainPageProps {
   /** Titre affiché dans le header */
@@ -39,6 +40,10 @@ const MainPage: React.FC<MainPageProps> = ({
   // console.log('Theme Mode:', isDarkMode ? 'Dark' : 'Light');
   // console.log('Background Default Channel:', backgroundDefaultChannel);
 
+  const theme = useTheme();
+  const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const stackWidht = isMobileScreen ? '100%' : '90%';
+
   return (
     <>
       {/* TODO: Fix this import and material symbol */}
@@ -56,14 +61,17 @@ const MainPage: React.FC<MainPageProps> = ({
             flexGrow: 1,
             bgcolor: 'background.surface',
             overflow: 'auto',
+            alignItems: 'center',
           }}
         >
           <Stack
             spacing={2}
             sx={{
+              margin: 'auto',
               alignItems: 'center',
               pb: 5,
               mt: { xs: 8, md: 0 },
+              width: stackWidht
             }}
           >
             <Header />

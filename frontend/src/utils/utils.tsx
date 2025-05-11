@@ -13,7 +13,7 @@ export function playerNumber(partie:GameSession, fontSize?:string, isMobileScree
     )
   } else {
     return(
-      <Typography gutterBottom variant="subtitle2" component="div" m="0 0 0 0" fontSize={fontSize ? fontSize : ""} sx={{ whiteSpace: 'nowrap' }}>
+      <Typography gutterBottom variant="subtitle1" component="div" m="0 0 0 0" fontSize={fontSize ? fontSize : ""} sx={{ whiteSpace: 'nowrap' }}>
         {partie.number_of_players_registered}/{partie.max_player} joueurs
       </Typography>
     )

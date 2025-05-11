@@ -18,7 +18,7 @@ export default function PartyTab(props) {
     
     const theme = useTheme();
     const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const [view, setView] = React.useState(localStorage.getItem( 'partyPageSate' ) || 'list');
+    const [view, setView] = React.useState(localStorage.getItem( 'partyPageSate' ) || 'card');
 
     const handleChange = (event, nextView) => {
         setView(nextView);
@@ -26,7 +26,6 @@ export default function PartyTab(props) {
     };
 
     
-    const stackWidht = isMobileScreen ? '100%' : '90%';
 
     return (
         <Stack
@@ -35,7 +34,7 @@ export default function PartyTab(props) {
             alignItems: 'center',
             px: 0,
             pb: 5,
-            width: stackWidht ,
+            width: '100%',
             }}
         >
             {/* <Paper elevation={3}>

@@ -13,6 +13,7 @@ export const parties = [
     "locked": false,
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
     "image_alt": "Chaos Space Marines in battle",
+    "party_name": "Les Ombres du Chaos",
     "coment": "Warhammer est un jeu de rôle immersif dans un univers de dark fantasy où l’humanité lutte contre les forces du Chaos dans un monde médiéval brutal. Les joueurs incarnent des héros de l’Empire, confrontés à des cultistes, des mutants et des démons. Le système de jeu, riche et détaillé, met l’accent sur des combats tactiques et des choix aux conséquences souvent tragiques. L’ambiance est sombre, presque désespérée, mais c’est dans cette adversité que les personnages trouvent leur gloire. Parfait pour ceux qui aiment les récits épiques et les dilemmes moraux complexes."
   },
   {
@@ -29,6 +30,7 @@ export const parties = [
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/great_old_one_cthulhu.jpg",
     "image_alt": "Depiction of the Great Old One Cthulhu",
+    "party_name": "L’Éveil de l’Innommable",
     "coment": "L’Appel de Cthulhu est un monument du jeu de rôle, ancré dans l’horreur cosmique de H.P. Lovecraft. Les joueurs, souvent des investigateurs ordinaires, plongent dans des enquêtes où chaque découverte menace leur santé mentale. Le système privilégie l’ambiance et la narration, avec des mécaniques simples mais efficaces pour simuler la fragilité humaine face à l’inconnu. Ce jeu excelle dans la création de tension, où la survie est rare et la victoire toujours amère. Idéal pour les amateurs de mystères oppressants et d’histoires où l’humanité est insignifiante."
   },
   {
@@ -45,6 +47,7 @@ export const parties = [
     "locked": false,
     "image": "https://dnd.wizards.com/images/dragon_horde.jpg",
     "image_alt": "A horde of dragons guarding treasure",
+    "party_name": "Les Terres Perdues",
     "coment": "Donjons et Dragons (D&D) est le jeu de rôle par excellence, définissant le genre depuis les années 1970. Dans cet univers de high fantasy, les joueurs explorent des royaumes remplis de dragons, de sorciers et de trésors cachés. La 5e édition offre un équilibre parfait entre accessibilité pour les novices et profondeur pour les vétérans, avec des mécaniques fluides pour le combat et la narration. Les campagnes, comme celle-ci, permettent des aventures épiques sur plusieurs sessions, où chaque choix forge une légende. Un incontournable pour les amateurs de fantasy héroïque."
   },
   {
@@ -61,6 +64,7 @@ export const parties = [
     "locked": true,
     "image": "https://worldofdarkness.com/images/vampire_masquerade_clan.jpg",
     "image_alt": "Vampire clan meeting in the shadows",
+    "party_name": "Les Ombres d’Orléans",
     "coment": "Vampire: La Mascarade plonge les joueurs dans un monde gothique-punk où les vampires manipulent les mortels tout en luttant pour leur humanité. Chaque personnage appartient à un clan avec ses propres pouvoirs et intrigues, rendant les interactions sociales aussi cruciales que les affrontements. Le système narratif met l’accent sur les dilemmes moraux et les jeux de pouvoir, avec une ambiance de trahison constante. Cette session courte promet une immersion rapide dans un univers de complots nocturnes. Parfait pour ceux qui aiment les histoires de pouvoir et de séduction sombre."
   },
   {
@@ -77,6 +81,7 @@ export const parties = [
     "locked": false,
     "image": "https://dnd.wizards.com/images/ancient_artifact.jpg",
     "image_alt": "An ancient artifact glowing with power",
+    "party_name": "L’Appel de l’Ancien",
     "coment": "Donjons et Dragons transporte les joueurs dans des aventures où chaque décision peut changer le destin d’un monde. Cette campagne continue met en scène une quête pour un artefact ancien, mêlant exploration, énigmes et combats épiques. Le système de D&D favorise la créativité, permettant aux joueurs de façonner leurs personnages et leurs stratégies. Les terres fantastiques regorgent de dangers, mais aussi de moments mémorables forgés par la coopération. Un choix idéal pour les amoureux d’histoires grandioses et d’univers immersifs."
   },
   {
@@ -93,6 +98,7 @@ export const parties = [
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/medieval_knight.jpg",
     "image_alt": "A medieval knight in armor",
+    "party_name": "L’Épreuve des Héros",
     "coment": "Chroniques Oubliées est un jeu de rôle français accessible, parfait pour des aventures médiévales fantastiques. Son système simplifié, basé sur des profils de personnages modulables, permet de plonger rapidement dans l’action. Les joueurs incarnent des héros classiques – chevaliers, mages ou voleurs – dans des quêtes héroïques remplies de combats et de magie. Cette session courte est idéale pour découvrir le jeu ou vivre une aventure sans engagement à long terme. Un excellent choix pour les débutants comme pour les vétérans en quête de fun immédiat."
   },
   {
@@ -109,6 +115,7 @@ export const parties = [
     "locked": false,
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
     "image_alt": "Empire soldiers defending against darkness",
+    "party_name": "L’Ombre Grandissante",
     "coment": "Warhammer offre une plongée dans un univers où la survie de l’Empire repose sur le courage de quelques héros. Cette campagne met les joueurs face à des menaces grandissantes, où chaque bataille peut être la dernière. Le système de jeu, avec ses carrières variées, permet de créer des personnages uniques, du soldat au sorcier. L’ambiance gritty et les récits épiques capturent l’essence d’un monde au bord du gouffre. Un must pour ceux qui aiment les aventures sombres et les défis héroïques."
   },
   {
@@ -125,6 +132,7 @@ export const parties = [
     "locked": false,
     "image": "https://worldofdarkness.com/images/vampire_night.jpg",
     "image_alt": "A dark night with lurking vampires",
+    "party_name": "La Danse des Traîtres",
     "coment": "Vampire: La Mascarade est un jeu où les intrigues politiques et les luttes internes des vampires dominent. Les joueurs incarnent des créatures de la nuit, partagés entre leur soif de sang et leur quête d’identité. Le système narratif encourage les dialogues intenses et les choix déchirants, avec des clans aux philosophies distinctes. Cette session courte est une immersion dans un monde de manipulation et de danger constant. Idéal pour ceux qui veulent explorer des récits sombres et des personnages complexes."
   },
   {
@@ -141,6 +149,7 @@ export const parties = [
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/cult_ritual.jpg",
     "image_alt": "A sinister cult performing a ritual",
+    "party_name": "Les Murmures du Culte",
     "coment": "L’Appel de Cthulhu excelle à créer une atmosphère d’angoisse où chaque indice découvert rapproche les joueurs de l’abîme. Dans cette session, un culte ancien menace la réalité, et les investigateurs doivent agir vite. Le système de jeu, centré sur la santé mentale, rend chaque révélation aussi dangereuse qu’un combat. Les mécaniques simples laissent place à une narration riche, parfaite pour des histoires immersives. Un jeu incontournable pour les fans d’horreur et d’enquêtes paranormales."
   },
   {
@@ -157,6 +166,7 @@ export const parties = [
     "locked": false,
     "image": "https://dnd.wizards.com/images/ancient_enemy.jpg",
     "image_alt": "Heroes facing an ancient enemy",
+    "party_name": "L’Ennemi Éternel",
     "coment": "Donjons et Dragons brille par sa capacité à tisser des récits épiques, comme cette campagne où un ennemi ancestral menace tout un royaume. Les joueurs, qu’ils soient guerriers ou sorciers, collaborent pour surmonter des défis variés, des pièges mortels aux batailles titanesques. Le système de la 5e édition est flexible, permettant des moments de roleplay profonds et des combats stratégiques. Cette aventure promet des souvenirs mémorables et des héros légendaires. Parfait pour les passionnés de fantasy et de narration collaborative."
   },
   {
@@ -173,6 +183,7 @@ export const parties = [
     "locked": false,
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
     "image_alt": "The final battle against Chaos forces",
+    "party_name": "L’Ultime Rempart",
     "coment": "Warhammer est synonyme de batailles désespérées dans un univers où l’espoir est rare. Cette campagne culmine dans une bataille finale contre le Chaos, où chaque choix peut sceller le destin de l’Empire. Le système de jeu offre une grande variété de carrières, permettant des personnages uniques et des stratégies diversifiées. L’ambiance est lourde, mais les moments de bravoure héroïque brillent d’autant plus. Un jeu pour ceux qui aiment les récits sombres et les combats où tout est en jeu."
   },
   {
@@ -189,24 +200,26 @@ export const parties = [
     "locked": true,
     "image": "https://chroniquesoubliees.fr/images/epic_quest.jpg",
     "image_alt": "Heroes on an epic quest",
+    "party_name": "La Grande Épopée",
     "coment": "Chroniques Oubliées est un jeu de rôle médiéval-fantastique qui brille par sa simplicité et son dynamisme. Cet événement spécial promet une aventure unique, avec des défis taillés pour des héros audacieux. Le système, basé sur des profils personnalisables, permet de se concentrer sur l’histoire et l’action sans règles complexes. Les joueurs vivront une épopée mémorable, ponctuée de combats épiques et de moments de gloire. Idéal pour une expérience intense et accessible à tous les niveaux."
   },
-    {
-      "id": 113,
-      "date": "2025-05-03",
-      "maitre_de_jeu": "Sophie",
-      "jeu": "Vampire: La Mascarade",
-      "type": "1Sht",
-      "lieu": "MDA",
-      "short_coment": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
-      "max_player": 5,
-      "players": ["Karine", "Laurent", "Ophélie", "Pascal"],
-      "number_of_players_registered": 4,
-      "locked": false,
-      "image": "https://worldofdarkness.com/images/clan_war.jpg",
-      "image_alt": "Vampire clans in a bloody conflict",
-      "coment": "Vampire: La Mascarade transporte les joueurs dans un monde où les vampires règnent dans l’ombre, déchirés par des luttes de pouvoir. Cette session met en scène un affrontement entre clans, où alliances et trahisons façonnent l’histoire. Le système narratif favorise les interactions sociales et les dilemmes éthiques, avec des mécaniques fluides pour les pouvoirs vampiriques. L’ambiance est lourde, presque cinématographique, parfaite pour une nuit de tension. Un jeu captivant pour les amateurs de drames gothiques et d’intrigues."
-    },
+  {
+    "id": 113,
+    "date": "2025-05-03",
+    "maitre_de_jeu": "Sophie",
+    "jeu": "Vampire: La Mascarade",
+    "type": "1Sht",
+    "lieu": "MDA",
+    "short_coment": "Les clans s’affrontent dans une nuit sanglante. Choisissez votre camp !",
+    "max_player": 5,
+    "players": ["Karine", "Laurent", "Ophélie", "Pascal"],
+    "number_of_players_registered": 4,
+    "locked": false,
+    "image": "https://worldofdarkness.com/images/clan_war.jpg",
+    "image_alt": "Vampire clans in a bloody conflict",
+    "party_name": "La Nuit des Clans",
+    "coment": "Vampire: La Mascarade transporte les joueurs dans un monde où les vampires règnent dans l’ombre, déchirés par des luttes de pouvoir. Cette session met en scène un affrontement entre clans, où alliances et trahisons façonnent l’histoire. Le système narratif favorise les interactions sociales et les dilemmes éthiques, avec des mécaniques fluides pour les pouvoirs vampiriques. L’ambiance est lourde, presque cinématographique, parfaite pour une nuit de tension. Un jeu captivant pour les amateurs de drames gothiques et d’intrigues."
+  },
   {
     "id": 114,
     "date": "2025-05-09",
@@ -221,6 +234,7 @@ export const parties = [
     "locked": true,
     "image": "https://cthulhu-rpg.com/artwork/cursed_manuscript.jpg",
     "image_alt": "A cursed manuscript with forbidden secrets",
+    "party_name": "Le Manuscrit Interdit",
     "coment": "L’Appel de Cthulhu est un jeu où la curiosité est aussi dangereuse que les monstres eux-mêmes. Cette session tourne autour d’un manuscrit maudit, entraînant les joueurs dans une enquête oppressante. Le système de jeu, avec sa gestion de la santé mentale, crée une tension palpable à chaque découverte. Les mécaniques simples mettent l’accent sur l’histoire, rendant chaque moment mémorable. Un choix parfait pour ceux qui aiment les récits d’horreur psychologique et les mystères insondables."
   },
   {
@@ -237,6 +251,7 @@ export const parties = [
     "locked": false,
     "image": "https://dnd.wizards.com/images/epic_conclusion.jpg",
     "image_alt": "Heroes in an epic world-saving battle",
+    "party_name": "L’Heure du Destin",
     "coment": "Donjons et Dragons atteint des sommets dans cette campagne où le destin du monde est en jeu. Les joueurs, héros aguerris, affrontent des défis ultimes dans une conclusion épique. Le système de la 5e édition permet des combats tactiques et des moments de roleplay riches, avec une grande liberté pour façonner l’histoire. Cette aventure est le point culminant d’une saga, promettant des émotions fortes et des souvenirs durables. Un must pour les fans de fantasy épique et de narration collaborative."
   },
   {
@@ -253,6 +268,7 @@ export const parties = [
     "locked": false,
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
     "image_alt": "A brutal battle in the Old World",
+    "party_name": "Gloire ou Tombeau",
     "coment": "Warhammer propose une plongée brutale dans le Vieux Monde, où chaque bataille est un test de courage. Cette session courte met les joueurs au cœur d’un affrontement sans merci contre les forces du Chaos. Le système, avec ses carrières variées, permet de créer des personnages hauts en couleur, prêts à tout pour la gloire. L’ambiance est sombre, mais les actes héroïques brillent dans l’adversité. Un jeu idéal pour ceux qui aiment l’action intense et les récits tragiques."
   },
   {
@@ -269,6 +285,7 @@ export const parties = [
     "locked": true,
     "image": "https://worldofdarkness.com/images/vampire_betrayal.jpg",
     "image_alt": "A vampire betraying another in the night",
+    "party_name": "Le Voile de la Trahison",
     "coment": "Vampire: La Mascarade est un jeu où chaque nuit est une danse de pouvoir et de trahison. Les joueurs incarnent des vampires luttant pour leur place dans une société secrète, où la moindre erreur peut être fatale. Le système narratif met l’accent sur les interactions et les choix moraux, avec des pouvoirs vampiriques ajoutant une touche dramatique. Cette session promet une immersion dans un monde de complots et de passions sombres. Parfait pour les fans de récits gothiques et de drames intenses."
   },
   {
@@ -285,6 +302,7 @@ export const parties = [
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/dragon_slayer.jpg",
     "image_alt": "A hero slaying a forgotten dragon",
+    "party_name": "Le Fléau Oublié",
     "coment": "Chroniques Oubliées offre une aventure fantastique accessible, où les héros affrontent des défis légendaires comme ce dragon oublié. Le système, simple et intuitif, permet de se concentrer sur l’histoire et les combats épiques sans se perdre dans les règles. Les joueurs peuvent personnaliser leurs personnages pour vivre une quête taillée pour l’héroïsme. Cette session courte est parfaite pour une soirée d’action et de bravoure. Un excellent choix pour tous ceux qui veulent une dose de fantasy sans complication."
   },
   {
@@ -301,6 +319,7 @@ export const parties = [
     "locked": false,
     "image": "https://cthulhu-rpg.com/artwork/ancient_cult.jpg",
     "image_alt": "An ancient cult resurfacing",
+    "party_name": "L’Ombre des Anciens",
     "coment": "L’Appel de Cthulhu plonge les joueurs dans une enquête où l’horreur cosmique menace de tout engloutir. Cette session, centrée sur un culte ancien, promet une tension constante et des révélations terrifiantes. Le système de jeu, avec sa mécanique de santé mentale, rend chaque découverte risquée, ajoutant une profondeur psychologique unique. Les mécaniques simples favorisent une narration immersive, parfaite pour des histoires oppressantes. Un jeu incontournable pour les amateurs de frissons et de mystères insondables."
   },
   {
@@ -317,6 +336,7 @@ export const parties = [
     "locked": false,
     "image": "https://dnd.wizards.com/images/lost_dungeon.jpg",
     "image_alt": "Explorers in a lost dungeon",
+    "party_name": "Le Donjon Oublié",
     "coment": "Donjons et Dragons excelle dans les aventures courtes comme celle-ci, où un donjon perdu regorge de trésors et de périls. Les joueurs explorent, combattent et résolvent des énigmes dans un cadre classique de high fantasy. Le système de la 5e édition offre une grande flexibilité, permettant des personnages variés et des stratégies créatives. Cette session est parfaite pour une soirée d’action et de découverte, avec des moments mémorables garantis. Idéal pour les fans de fantasy et d’aventures palpitantes."
   },
   {
@@ -333,6 +353,7 @@ export const parties = [
     "locked": true,
     "image": "https://worldofdarkness.com/images/bloody_clans.jpg",
     "image_alt": "Vampire clans in a bloody confrontation",
+    "party_name": "La Guerre des Ombres",
     "coment": "Vampire: La Mascarade offre une immersion dans un monde où les vampires se livrent à des guerres secrètes pour le pouvoir. Cette session met en lumière un affrontement entre clans, où chaque joueur doit naviguer dans un réseau de trahisons. Le système narratif, avec ses mécaniques de disciplines vampiriques, enrichit les interactions et les conflits. L’ambiance gothique et les dilemmes moraux créent une expérience unique. Un jeu parfait pour ceux qui aiment les récits de pouvoir et les intrigues sombres."
   },
   {
@@ -349,6 +370,7 @@ export const parties = [
     "locked": false,
     "image": "https://chroniquesoubliees.fr/images/forgotten_dragon.jpg",
     "image_alt": "A forgotten dragon menacing heroes",
+    "party_name": "L’Ombre du Dragon",
     "coment": "Chroniques Oubliées est un jeu de rôle qui allie simplicité et heroic fantasy, idéal pour des quêtes épiques comme celle-ci contre un dragon oublié. Le système fluide permet de créer des personnages variés et de plonger directement dans l’aventure. Les combats sont dynamiques, et les défis narratifs captivants, offrant un équilibre parfait entre action et roleplay. Cette session courte promet une soirée mémorable, accessible à tous. Un excellent choix pour les amateurs de fantasy classique et d’histoires héroïques."
   },
   {
@@ -365,6 +387,7 @@ export const parties = [
     "locked": true,
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
     "image_alt": "Warriors fighting for glory or death",
+    "party_name": "Le Chant des Lames",
     "coment": "Warhammer conclut ce calendrier avec une bataille brutale dans son univers dark fantasy. Les joueurs, héros de l’Empire, affrontent des ennemis implacables dans une session courte mais intense. Le système de jeu, avec ses carrières et ses mécaniques tactiques, permet des affrontements riches en stratégie. L’ambiance est oppressante, mais les moments de triomphe sont d’autant plus gratifiants. Un jeu parfait pour ceux qui veulent une dose d’action sombre et d’héroïsme désespéré."
   }
 ];

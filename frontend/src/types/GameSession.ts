@@ -13,4 +13,5 @@ export default interface GameSession {
   image: string;
   image_alt: string;
   short_coment: string;
+  party_name: string; // "La bande à Julien"
 }

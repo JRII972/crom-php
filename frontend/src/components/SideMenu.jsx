@@ -64,7 +64,27 @@ export default function SideMenu() {
           <ListItemAvatar>
             <Avatar color="inherit" alt="Logo BDR" src="/data/images/logo-bdr.png"  sx={{ fontSize: '3rem', bgcolor: 'transparent' }} />
           </ListItemAvatar>
-          {/* <ListItemText primary="Les Batisseurs de rève" secondary="CROM" /> */}
+          <ListItemText primary={
+            <Typography
+              variant="h6"
+              sx={{
+                fontFamily: 'Ravenholm Inline',
+                fontWeight: 400,
+              }}
+            >
+              Les Batisseurs de rève
+            </Typography>
+            } secondary={
+              <Typography
+              variant="h6"
+              sx={{
+                fontFamily: 'Ravenholm',
+                fontWeight: 300,
+              }}
+            >
+              CROM
+            </Typography>
+            } />
         </MenuItem>
       </Box>
       <Divider />

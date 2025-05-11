@@ -30,6 +30,8 @@ import { playerNumber } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import PlayersDisplay from './PlayersDisplay';
 
+import { findGameByName } from '../data/games';
+
 
 interface PartyCardProps {
   partie: GameSession;
@@ -84,42 +86,45 @@ const PartyCardSubInfo: FC<{
   // );
   
   return (
-    <Grid container spacing={0} sx={{ alignItems: 'center', justifyContent: 'center' }}>
+    <Grid container spacing={0} sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
 
-    <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography variant="subtitle2" sx={{ fontSize: commentSize, whiteSpace: 'nowrap' }}>
-        {partie.maitre_de_jeu}
-      </Typography>
-      <Divider
-        orientation="vertical"
-        variant="middle"
-        flexItem
-        sx={{ mx: 0.5 }}
-      />
-      <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
-        {partie.type}
-        {/* TODO: Changer ce qui est ecrit en fonction de l'espace disponible */}
-      </Typography>
-    </Stack>
+      <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize, whiteSpace: 'nowrap' }}>
+          {partie.jeu} 
+        </Typography>
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
 
-      <Divider
-        orientation="vertical"
-        variant="middle"
-        flexItem
-        sx={{ mx: 0.5 }}
-      />
-    <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
-      <Typography variant="subtitle2" sx={{ fontSize: commentSize,  whiteSpace: 'nowrap'  }}>
-        {partie.lieu}
-      </Typography>
-      <Divider
-        orientation="vertical"
-        variant="middle"
-        flexItem
-        sx={{ mx: 0.5 }}
-      />
-      {playerNumber(partie, commentSize, isMobileScreen)}
-    </Stack>
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize,  whiteSpace: 'nowrap'  }}>
+          {partie.lieu}
+        </Typography>
+      </Stack>
+
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
+        
+      <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+          {partie.type}
+          {/* TODO: Changer ce qui est ecrit en fonction de l'espace disponible */}
+        </Typography>
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
+        {playerNumber(partie, commentSize, isMobileScreen)}
+      </Stack>
+
     </Grid>
   );
 }
@@ -172,9 +177,12 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
     minWidth: isMobileScreen ? 160 : 200,
     height: isMobileScreen ? 300 : 350,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'stretch',
-    maxWidth: isMobileScreen ? 400 : 550,
-    px: isMobileScreen ? 1 : 2,
+    maxWidth: isMobileScreen ? 160 : 550,
+    p: 0,
+    
+    // px: isMobileScreen ? 1 : 2,    
   };
 
   const cardImageSize = isMobileScreen ? 100 : 140;
@@ -192,23 +200,27 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
       onMouseLeave={handleMouseLeave}
 
       variant={actualMode === 'light' ? 'outlined' : ''}
-      sx={{
-        p: 1,
-       }}
     >
-      <Box sx={{ 
-        display: 'flex',
-        flexDirection: 'column',
-        width: cardStyles.minWidth, 
-        justifyContent: 'space-between' }}>
+      <Box sx={{ width: cardStyles.minWidth, height: '100%' }}>
 
         <CardActionArea
           component={Link}
           to={"./partie/" + partie.id}
+          sx={{
+            flex: 1, // Prend l'espace disponible
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
         >
           <Box
            sx={{
-            p: 0.5,
+            m: 1,
+            height: cardImageSize,
+            // borderTopLeftRadius: 5,
+            // borderTopRightRadius: 5,
+            borderRadius: 1,
+            overflow: 'hidden',
            }}
           >
             {!loaded && !error && (
@@ -218,11 +230,12 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
               <CardMedia
                 component="img"
                 height={cardImageSize}
-                image={partie.image}
+                // image={partie.image}
+                image={findGameByName(partie.jeu).image}
                 alt={partie.image_alt}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
-                sx={{ display: loaded ? 'block' : 'none' }}
+                sx={{ display: loaded ? 'block' : 'none', objectFit: 'cover', width: '100%' }}
               />
             )}
             {error && (
@@ -237,73 +250,147 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
             )}
           </Box>
 
-          <Divider sx={{ my: 1 }}/>
+          {/* <Divider sx={{ my: 1 }}/> */}
 
           <CardContent
             sx={{
               backgroundColor: 'background.card',
               p: 1,
+              
+              flex: 1,
+              // boxSizing: 'border-box',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
             }}
           >
-            <Typography variant="h5" component="div" 
-              sx={{
-                  textalign: 'center',
-                  alignItems: 'center',
-                  fontSize: titleSize,
-                  whiteSpace: 'nowrap',
-              }}
-            >
-              {partie.jeu}
-            </Typography>
-            <Typography gutterBottom variant="overline" component="div" 
-              sx={{
-                  fontSize: subTitleSize,
-                  lineHeight: subTitleLineHeight,
-                  alignItems: 'center',
-              }}
-              >
-              {partie.jeu}
-            </Typography>
+            <Box>
+              <Stack spacing={0.5} sx={{ mb: 1 }}>
+                <Typography variant="h5" component="div" 
+                  sx={{
+                      textalign: 'center',
+                      alignItems: 'center',
+                      fontSize: titleSize,
+                      whiteSpace: 'nowrap',
+                  }}
+                >
+                  {partie.party_name}
+                </Typography>
+                
+                <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography gutterBottom variant="subtitle1" component="div" 
+                    sx={{
+                        fontSize: subTitleSize,
+                        lineHeight: subTitleLineHeight,
+                        alignItems: 'center',
+                    }}
+                    >
+                    {partie.maitre_de_jeu}
+                  </Typography>
 
-            <PartyCardSubInfo partie={partie} commentSize={commentSize} isMobileScreen={isMobileScreen}/>
-            
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'text.secondary',
-                display: '-webkit-box',
-                WebkitBoxOrient: 'vertical',
-                WebkitLineClamp: 3,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                fontSize: commentSize,
-              }}
-            >
-              {partie.short_coment}
-            </Typography>
+                  <Typography gutterBottom variant="subtitle1" component="div" 
+                    sx={{
+                        fontSize: subTitleSize,
+                        lineHeight: subTitleLineHeight,
+                        alignItems: 'center',
+                    }}
+                    >
+                    {partie.jeu}
+                  </Typography>
+                </Stack>
+                
+
+                {/* 3) Affichage des infos de la partie */}
+
+                <Grid container spacing={1}>
+
+                  <Grid size={4}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'left',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography gutterBottom variant="subtitle1" component="div" 
+                      sx={{
+                          fontSize: subTitleSize,
+                          lineHeight: subTitleLineHeight,
+                          alignItems: 'center',
+                      }}
+                      >
+                      {partie.type}
+                    </Typography>
+                  </Grid>
+
+                  <Grid size={4} 
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography gutterBottom variant="subtitle1" component="div" 
+                      sx={{
+                          fontSize: subTitleSize,
+                          lineHeight: subTitleLineHeight,
+                          alignItems: 'center',
+                      }}
+                      >
+                      {partie.lieu}
+                    </Typography>                  
+                  </Grid>
+
+                  <Grid size={4}                  
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'right',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography gutterBottom variant="subtitle1" component="div" 
+                      sx={{
+                          fontSize: subTitleSize,
+                          lineHeight: subTitleLineHeight,
+                          alignItems: 'center',
+                      }}
+                      >
+                      {playerNumber(partie, subTitleSize, isMobileScreen)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+              </Stack>
+
+              {/* <PartyCardSubInfo partie={partie} commentSize={commentSize} isMobileScreen={isMobileScreen}/> */}
+              
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  display: '-webkit-box',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 3,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  fontSize: commentSize,
+                }}
+              >
+                {partie.short_coment}
+              </Typography>
+            </Box>
+
+            <PlayersDisplay
+              players={partie.players}
+              maxWidth={cardStyles.minWidth - 20} // Largeur maximale en pixels
+              spaceWidth={5} // Espace avant le séparateur en pixels
+              separator=", " // Séparateur entre les noms
+              fontSize={commentSize} // Taille de la police
+            />
           </CardContent>
         </CardActionArea>
 
-        <CardActions
-          sx={{
-            pt: playerListPadding,
-            pb: playerListPadding,
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 0.5,
-            justifyContent: 'center',
-            backgroundColor: 'background.card',
-          }}
-        >
-          
-          <PlayersDisplay
-            players={partie.players}
-            maxWidth={200} // Largeur maximale en pixels
-            spaceWidth={5} // Espace avant le séparateur en pixels
-            separator=", " // Séparateur entre les noms
-            fontSize={commentSize} // Taille de la police
-          />
-        </CardActions>
+        
       </Box>
 
       <Collapse
@@ -323,6 +410,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
             width: 250,
             p: 2,
             backgroundColor: 'grey.100',
+            height: '100%',
           }}
         >
           <Typography
@@ -334,6 +422,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie }) => {
               WebkitLineClamp: 14,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
+              fontSize: subTitleSize,
             }}
           >
             {partie.coment}

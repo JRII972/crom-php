@@ -11,9 +11,6 @@ import { Typography } from '@mui/material';
 
 export default function Header() {
   return (
-    <Stack
-      direction="column"
-    >
       <Stack
         direction="row"
         sx={{
@@ -26,15 +23,8 @@ export default function Header() {
         }}
         spacing={2}
       >
-        <Typography
-          variant="h1"
-          sx={{
-            fontFamily: 'Ravenholm',
-            fontWeight: 700,
-          }}
-        >
-          Les Batisseurs de rève
-        </Typography>
+        
+        <NavbarBreadcrumbs />
 
         <Stack direction="row" sx={{ gap: 1 }}>
           <Search />
@@ -46,8 +36,5 @@ export default function Header() {
         </Stack>
       </Stack>
       
-
-      <NavbarBreadcrumbs />
-    </Stack>
   );
 }
