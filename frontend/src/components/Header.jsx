@@ -8,12 +8,12 @@ import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
 
 import Search from './Search';
 import { Typography } from '@mui/material';
-import { useCurrentMeta } from '../utils/utils';
 
-export default function Header(noHeader, title) {
-  const noHeaderCSS = (!noHeader ? {} : {
-    pb: 5
-  })
+export default function Header({noHeader, title}) {
+  const noHeaderCSS = (noHeader ? {    
+    pb: 5} : {})
+  
+  console.log(title)
   return (
       <Stack
         direction="row"
@@ -38,7 +38,7 @@ export default function Header(noHeader, title) {
             textAlign: 'center',
             mb: 2
           }}>
-            {title ? title : useCurrentMeta('title')}
+            {title}
           </Typography>
         }
 

@@ -45,6 +45,8 @@ const MainPage: React.FC<MainPageProps> = ({
   const theme = useTheme();
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
   const stackWidht = isMobileScreen ? '100%' : '90%';
+  title = (title ? title : useCurrentMeta('title'))
+
 
   return (
     <>
@@ -77,7 +79,7 @@ const MainPage: React.FC<MainPageProps> = ({
             }}
           >
             
-            <Header noHeader title /> 
+            <Header noHeader={noHeader} title={title} /> 
 
             {!noHeader && 
 
@@ -87,7 +89,7 @@ const MainPage: React.FC<MainPageProps> = ({
               textAlign: 'center',
               mb: 2
             }}>
-              {title ? title : useCurrentMeta('title')}
+              {title}
             </Typography>}
 
             {children}
