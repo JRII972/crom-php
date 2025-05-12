@@ -8,8 +8,8 @@ export function useDominantColor(imageUrl) {
     if (!imageUrl) return;
     Vibrant.from(imageUrl).getPalette()
       .then(palette => {
-        console.log(palette)
-        console.log(palette.Vibrant.hex)
+        // console.log(palette)
+        // console.log(palette.Vibrant.hex)
         setColors({
           primary:   {
             main: palette.Vibrant.hex,
@@ -25,6 +25,6 @@ export function useDominantColor(imageUrl) {
       })
       .catch(err => console.error(err));
   }, [imageUrl]);
-  console.log(colors)
+  // console.log(colors)
   return colors;
 }

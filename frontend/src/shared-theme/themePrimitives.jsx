@@ -147,7 +147,7 @@ export const colorSchemes = {
         default: 'hsl(0, 0%, 99%)',
         lightRed: brandAnalogousRed[50],
         surface: 'hsl(0, 0%, 99%)',
-        card: gray[50],
+        card: `${alpha(gray[50], 0.9)}`,
         paper: brand[50], //#F9F5FA
       },
       text: {
@@ -199,7 +199,7 @@ export const colorSchemes = {
       background: {
         default: gray[900],
         surface: gray[900],        
-        card: `${alpha(gray[700], 0.4)}`,
+        card: `${alpha('#2C323C', 0.9)}`,
         paper: gray[800],
       },
       text: {

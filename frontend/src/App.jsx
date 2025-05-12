@@ -19,19 +19,26 @@ import NotFound404_v2 from './404_v2';
 import Blog from './blog/Blog';
 import UserManagement from './API/test/user';
 
-import PlayerParties from './PlayersParties/PlayerParties';
+import PlayerParties from './party-tab/PlayerParties';
 
 const router = createBrowserRouter([
   {
     path: "/*", //TODO: verifiquer si ca ne bloque pas l'accès à d'autre page
-    element: <MainPage/>,
+    element: <MainPage noHeader/>,
     handle: { breadcrumb: 'CROM' },
     children: [
       {
         index: true,
         element: <PartyTab />,
         handle: { breadcrumb: 'Parties', title: 'Calendrier Rôliste à Option Multiples' },
-      },
+      }
+    ]
+  },
+  {
+    path: "/", //TODO: verifiquer si ca ne bloque pas l'accès à d'autre page
+    element: <MainPage/>,
+    handle: { breadcrumb: 'CROM' },
+    children: [
       {
         path: "partie/:id",   // Route dynamique
         element: <PartiePage />, 
@@ -76,7 +83,7 @@ const router = createBrowserRouter([
         ]
       },
     ]
-  },
+  }, 
   {
     path: "/login",
     element: <SignIn />,

@@ -17,6 +17,7 @@ export interface MainPageProps {
   title: string;
   /** État de connexion de l’utilisateur (ex. true si connecté) */
   connected: boolean;
+  noHeader: boolean;
   /** Contenu principal de la page */
   children?: ReactNode;
 }
@@ -25,6 +26,7 @@ const MainPage: React.FC<MainPageProps> = ({
   title,
   connected,
   children,
+  noHeader,
 }) => {
 
   // const theme = useTheme();
@@ -74,7 +76,10 @@ const MainPage: React.FC<MainPageProps> = ({
               width: stackWidht
             }}
           >
-            <Header />
+            
+            <Header noHeader title /> 
+
+            {!noHeader && 
 
             <Typography variant="h2" component="h1" sx={{
               fontFamily: 'Ravenholm',
@@ -83,7 +88,7 @@ const MainPage: React.FC<MainPageProps> = ({
               mb: 2
             }}>
               {title ? title : useCurrentMeta('title')}
-            </Typography>
+            </Typography>}
 
             {children}
             <Outlet />

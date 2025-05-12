@@ -9,14 +9,14 @@ import CardActions from '@mui/material/CardActions';
 import { Box, Divider, Grid, Skeleton, Stack } from '@mui/material';
 import { esES } from '@mui/material/locale';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
-import PartyCard from '../party-tab/components/PartyCard';
-import CardsRolls from './components/CardsRolls';
+import PartyCard from './components/PartyCard';
+import CardsRoll, { PartyGameCardsRoll } from './components/CardsRoll';
 
-import {parties_card} from '../party-tab/data/parties_cards';
+import {parties_card, vos_partie} from './data/parties_cards';
 import GameSession from '../types/GameSession';
-import groupedParties, { DaySessions, WeekSessions } from '../party-tab/data/grouped_parties';
+import groupedParties, { DaySessions, WeekSessions } from './data/grouped_parties';
 
-import { parties } from '../party-tab/data/parties';
+import { parties } from './data/parties';
 
 // Function to group by date
 const groupByDate = (array) => {
@@ -30,7 +30,7 @@ const groupByDate = (array) => {
   }, {});
 };
 
-function formatDateToFrench(date: Date): string {
+function formatDateToFrench(date: Date|number): string {
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     day: 'numeric',
@@ -61,6 +61,8 @@ function playerNumber(partie:GameSession) {
 
 export default function PlayerParties() {
   const sessions = groupByDate(Object.values(parties));
+
+  const allDays = groupedParties.flatMap((week) => week.jours);
   
   return (
     <Stack
@@ -75,42 +77,26 @@ export default function PlayerParties() {
       {/* Section semaine prochaine */}
       <Box>
         <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
-        Vos prochaines sessions
+          Vos prochaines sessions
         </Typography>
 
         <Box sx={{ overflow:'auto', width: '100%', display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
-          <CardsRolls title='Vendredi au FSV de 14h à 22h' sessions={sessions['2025-05-16']}/>
-          <CardsRolls title='Samedi au FSV de 14h à 22h' sessions={sessions['2025-05-17']}/>
+          <CardsRoll title='Vendredi au FSV de 14h à 22h' sessions={sessions['2025-05-16']}/>
+          <CardsRoll title='Samedi au FSV de 14h à 22h' sessions={sessions['2025-05-17']}/>
         </Box>
         <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem  />
       </Box>
 
-      {/* Section dédier au proposition */}
-      <Box>
-        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
-          Vos parties en tant que MJ
-        </Typography>
-
-        <Box sx={{overflow:'auto', width: '100%',  display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
-        {
-          parties_card.map((data) => (
-            <CardsRolls key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
-          ))
-        }
-        </Box>
-        <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem  />
-      </Box>
-      
       {/* Section dédier au proposition */}
       <Box>
         <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
           Vos parties
         </Typography>
 
-        <Box sx={{overflow:'auto', width: '100%',  display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
+        <Box sx={{overflow:'auto', width: '100%',  display:'flex', flexDirection: 'column',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
         {
-          parties_card.map((data) => (
-            <CardsRolls key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
+          vos_partie.map((data) => (
+            <PartyGameCardsRoll key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
           ))
         }
         </Box>
@@ -119,29 +105,30 @@ export default function PlayerParties() {
 
 
 
-      {groupedParties.map((week:WeekSessions) => (
-        <Box key={week.titre}>
-          <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
-            {week.titre}
-          </Typography>
-          {/* <Typography variant="subtitle1" sx={{ mb: 2, marginTop:0, paddingLeft:'1em' }}>
-              au FSV de 14h à 22h
-          </Typography> */}
-
-          <Box sx={{ 
-            overflow:'auto', width: '100%', 
-            display:'inline-flex',  
-            flexWrap:'nowrap', 
-            gap:'1em',
-            alignItems:'left',
-            }} className={'className'}>
-            {week.jours.map((jour:DaySessions[]) => ( 
-              <CardsRolls key={jour.date} title={formatDateToFrench(Date.parse(jour.date))} sessions={jour.sessions}/>
-            ))}
-          </Box>
-          <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem  />
+      <Box >
+        <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0 }}>
+          Toutes vos prochaines partie
+        </Typography>
+        {/* TODO: améliorer cette affichage */}
+        <Box sx={{ 
+          overflow:'auto', width: '100%', 
+          display:'flex',  
+          flexWrap:'wrap', 
+          gap:'1em',
+          alignItems:'left',
+          }} className={'className'}>
+          {allDays.map((jour) => (
+            <>
+            <CardsRoll
+              key={jour.date}
+              title={formatDateToFrench(Date.parse(jour.date))}
+              sessions={jour.sessions}
+            />
+            <Divider orientation="vertical" flexItem />
+            </>
+          ))}
         </Box>
-      ))}
+      </Box>
 
 
     </Stack>

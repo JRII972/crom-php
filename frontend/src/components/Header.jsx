@@ -8,26 +8,42 @@ import ColorModeIconDropdown from '../shared-theme/ColorModeIconDropdown';
 
 import Search from './Search';
 import { Typography } from '@mui/material';
+import { useCurrentMeta } from '../utils/utils';
 
-export default function Header() {
+export default function Header(noHeader, title) {
+  const noHeaderCSS = (!noHeader ? {} : {
+    pb: 5
+  })
   return (
       <Stack
         direction="row"
         sx={{
           display: { xs: 'none', md: 'flex' },
           width: '100%',
-          alignItems: { xs: 'flex-start', md: 'center' },
+          alignItems: { xs: 'flex-start', md: (!noHeader ? 'center' : 'baseline')},
           justifyContent: 'space-between',
           maxWidth: { sm: '100%', md: '1700px' },
-          pt: 1.5,
+          pt: (!noHeader ? 1.5 : 3.5),
+          ...noHeaderCSS
         }}
         spacing={2}
       >
         
         <NavbarBreadcrumbs />
+      
+        {noHeader && 
+          <Typography variant="h2" component="h1" sx={{
+            fontFamily: 'Ravenholm',
+            fontWeight: 700,
+            textAlign: 'center',
+            mb: 2
+          }}>
+            {title ? title : useCurrentMeta('title')}
+          </Typography>
+        }
 
         <Stack direction="row" sx={{ gap: 1 }}>
-          <Search />
+          {!noHeader && <Search /> }
           <CustomDatePicker />
           <MenuButton showBadge aria-label="Open notifications">
             <NotificationsRoundedIcon />

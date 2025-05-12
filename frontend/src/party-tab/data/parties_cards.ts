@@ -19,7 +19,7 @@ export const parties_card: PartyCardData[] = [
       ]
   },
   {
-    id: 101,
+    id: 102,
     title: 'Horreur',
     parties: 
       [
@@ -29,7 +29,7 @@ export const parties_card: PartyCardData[] = [
       ]
   },
   {
-    id: 101,
+    id: 103,
     title: 'Entre Amis',
     parties: 
       [
@@ -38,6 +38,31 @@ export const parties_card: PartyCardData[] = [
         parties[9],
       ]
   },
+];
+
+export const vos_partie: PartyCardData[] = [
+  {
+    id: 101,
+    title: 'En tant que MJ',
+    parties: 
+      [
+        parties[0],
+        parties[1],
+        parties[2],
+      ]
+  },
+  {
+    id: 102,
+    title: 'En tant que joueur',
+    parties: 
+      [
+        parties[4],
+        parties[5],
+        parties[6],
+        parties[7],
+        parties[8],
+      ]
+  }
 ];
 
 export default parties_card;

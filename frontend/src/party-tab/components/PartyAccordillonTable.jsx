@@ -121,7 +121,7 @@ export default function PartyAccordillonTable({party, expanded, setExpanded}) {
 
   const handleAccordionChange = useCallback(
     (panel) => (event, isExpanded) => {
-      setExpanded(isExpanded ? panel : false);
+      // setExpanded(isExpanded ? panel : false);
     },
     [setExpanded]
   );

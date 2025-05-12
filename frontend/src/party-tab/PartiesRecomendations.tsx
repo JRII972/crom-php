@@ -10,7 +10,7 @@ import { Box, Divider, Grid, Skeleton, Stack } from '@mui/material';
 import { esES } from '@mui/material/locale';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
 import PartyCard from './components/PartyCard';
-import CardsRolls from './components/CardsRolls';
+import CardsRoll from './components/CardsRoll';
 
 import {parties_card} from './data/parties_cards';
 import GameSession from '../types/GameSession';

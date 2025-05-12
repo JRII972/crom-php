@@ -11,6 +11,7 @@ import { esES } from '@mui/material/locale';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
 import PartyCard from './PartyCard';
 import { GameSession } from '../../types/GameSession';
+import PartyGameCard from './PartyGameCard';
 
 // Function to group by date
 const groupByDate = (array) => {
@@ -38,13 +39,12 @@ function formatDateToFrench(date: Date): string {
 }
 
 
-export default function CardsRolls({ title, sessions }: { title: string; sessions: GameSession[] }): React.ReactElement {
-  console.log(sessions)
+export default function CardsRoll({ title, sessions, type }: { title: string; sessions: GameSession[]; type?: 'session' | 'game' | 'party' }): React.ReactElement {
   return (
     <Stack 
       direction='column'
       spacing={1} 
-      sx={{ paddingBottom:'1em', paddingTop:'1em'}}>
+      sx={{ paddingBottom:'1em', paddingTop:'1em', mx: 1}}>
       <Box sx={{ display:'inline-flex', gap:'1em'}}>
         <Typography variant="subtitle1" sx={{ 
           paddingLeft:'1em',
@@ -57,9 +57,15 @@ export default function CardsRolls({ title, sessions }: { title: string; session
       </Box>
       <Box sx={{ display:'inline-flex', gap:'1em' }}>
         {sessions.map((partie:GameSession) => ( 
-          <PartyCard partie={partie} key={partie.id}/>
+          <PartyCard partie={partie} key={partie.id} type={type}/>
           ))}
       </Box>
     </Stack>
+  );
+}
+
+export function PartyGameCardsRoll({ title, sessions }: { title: string; sessions: GameSession[] }): React.ReactElement {
+  return (
+    <CardsRoll title={title} sessions={sessions} type='game' />
   );
 }

@@ -289,6 +289,28 @@ export const inputsCustomizations = {
           },
           boxShadow: `0 4px 16px ${alpha(brand[700], 0.5)}`,
         }),
+        variants: [
+          {
+            props: { size: 'small' },
+            style: {
+              [`& .${toggleButtonClasses.root}`]: {
+                padding: '4px 12px',
+                height: '2.25rem',
+                fontSize: 'auto', // Smaller font for small size
+              },
+            },
+          },
+          {
+            props: { size: 'medium' },
+            style: {
+              [`& .${toggleButtonClasses.root}`]: {
+                padding: '12px 16px',
+                height: '2.5rem',
+                fontSize: 'auto', // Default font for medium size
+              },
+            },
+          },
+        ],
       }),
     },
   },
@@ -306,6 +328,24 @@ export const inputsCustomizations = {
             color: brand[300],
           },
         }),
+        variants: [
+          {
+            props: { size: 'small' },
+            style: {
+              padding: '8px 12px',
+              fontSize: 'auto',
+              height: '2.25rem',
+            },
+          },
+          {
+            props: { size: 'medium' },
+            style: {
+              padding: '12px 16px',
+              fontSize: 'auto',
+              height: '2.5rem',
+            },
+          },
+        ],
       }),
     },
   },
@@ -438,6 +478,96 @@ export const inputsCustomizations = {
       root: ({ theme }) => ({
         typography: theme.typography.caption,
         marginBottom: 8,
+      }),
+    },
+  },
+
+  MuiFab: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        // boxShadow: `0 4px 16px ${alpha(gray[400], 0.2)}`,
+        // borderRadius: (theme.vars || theme).shape.borderRadius,
+        border: `1px solid ${gray[200]}`,
+        backgroundColor: alpha(gray[50], 0.3),
+        color: (theme.vars || theme).palette.text.primary,
+        transition: 'all 120ms ease-in',
+        '&:hover': {
+          backgroundColor: gray[100],
+          borderColor: gray[300],
+        },
+        '&:active': {
+          backgroundColor: gray[200],
+        },
+        '&:focus-visible': {
+          outline: `3px solid ${alpha(theme.palette.primary.main, 0.5)}`,
+          outlineOffset: '2px',
+        },
+        ...theme.applyStyles('dark', {
+          boxShadow: `0 4px 16px ${alpha(brand[700], 0.5)}`,
+          border: `1px solid ${gray[700]}`,
+          backgroundColor: gray[800],
+          '&:hover': {
+            backgroundColor: gray[900],
+            borderColor: gray[600],
+          },
+          '&:active': {
+            backgroundColor: gray[900],
+          },
+        }),
+        variants: [
+          {
+            props: { size: 'small' },
+            style: {
+              width: '2.25rem', 
+              height: '2.25rem', 
+              minWidth: '2.25rem',
+              minHeight: '2.25rem',
+              [`& .${svgIconClasses.root}`]: {
+                fontSize: '1rem', 
+              },
+            },
+          },
+          {
+            props: { size: 'medium' },
+            style: {
+              width: '2.5rem',
+              height: '2.5rem',
+              minWidth: '2.5rem',
+              minHeight: '2.5rem',
+              [`& .${svgIconClasses.root}`]: {
+                fontSize: '1.25rem',
+              },
+            },
+          },
+          {
+            props: { color: 'secondary' },
+            style: {
+              color: 'white',
+              backgroundColor: brand[400],
+              border: `1px solid ${brand[300]}`,
+              '&:hover': {
+                backgroundColor: brand[700],
+                borderColor: gray[300],
+              },
+              '&:active': {
+                backgroundColor: brand[700],
+              },
+              ...theme.applyStyles('dark', {
+                color: 'white',
+                backgroundColor: alpha(brand[900], 0.8),               
+                border: `1px solid ${brand[900]}`,
+                '&:hover': {
+                  backgroundColor: brand[700],
+                  backgroundImage: 'none',
+                  boxShadow: 'none',
+                },
+                '&:active': {
+                  backgroundColor: brand[800],
+                },
+              }),
+            },
+          },
+        ],
       }),
     },
   },

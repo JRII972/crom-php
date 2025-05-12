@@ -10,7 +10,7 @@ import { Box, Divider, Grid, Skeleton } from '@mui/material';
 import { esES } from '@mui/material/locale';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
 import PartyCard from './components/PartyCard';
-import CardsRolls from './components/CardsRolls';
+import CardsRoll from './components/CardsRoll';
 
 import {parties_card} from './data/parties_cards';
 import GameSession from '../types/GameSession';
@@ -66,13 +66,13 @@ export default function PartiesCard(parties:GameSession[]) {
       {/* Section dédier au proposition */}
       <Box>
         <Typography variant="h4" component="h1" sx={{ mb: 2, marginBottom:0, mx:2 }}>
-          Qui pourrais vous intérrésser
+          Elles pourraient vous intérrésser
         </Typography>
 
         <Box sx={{overflow:'auto', width: '100%',  display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
         {
           parties_card.map((data) => (
-            <CardsRolls key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
+            <CardsRoll key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
           ))
         }
         </Box>
@@ -86,8 +86,8 @@ export default function PartiesCard(parties:GameSession[]) {
         </Typography>
 
         <Box sx={{ overflow:'auto', width: '100%', display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
-          <CardsRolls title='Vendredi au FSV de 14h à 22h' sessions={sessions['2025-05-16']}/>
-          <CardsRolls title='Samedi au FSV de 14h à 22h' sessions={sessions['2025-05-17']}/>
+          <CardsRoll title='Vendredi au FSV de 14h à 22h' sessions={sessions['2025-05-16']}/>
+          <CardsRoll title='Samedi au FSV de 14h à 22h' sessions={sessions['2025-05-17']}/>
         </Box>
         <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem  />
       </Box>
@@ -110,7 +110,7 @@ export default function PartiesCard(parties:GameSession[]) {
             alignItems:'left',
             }} className={'className'}>
             {week.jours.map((jour:DaySessions[]) => ( 
-              <CardsRolls key={jour.date} title={formatDateToFrench(Date.parse(jour.date))} sessions={jour.sessions}/>
+              <CardsRoll key={jour.date} title={formatDateToFrench(Date.parse(jour.date))} sessions={jour.sessions}/>
             ))}
           </Box>
           <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem  />

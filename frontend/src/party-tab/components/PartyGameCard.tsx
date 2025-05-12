@@ -31,16 +31,105 @@ import { Link } from 'react-router-dom';
 import PlayersDisplay from './PlayersDisplay';
 
 import { findGameByName } from '../data/games';
-import { PartyCardContent } from './PartyCardContent';
 
 
 interface PartyCardProps {
   partie: GameSession;
-  type?: 'session' | 'game' | 'party';
 }
 
 
-const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
+// TODO: FIX card size adjust
+
+const PartyCardSubInfo: FC<{ 
+  partie: GameSession; 
+  commentSize: string; 
+  isMobileScreen: boolean }> = ({ partie, commentSize, isMobileScreen }) => {
+  
+  if (!partie) return null;
+  // if (!isMobileScreen) return (
+  //   <Box
+  //     sx={{
+  //       display: 'inline-flex',
+  //       flexDirection: 'row',
+  //       alignItems: 'center',
+  //     }}
+  //   >
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.maitre_de_jeu}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.type}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+  //       {partie.lieu}
+  //     </Typography>
+  //     <Divider
+  //       orientation="vertical"
+  //       variant="middle"
+  //       flexItem
+  //       sx={{ mx: 0.5 }}
+  //     />
+  //     {playerNumber(partie, commentSize, isMobileScreen)}
+  //   </Box>
+  // );
+  
+  return (
+    <Grid container spacing={0} sx={{ alignItems: 'center', justifyContent: 'space-around' }}>
+
+      <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize, whiteSpace: 'nowrap' }}>
+          {partie.jeu} 
+        </Typography>
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
+
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize,  whiteSpace: 'nowrap'  }}>
+          {partie.lieu}
+        </Typography>
+      </Stack>
+
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
+        
+      <Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between' }}>
+        <Typography variant="subtitle2" sx={{ fontSize: commentSize }}>
+          {partie.type}
+          {/* TODO: Changer ce qui est ecrit en fonction de l'espace disponible */}
+        </Typography>
+        <Divider
+          orientation="vertical"
+          variant="middle"
+          flexItem
+          sx={{ mx: 0.5 }}
+        />
+        {playerNumber(partie, commentSize, isMobileScreen)}
+      </Stack>
+
+    </Grid>
+  );
+}
+
+const PartyGameCard: FC<PartyCardProps> = ({ partie }) => {
   // états
   const [loaded, setLoaded] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -178,10 +267,48 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
 
           {/* <Divider sx={{ my: 1 }}/> */}
 
-          
-          <PartyCardContent partie={partie} cardMinWidth={cardStyles.minWidth} type={type}/>
+          <CardContent
+            sx={{
+              backgroundColor: 'background.card',
+              p: 1,
+              
+              flex: 1,
+              // boxSizing: 'border-box',
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Box>
+              
 
-            
+              {/* <PartyCardSubInfo partie={partie} commentSize={commentSize} isMobileScreen={isMobileScreen}/> */}
+              
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  display: '-webkit-box',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 3,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  fontSize: commentSize,
+                }}
+              >
+                {partie.short_coment}
+              </Typography>
+            </Box>
+
+            <PlayersDisplay
+              players={partie.players}
+              maxWidth={cardStyles.minWidth - 20} // Largeur maximale en pixels
+              spaceWidth={5} // Espace avant le séparateur en pixels
+              separator=", " // Séparateur entre les noms
+              fontSize={commentSize} // Taille de la police
+            />
+          </CardContent>
         </CardActionArea>
 
         
@@ -203,7 +330,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
           sx={{
             width: 250,
             p: 2,
-            // backgroundColor: 'grey.100',
+            backgroundColor: 'grey.100',
             height: '100%',
           }}
         >
@@ -227,4 +354,4 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
   );
 };
 
-export default PartyCard;
+export default PartyGameCard;
