@@ -1,18 +1,9 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardActions from '@mui/material/CardActions';
-import { Box, Divider, Grid, Skeleton } from '@mui/material';
-import { esES } from '@mui/material/locale';
+import { Box, Divider } from '@mui/material';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
-import PartyCard from './components/PartyCard';
 import CardsRoll from './components/CardsRoll';
 
-import {parties_card} from './data/parties_cards';
+import { parties_card } from './data/parties_cards';
 import GameSession from '../types/GameSession';
 import groupedParties, { DaySessions, WeekSessions } from './data/grouped_parties';
 
@@ -28,7 +19,10 @@ const groupByDate = (array) => {
   }, {});
 };
 
-function formatDateToFrench(date: Date): string {
+export function formatDateToFrench(date: Date | string | number): string {
+  if (typeof(date) == 'string') {
+    date = Date.parse(date)
+  } 
   const options: Intl.DateTimeFormatOptions = {
     weekday: 'long',
     day: 'numeric',
@@ -37,7 +31,7 @@ function formatDateToFrench(date: Date): string {
   const formatted = new Intl.DateTimeFormat('fr-FR', options).format(date);
   return formatted
     .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map(word => word.charAt(0) + word.slice(1))
     .join(' ');
 }
 
@@ -72,7 +66,7 @@ export default function PartiesCard(parties:GameSession[]) {
         <Box sx={{overflow:'auto', width: '100%',  display:'inline-flex',  flexWrap:'nowrap', gap:'1em'}} className={'className'}>
         {
           parties_card.map((data) => (
-            <CardsRoll key={data.id} title={data.title} sessions={data.parties as GameSession[]} />
+            <CardsRoll key={data.id} title={data.title} sessions={data.parties as GameSession[]} displayDate />
           ))
         }
         </Box>

@@ -2,7 +2,7 @@ export const parties = [
   {
     "id": 101,
     "date": "2025-04-04",
-    "maitre_de_jeu": "Julien",
+    "maitre_de_jeu": "Rêveur en Chef",
     "jeu": "Warhammer",
     "type": "Cmp",
     "lieu": "FSV",
@@ -19,7 +19,7 @@ export const parties = [
   {
     "id": 102,
     "date": "2025-04-04",
-    "maitre_de_jeu": "Pierre",
+    "maitre_de_jeu": "Sakanéné",
     "jeu": "L’Appel de Cthulhu",
     "type": "1Sht",
     "lieu": "FSV",

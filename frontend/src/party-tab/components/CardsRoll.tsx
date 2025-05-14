@@ -1,17 +1,8 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardActions from '@mui/material/CardActions';
-import { Box, Divider, Grid, Skeleton, Stack } from '@mui/material';
-import { esES } from '@mui/material/locale';
-import LockOutlineIcon from '@mui/icons-material/LockOutline';
+import { Box, Stack } from '@mui/material';
 import PartyCard from './PartyCard';
 import { GameSession } from '../../types/GameSession';
-import PartyGameCard from './PartyGameCard';
 
 // Function to group by date
 const groupByDate = (array) => {
@@ -39,7 +30,7 @@ function formatDateToFrench(date: Date): string {
 }
 
 
-export default function CardsRoll({ title, sessions, type }: { title: string; sessions: GameSession[]; type?: 'session' | 'game' | 'party' }): React.ReactElement {
+export default function CardsRoll({ title, sessions, type, displayDate }: { title: string; sessions: GameSession[]; type?: 'session' | 'game' | 'party'; displayDate?: boolean }): React.ReactElement {
   return (
     <Stack 
       direction='column'
@@ -57,15 +48,15 @@ export default function CardsRoll({ title, sessions, type }: { title: string; se
       </Box>
       <Box sx={{ display:'inline-flex', gap:'1em' }}>
         {sessions.map((partie:GameSession) => ( 
-          <PartyCard partie={partie} key={partie.id} type={type}/>
+          <PartyCard partie={partie} key={partie.id} type={type} displayDate={displayDate}/>
           ))}
       </Box>
     </Stack>
   );
 }
 
-export function PartyGameCardsRoll({ title, sessions }: { title: string; sessions: GameSession[] }): React.ReactElement {
+export function PartyGameCardsRoll({ title, sessions, displayDate }: { title: string; sessions: GameSession[], displayDate?:boolean }): React.ReactElement {
   return (
-    <CardsRoll title={title} sessions={sessions} type='game' />
+    <CardsRoll title={title} sessions={sessions} type='game' displayDate={displayDate} />
   );
 }

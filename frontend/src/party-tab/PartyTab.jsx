@@ -1,25 +1,22 @@
 import * as React from 'react';
 
-import ToggleButton from '@mui/material/ToggleButton';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import CategoryIcon from '@mui/icons-material/Category';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
-import { parties } from './data/parties'
-import PartiesTables from './PartiesTables';
-import PartiesRecomendations from './PartiesRecomendations';
-import MainPage from '../components/MainPage';
-import PartiesCard from './PartiesCards'
-import { Stack, useMediaQuery, useTheme, Divider, Fab, NativeSelect } from '@mui/material';
-import { FilterAlt } from '@mui/icons-material';
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import { Divider, Fab, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { parties } from './data/parties';
+import PartiesCard from './PartiesCards';
+import PartiesRecomendations from './PartiesRecomendations';
+import PartiesTables from './PartiesTables';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 
 export default function PartyTab(props) {
@@ -92,7 +89,7 @@ export default function PartyTab(props) {
           Type
         </Fab> */}
         <Fab color="secondary" size='small'>
-          <FilterAlt />
+          <FilterAltIcon />
           {/* Filtre */}
         </Fab>
       </Stack>

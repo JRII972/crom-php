@@ -10,7 +10,7 @@ import SideMenu from './SideMenu';
 import AppNavbar from './AppNavbar';
 import Header from './Header';
 import { useCurrentMeta } from '../utils/utils';
-import { useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export interface MainPageProps {
   /** Titre affiché dans le header */

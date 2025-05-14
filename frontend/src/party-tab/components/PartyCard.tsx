@@ -1,34 +1,19 @@
-import React, {
+import {
   FC,
-  useState,
-  useEffect,
-  useRef,
-  MouseEvent,
-  SyntheticEvent,
-  RefObject,
+  useState, SyntheticEvent
 } from 'react';
 import {
   Card,
   Box,
   CardActionArea,
   Skeleton,
-  CardMedia,
-  CardContent,
-  Typography,
-  Divider,
-  CardActions,
-  Collapse,
+  CardMedia, Typography, Collapse,
   useMediaQuery,
-  useTheme,
-  Stack,
-  Grid,
-  useColorScheme,
+  useTheme, useColorScheme
 } from '@mui/material';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import GameSession from '../../types/GameSession';
-import { playerNumber } from '../../utils/utils';
 import { Link } from 'react-router-dom';
-import PlayersDisplay from './PlayersDisplay';
 
 import { findGameByName } from '../data/games';
 import { PartyCardContent } from './PartyCardContent';
@@ -37,10 +22,11 @@ import { PartyCardContent } from './PartyCardContent';
 interface PartyCardProps {
   partie: GameSession;
   type?: 'session' | 'game' | 'party';
+  displayDate: boolean;
 }
 
 
-const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
+const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=false }) => {
   // états
   const [loaded, setLoaded] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -179,7 +165,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session' }) => {
           {/* <Divider sx={{ my: 1 }}/> */}
 
           
-          <PartyCardContent partie={partie} cardMinWidth={cardStyles.minWidth} type={type}/>
+          <PartyCardContent partie={partie} cardMinWidth={cardStyles.minWidth} type={type} displayDate={displayDate}/>
 
             
         </CardActionArea>

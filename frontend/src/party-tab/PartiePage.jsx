@@ -113,18 +113,35 @@ const PartiePage = () => {
   return (
   <Box
     sx={{
-      width: '90%',
-      maxWidth: 1300
+      width: {
+        xs: '100%', // Full width on extra-small screens (<600px)
+        sm: '100%', // 95% width on small screens (≥600px)
+        md: '100%', // 90% width on medium screens (≥900px)
+        lg: '85%', // 85% width on large screens (≥1200px)
+        xl: '80%', // 80% width on extra-large screens (≥1536px)
+      },
+      maxWidth: {
+        lg: 1200, // Max width of 1200px on lg
+        xl: 1300, // Max width of 1300px on xl
+      },
     }}
   >
-    <DynamicThemeProvider imageUrl={partie.image} p={2}>
+    <DynamicThemeProvider imageUrl={partie.image}>
       {/* Bandeau principal */}
       <Card
         sx={{
 
         position: 'relative',
         overflow: 'hidden',
-          p: 4,
+          p: {
+            sm: 1,
+            md: 2, // 90% width on medium screens (≥900px)
+            lg: 4,
+          },
+          height: {
+            sm: '50vh',
+            md: '80vh',
+          },
           background: theme => theme.palette.primary.main,
           color: theme => theme.palette.getContrastText(theme.palette.primary.main),
           textAlign: 'center',

@@ -1,35 +1,17 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  useRef,
-  MouseEvent,
-  SyntheticEvent,
-  RefObject,
+import {
+	FC
 } from 'react';
 import {
-  Card,
-  Box,
-  CardActionArea,
-  Skeleton,
-  CardMedia,
-  CardContent,
-  Typography,
-  Divider,
-  CardActions,
-  Collapse,
-  useMediaQuery,
-  useTheme,
-  Stack,
-  Grid,
-  useColorScheme,
+	CardContent,
+	Typography, useMediaQuery,
+	useTheme,
+	Stack,
+	Grid
 } from '@mui/material';
-import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import GameSession from '../../types/GameSession';
-import { playerNumber } from '../../utils/utils';
-import { Link } from 'react-router-dom';
+import { playerNumber, trimString } from '../../utils/utils';
 import PlayersDisplay from './PlayersDisplay';
-import {findGameByName} from '../data/games';
+import { findGameByName } from '../data/games';
 
 
 interface PartyCardProps {
@@ -42,7 +24,8 @@ interface PartyCardProps {
 export const PartyCardContent: FC<{ 
   partie: GameSession;
 	cardMinWidth: number;
-  type?: 'session' | 'game' | 'party'}> = ({ partie, cardMinWidth, type='session'}) => {
+	displayDate: boolean;
+  type?: 'session' | 'game' | 'party'}> = ({ partie, cardMinWidth, type='session', displayDate=false}) => {
 
     
 	const theme = useTheme();
@@ -60,6 +43,15 @@ export const PartyCardContent: FC<{
 	const isParty = (type == 'party')
 
 	const gameData = findGameByName(partie.jeu)
+  
+  const dateFormatingOption = partie.maitre_de_jeu.length < 11 ? {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'numeric',
+    } : { day: 'numeric', month: 'numeric' }
+  							
+  const partieDate = new Date(Date.parse(partie.date)).toLocaleDateString('fr-FR', dateFormatingOption)
+									
   
  return(
     <CardContent
@@ -109,7 +101,8 @@ export const PartyCardContent: FC<{
 										alignItems: 'center',
 								}}
 								>
-								{partie.maitre_de_jeu}
+								{!displayDate && <>{partie.maitre_de_jeu}</>}
+								{displayDate && <>{trimString(partie.maitre_de_jeu, 17, 16, '.')} | {partieDate}</>}
 								</Typography>
 						</Stack>
 

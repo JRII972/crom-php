@@ -1,11 +1,6 @@
-import React, {
+import {
   FC,
-  useState,
-  useEffect,
-  useRef,
-  MouseEvent,
-  SyntheticEvent,
-  RefObject,
+  useState, SyntheticEvent
 } from 'react';
 import {
   Card,

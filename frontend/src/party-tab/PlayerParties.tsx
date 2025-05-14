@@ -1,20 +1,11 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import CardActionArea from '@mui/material/CardActionArea';
-import CardActions from '@mui/material/CardActions';
-import { Box, Divider, Grid, Skeleton, Stack } from '@mui/material';
-import { esES } from '@mui/material/locale';
+import { Box, Divider, Stack } from '@mui/material';
 import LockOutlineIcon from '@mui/icons-material/LockOutline';
-import PartyCard from './components/PartyCard';
 import CardsRoll, { PartyGameCardsRoll } from './components/CardsRoll';
 
-import {parties_card, vos_partie} from './data/parties_cards';
+import { vos_partie } from './data/parties_cards';
 import GameSession from '../types/GameSession';
-import groupedParties, { DaySessions, WeekSessions } from './data/grouped_parties';
+import groupedParties from './data/grouped_parties';
 
 import { parties } from './data/parties';
 

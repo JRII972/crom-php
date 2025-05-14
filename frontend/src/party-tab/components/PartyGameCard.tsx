@@ -1,11 +1,6 @@
-import React, {
+import {
   FC,
-  useState,
-  useEffect,
-  useRef,
-  MouseEvent,
-  SyntheticEvent,
-  RefObject,
+  useState, SyntheticEvent
 } from 'react';
 import {
   Card,
@@ -15,14 +10,12 @@ import {
   CardMedia,
   CardContent,
   Typography,
-  Divider,
-  CardActions,
-  Collapse,
+  Divider, Collapse,
   useMediaQuery,
   useTheme,
   Stack,
   Grid,
-  useColorScheme,
+  useColorScheme
 } from '@mui/material';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
 import GameSession from '../../types/GameSession';

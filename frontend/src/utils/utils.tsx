@@ -55,3 +55,11 @@ export function LogoIcon() {
     </Box>
   );
 }
+
+export const trimString = (str:string, maxLength:number, sliceLenght?:number, strip?:string='...') => {
+  sliceLenght = sliceLenght ? sliceLenght : maxLength
+  if (str.length >= maxLength) {
+    return str.slice(0, sliceLenght) + strip;
+  }
+  return str;
+};

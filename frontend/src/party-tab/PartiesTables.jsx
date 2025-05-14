@@ -9,6 +9,7 @@ import { isMobile } from '../config';
 import PartyTable from './components/PartyTable';
 import PartyAccordillonTable from './components/PartyAccordillonTable'
 import { useState } from 'react';
+import { formatDateToFrench } from './PartiesCards';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,7 +53,7 @@ export default function PartiesTables(parties) {
         // TODO Mettre un meilleur ID 
         <Box sx={{ width: '100%', paddingBottom: '1em'}} key={'session-'+date}>
         <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
-            Partie du {date} 
+            Partie du {formatDateToFrench(date)} 
         </Typography>
         {isMobile() ? <PartyAccordillonTable 
                         party={sessions[date]}
