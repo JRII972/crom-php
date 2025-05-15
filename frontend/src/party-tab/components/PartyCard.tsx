@@ -22,7 +22,7 @@ import { PartyCardContent } from './PartyCardContent';
 interface PartyCardProps {
   partie: GameSession;
   type?: 'session' | 'game' | 'party';
-  displayDate: boolean;
+  displayDate?: boolean;
 }
 
 
@@ -72,7 +72,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
   // Change les tailles de la carte en fonction de la taille de l'écran
   const cardStyles = {
     minWidth: isMobileScreen ? 160 : 200,
-    height: isMobileScreen ? 300 : 350,
+    height: type == 'session' ? (isMobileScreen ? 300 : 350) : (isMobileScreen ? 300 : 280),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',

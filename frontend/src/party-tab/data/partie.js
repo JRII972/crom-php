@@ -12,7 +12,7 @@ const partie = {
     "players": ["Alice", "Bastien", "Camille", "Damien"],
     "number_of_players_registered": 4,
     "locked": false,
-    "image": "/data/images/vampire_mascarde.avif",
+    "image": "/data/images/creature-cthulhu-grand-ancien.webp",
     "image_alt": "Chaos Space Marines in battle",
     "party_name": "Les Ombres du Chaos",
     "coment": "Warhammer est un jeu de rôle immersif dans un univers de dark fantasy où l’humanité lutte contre les forces du Chaos dans un monde médiéval brutal. Les joueurs incarnent des héros de l’Empire, confrontés à des cultistes, des mutants et des démons. Le système de jeu, riche et détaillé, met l’accent sur des combats tactiques et des choix aux conséquences souvent tragiques. L’ambiance est sombre, presque désespérée, mais c’est dans cette adversité que les personnages trouvent leur gloire. Parfait pour ceux qui aiment les récits épiques et les dilemmes moraux complexes.",
@@ -31,6 +31,10 @@ const partie = {
       { id: 10, nom: "H", avatar: "https://example.com/avatars/sophie.jpg" },
       { id: 11, nom: "I", avatar: "https://example.com/avatars/sophie.jpg" },
       { id: 12, nom: "J", avatar: "https://example.com/avatars/sophie.jpg" },
+      { id: 12, nom: "J", avatar: "https://example.com/avatars/sophie.jpg" },
+      { id: 12, nom: "J", avatar: "https://example.com/avatars/sophie.jpg" },
+      { id: 12, nom: "J", avatar: "https://example.com/avatars/sophie.jpg" },
+      { id: 12, nom: "J", avatar: "https://example.com/avatars/sophie.jpg" },
       { id: 13, nom: "K", avatar: "https://example.com/avatars/maxime.jpg" }
     ],
     prochainesSessions: [
@@ -38,6 +42,7 @@ const partie = {
         id: 201,
         date: "2025-05-05T19:30:00Z",
         lieu: "FSV",
+        session_number: 1,
         joueurs: [
           { id: 1, nom: "Arthur G", pseudo: 'Prètre de pacotille', avatar: "https://example.com/avatars/arthur.jpg" },
           { id: 2, nom: "Arthur", avatar: "https://example.com/avatars/arthur.jpg" },
@@ -49,6 +54,7 @@ const partie = {
       {
         id: 202,
         date: "2025-05-12T19:30:00Z",
+        session_number: 2,
         lieu: "Discord",
         joueurs: [
           { id: 1, nom: "Arthur", avatar: "https://example.com/avatars/arthur.jpg" },

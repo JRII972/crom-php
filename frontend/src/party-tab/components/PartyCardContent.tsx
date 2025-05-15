@@ -21,7 +21,7 @@ interface PartyCardProps {
 
 // TODO: FIX card size adjust
 
-export const PartyCardContent: FC<{ 
+export const 	PartyCardContent: FC<{ 
   partie: GameSession;
 	cardMinWidth: number;
 	displayDate: boolean;
@@ -160,7 +160,7 @@ export const PartyCardContent: FC<{
 					}
 
 					{isGame && 					
-						<Stack direction={"row"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between', my: 0.5 }}>
+						<Stack direction={"column"} spacing={0.5} sx={{alignItems: 'center', justifyContent: 'space-between', my: 0.5 }}>
 							<Typography variant="subtitle1" component="div" 
 								sx={{
 										fontSize: subTitleSize,
@@ -191,6 +191,7 @@ export const PartyCardContent: FC<{
 
 				{/* <PartyCardSubInfo partie={partie} commentSize={commentSize} isMobileScreen={isMobileScreen}/> */}
 				
+				{ type!='game' &&
 				<Typography
 					variant="body2"
 					sx={{
@@ -204,7 +205,7 @@ export const PartyCardContent: FC<{
 					}}
 				>
 					{partie.short_coment}
-				</Typography>
+				</Typography>}
 		</Stack>
 		<PlayersDisplay
 			players={partie.players}

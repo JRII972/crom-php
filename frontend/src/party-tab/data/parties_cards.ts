@@ -61,6 +61,9 @@ export const vos_partie: PartyCardData[] = [
         parties[6],
         parties[7],
         parties[8],
+        parties[9],
+        parties[10],
+        parties[11],
       ]
   }
 ];

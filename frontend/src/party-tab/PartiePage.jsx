@@ -144,6 +144,7 @@ const PartiePage = () => {
           bgcolor: 'background.subcontent',
           px: 4,
           py: 2,
+          color: 'text.subcontent',
         }}
       >
         <Typography variant="h5" gutterBottom>
@@ -206,52 +207,65 @@ const PartiePage = () => {
           Vous devez être inscrit à cette campagne pour participer !
         </Typography>
         <List>
-          {partie.prochainesSessions.map((session) => (
-            <React.Fragment key={session.id}>
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  {/* TODO: Add the session_number to database */}
-                  {/* TODO: Add the other session informations like time her */}
-                  <Avatar># {partie.session_number}</Avatar>
-                </ListItemAvatar>
-                {/* FIXME: change this bellow to not have a div inside a <p> */}
-                <ListItemText component='div'
-                  primary={`${new Date(session.date).toLocaleDateString()} - ${session.lieu}`}
-                  secondary={
-                    <Stack direction="row" mt={1} sx={{
-                      overflow: 'auto',
-                      justifyContent: 'flex-start',
-                      alignItems: 'center',
-                      '@media (max-width: 1650px)': {
-                        flexWrap: 'wrap',
-                      },
-                    }}>
-                      {session.joueurs.map((joueur) => (
-                        <Stack direction='row' alignItems='center' key={joueur.id} mr={1}>
-                          <Avatar key={joueur.id} src={joueur.avatar} alt={joueur.nom} sx={{ width: 30, height: 30 }} />
-                          <Stack direction='column' p={0.5}>
-                            <Typography variant="body2">{joueur.nom}</Typography>
-                            {
-                              joueur.pseudo && <Typography variant="caption" sx={{ whiteSpace: 'nowrap'}}>{joueur.pseudo}</Typography>
-                            }
-                          </Stack>
-                        </Stack>
-                      ))}
-                    </Stack>
-                  }
-                />
-                <ListItemButton
+        {partie.prochainesSessions.map((session) => (
+          <React.Fragment key={session.id}>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                {/* TODO: Add the session_number to database */}
+                {/* TODO: Add the other session information like time here */}
+                <Avatar 
                   sx={{
-                    margin: 'auto'
+                    bgcolor: 'primary.dark'
+                  }}
+                ># {session.session_number}</Avatar>
+              </ListItemAvatar>
+              <Box sx={{ flexGrow: 1 }}>
+                <Typography variant="body1">
+                  {`${new Date(session.date).toLocaleDateString()} - ${session.lieu}`}
+                </Typography>
+                <Stack
+                  direction="row"
+                  mt={1}
+                  sx={{
+                    overflow: 'auto',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    '@media (max-width: 1650px)': {
+                      flexWrap: 'wrap',
+                    },
                   }}
                 >
-                  {sessionButton(partie)}
-                </ListItemButton>
-              </ListItem>
-              <Divider component="li" />
-            </React.Fragment>
-          ))}
-        </List>
+                  {session.joueurs.map((joueur) => (
+                    <Stack direction="row" alignItems="center" key={joueur.id} mr={1}>
+                      <Avatar
+                        src={joueur.avatar}
+                        alt={joueur.nom}
+                        sx={{ width: 30, height: 30 }}
+                      />
+                      <Stack direction="column" p={0.5}>
+                        <Typography variant="body2">{joueur.nom}</Typography>
+                        {joueur.pseudo && (
+                          <Typography variant="caption" sx={{ whiteSpace: 'nowrap' }}>
+                            {joueur.pseudo}
+                          </Typography>
+                        )}
+                      </Stack>
+                    </Stack>
+                  ))}
+                </Stack>
+              </Box>
+              <ListItemButton
+                sx={{
+                  margin: 'auto',
+                }}
+              >
+                {sessionButton(session)} {/* Updated to pass session instead of partie */}
+              </ListItemButton>
+            </ListItem>
+            <Divider component="li" />
+          </React.Fragment>
+        ))}
+      </List>
       </Box>
 
       {/* PLAYER LIST MODAL */}
@@ -506,11 +520,16 @@ function bandeauPrincipalPC(isCampagne,isFermé, handleOpenPlayerModal, theme) {
 
 function partiePlayerList(handleOpenPlayerModal, theme) {
   const maxPlayerDisplayedWithName = partie.joueurs.length > (useMediaQuery(theme.breakpoints.down('xl')) ? 3 : 6);
-  let maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('xl')) ? 5 : 12;
+  let maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('sm')) ? 5 : 12;
+  maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('md')) ? maxPlayerDisplayed : 10;
+  maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('lg')) ? maxPlayerDisplayed : 15;
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  // Limit displayed players to maxPlayerDisplayed
-  const displayedPlayers = partie.joueurs.slice(0, maxPlayerDisplayed);
+  // Memoize displayedPlayers to prevent new array reference on every render
+  const displayedPlayers = React.useMemo(
+    () => partie.joueurs.slice(0, maxPlayerDisplayed),
+    [partie.joueurs, maxPlayerDisplayed]
+  );
 
   // Calculate if scrolling is needed
   const needsScroll = partie.joueurs.length > maxPlayerDisplayed;
@@ -521,9 +540,16 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
 
   React.useEffect(() => {
     if (listRef.current && needsScroll) {
-      setScrollWidth(listRef.current.scrollWidth / 2 - listRef.current.clientWidth); // Half scrollWidth due to duplication
+      const updateScrollWidth = () => {
+        setScrollWidth(listRef.current.scrollWidth / 2 - listRef.current.clientWidth);
+      };
+      updateScrollWidth();
+
+      // Handle window resize to recalculate scrollWidth
+      window.addEventListener('resize', updateScrollWidth);
+      return () => window.removeEventListener('resize', updateScrollWidth);
     }
-  }, [displayedPlayers, needsScroll]);
+  }, [needsScroll, displayedPlayers.length]); // Depend on length to avoid reference issues
 
   // Custom animation speed (seconds)
   const animationDuration = Math.max(1, partie.joueurs.length * 1.3);
@@ -533,10 +559,11 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
     <Stack
       direction="row"
       alignItems="center"
-      key={`${joueur.id}-${index}`} // Unique key for duplicated items
+      key={`${joueur.id}-${index}`}
+      onClick={handleOpenPlayerModal}
       mr={1}
       sx={{
-        flexShrink: 0, // Prevent shrinking for consistent animation
+        flexShrink: 0,
         '&:hover .playerInfo': {
           visibility: 'visible',
           width: 'auto',
@@ -550,8 +577,7 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
         src={joueur.avatar}
         alt={joueur.nom}
         sx={{
-          // Respect theme's MuiAvatar breakpoint styles
-          ...(isMobileScreen && { width: 24, height: 24 }), // Smaller on mobile
+          ...(isMobileScreen && { width: 24, height: 24 }),
         }}
       />
       {!isMobileScreen && (
@@ -586,7 +612,7 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
   );
 
   return (
-    <CardActionArea onClick={handleOpenPlayerModal}>
+    <Box >
       <Stack
         direction="column"
         mt={isMobileScreen ? 0 : 2}
@@ -602,15 +628,20 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
           justifyContent="space-between"
           width="100%"
         >
-          <Typography variant="overline" fontSize={isMobileScreen ? 10 : ''}>
+          <Typography variant="overline" fontSize={isMobileScreen ? 10 : ''} onClick={handleOpenPlayerModal}>
             Joueurs inscrits :
           </Typography>
           <Button
             color="secondary"
+            onClick={handleOpenPlayerModal}
             size="small"
             sx={{
               color: 'background.avatar',
-              fontSize: isMobileScreen ? 10 : '',
+              fontSize: isMobileScreen ? 10 : '',              
+              ...theme.applyStyles('light', {
+                borderColor: theme.palette.main,
+                backgroundColor: 'text.avatar',
+              }),
             }}
           >
             Voir tout
@@ -619,9 +650,9 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
 
         <Box
           sx={{
-            overflow: 'hidden', // Hide overflow for scrolling effect
+            overflow: 'hidden',
             width: '100%',
-            position: 'relative', // For overflow indicator
+            position: 'relative',
           }}
         >
           <Stack
@@ -630,32 +661,27 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
             sx={{
               justifyContent: 'flex-start',
               alignItems: 'center',
-              // Apply scrolling animation if needed
               ...(needsScroll && {
                 display: 'flex',
-                width: `${scrollWidth}px`, // Allow content to expand
+                width: `${scrollWidth}px`,
                 animation: `scroll ${animationDuration}s linear infinite`,
                 '&:hover': {
-                  animationPlayState: 'paused', // Pause on hover
+                  animationPlayState: 'paused',
                 },
-                // Keyframes for looping scroll
                 '@keyframes scroll': {
                   '0%': { transform: 'translateX(0)' },
-                  '100%': { transform: `translateX(-${scrollWidth}px)` }, // Half width due to duplication
+                  '100%': { transform: `translateX(-${scrollWidth}px)` },
                 },
-                // Respect reduced motion
                 '@media (prefers-reduced-motion: reduce)': {
                   animation: 'none',
                 },
               }),
-              // Disable animation if no scroll needed
               ...(!needsScroll && {
-                flexWrap: 'wrap', // Allow wrapping if no animation
+                flexWrap: 'wrap',
               }),
             }}
             ref={listRef}
           >
-            {/* Render players twice for seamless looping */}
             {needsScroll ? (
               <>
                 {partie.joueurs.map((joueur, index) => renderPlayer(joueur, index))}
@@ -666,10 +692,10 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
             )}
           </Stack>
 
-          {/* Overflow Indicator (Static) */}
           {needsScroll && (
             <Typography
               variant="caption"
+              onClick={handleOpenPlayerModal}
               sx={{
                 position: 'absolute',
                 right: 0,
@@ -682,8 +708,8 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
                 boxShadow: 1,
                 whiteSpace: 'nowrap',
                 color: 'text.secondary',
-                zIndex: 1, // Ensure above scrolling content
-                ...(isMobileScreen && { fontSize: '0.75rem' }), // Smaller on mobile
+                zIndex: 1,
+                ...(isMobileScreen && { fontSize: '0.75rem' }),
               }}
             >
               +{partie.joueurs.length - maxPlayerDisplayed} autres
@@ -691,6 +717,6 @@ function partiePlayerList(handleOpenPlayerModal, theme) {
           )}
         </Box>
       </Stack>
-    </CardActionArea>
+    </Box>
   );
 }
