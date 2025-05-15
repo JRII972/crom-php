@@ -39,7 +39,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     visibility: 'collapse', // Hide without removing from layout
     opacity: 0,
     transform: 'translateY(-10px)', // Start slightly above for slide-in effect
-    transition: 'opacity 0.3s ease, transform 0.8s ease', // Smooth transition
+    transition: 'opacity 0.3s ease, transform 0.5s ease', // Smooth transition
   },
   '&.info-row:hover': {
     visibility: 'visible', // Show the row

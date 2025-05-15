@@ -69,7 +69,7 @@ const MainPage: React.FC<MainPageProps> = ({
           }}
         >
           <Stack
-            spacing={2}
+            spacing={isMobileScreen ? 0 : 2}
             sx={{
               margin: 'auto',
               alignItems: 'center',
@@ -81,7 +81,7 @@ const MainPage: React.FC<MainPageProps> = ({
             
             <Header noHeader={noHeader} title={title} /> 
 
-            {!noHeader && 
+            {!noHeader && title &&  
 
             <Typography variant="h2" component="h1" sx={{
               fontFamily: 'Ravenholm',
