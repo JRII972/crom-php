@@ -1,6 +1,6 @@
 // Exemple de fichier partie.js
 
-const partie = {
+export const partie = {
     "id": 101,
     "date": "2025-04-04",
     "maitre_de_jeu": "Rêveur en Chef",

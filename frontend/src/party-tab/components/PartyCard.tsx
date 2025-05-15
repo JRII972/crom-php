@@ -117,7 +117,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
 
         <CardActionArea
           component={Link}
-          to={"./partie/" + partie.id}
+          to={"/partie/" + partie.id}
           sx={{
             flex: 1, // Prend l'espace disponible
             height: '100%',

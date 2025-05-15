@@ -22,7 +22,8 @@ import {
   alpha,
 } from "@mui/material";
 
-import partie from './data/partie';
+import {partie as _p} from './data/partie';
+import parties from './data/parties';
 import { DynamicThemeProvider, createDynamicTheme } from "../utils/DynamicThemeProvider";
 import { getCurrentUser } from "../models/User";
 
@@ -30,6 +31,8 @@ import LockOutlineIcon from '@mui/icons-material/LockOutline';
 import BlockIcon from '@mui/icons-material/Block';
 import SizeBoundary from "../utils/SizeBoundaryProps";
 import { useTheme } from "@emotion/react";
+import { useParams } from 'react-router-dom';
+import { findGameByName } from "./data/games";
 
 const Modalstyle = {
   position: 'absolute',
@@ -105,6 +108,23 @@ const sessionButton = (session) => {
 // TODO: Make the card mobile friendly
 // TODO: add click on player and mj avatar for a new page with all parties and sessions likend to them
 const PartiePage = () => {
+  const { id } = useParams()
+  console.log(id)
+
+  const _partie = parties.find((party) => party.id === Number(id));
+
+  // If _partie is not found, you might want to handle this case
+  if (!_partie) {
+    return <Typography>Partie non trouvée</Typography>;
+  }
+
+  // Use _partie directly, or merge with additional data if needed
+  const partie = { ..._p, ..._partie, image: findGameByName(_partie.jeu).image };
+
+  console.log(id);
+  console.log(_partie);
+  console.log(partie);
+
   const isCampagne = partie.type === "Cmp";
   const isFermé = true;
   const currentUser = getCurrentUser();
@@ -135,8 +155,8 @@ const PartiePage = () => {
   >
     <DynamicThemeProvider imageUrl={partie.image}>
       {/* Bandeau principal */}
-      {!isMobileScreen && bandeauPrincipalPC(isCampagne, isFermé, handleOpenPlayerModal, theme)}
-      {isMobileScreen && bandeauPrincipalMobile(isCampagne, isFermé, handleOpenPlayerModal, theme)}
+      {!isMobileScreen && bandeauPrincipalPC(partie, isCampagne, isFermé, handleOpenPlayerModal, theme)}
+      {isMobileScreen && bandeauPrincipalMobile(partie, isCampagne, isFermé, handleOpenPlayerModal, theme)}
 
       {/* Zone secondaire */}
       <Box mt={4}
@@ -269,7 +289,7 @@ const PartiePage = () => {
       </Box>
 
       {/* PLAYER LIST MODAL */}
-      {PlayerListModal(openPlayerModal, handleClosePlayerModal)}
+      {PlayerListModal(partie, openPlayerModal, handleClosePlayerModal)}
     </DynamicThemeProvider>
   </Box>
   );
@@ -277,7 +297,7 @@ const PartiePage = () => {
 
 export default PartiePage;
 
-function PlayerListModal(openPlayerModal, handleClosePlayerModal) {
+function PlayerListModal(partie, openPlayerModal, handleClosePlayerModal) {
   const isMobileScreen = useMediaQuery(theme => theme.breakpoints.down('md'));
 
   return (
@@ -327,7 +347,7 @@ function PlayerListModal(openPlayerModal, handleClosePlayerModal) {
   );
 }
 
-function bandeauPrincipalMobile(isCampagne, isFermé, handleOpenPlayerModal, theme) {
+function bandeauPrincipalMobile(partie, isCampagne, isFermé, handleOpenPlayerModal, theme) {
   return <Card
     sx={{
       position: 'relative',
@@ -423,7 +443,7 @@ function bandeauPrincipalMobile(isCampagne, isFermé, handleOpenPlayerModal, the
         
         
         {isCampagne && (
-          partiePlayerList(handleOpenPlayerModal, theme)
+          partiePlayerList(partie, handleOpenPlayerModal, theme)
         )}
       </Stack>
       
@@ -431,7 +451,7 @@ function bandeauPrincipalMobile(isCampagne, isFermé, handleOpenPlayerModal, the
   </Card>;
 }
 
-function bandeauPrincipalPC(isCampagne,isFermé, handleOpenPlayerModal, theme) {
+function bandeauPrincipalPC(partie, isCampagne, isFermé, handleOpenPlayerModal, theme) {
   return <Card
     sx={{
       position: 'relative',
@@ -512,13 +532,13 @@ function bandeauPrincipalPC(isCampagne,isFermé, handleOpenPlayerModal, theme) {
         </Box>
       </Stack>
       {isCampagne && (
-        partiePlayerList(handleOpenPlayerModal, theme)
+        partiePlayerList(partie, handleOpenPlayerModal, theme)
       )}
     </CardContent>
   </Card>;
 }
 
-function partiePlayerList(handleOpenPlayerModal, theme) {
+function partiePlayerList(partie, handleOpenPlayerModal, theme) {
   const maxPlayerDisplayedWithName = partie.joueurs.length > (useMediaQuery(theme.breakpoints.down('xl')) ? 3 : 6);
   let maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('sm')) ? 5 : 12;
   maxPlayerDisplayed = useMediaQuery(theme.breakpoints.down('md')) ? maxPlayerDisplayed : 10;
