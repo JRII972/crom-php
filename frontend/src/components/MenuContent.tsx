@@ -12,9 +12,47 @@ interface MenuItem {
 
 const mainListItems: MenuItem[] = [
   { text: 'Acceuil',      icon: <HomeRounded />,      to: '/' },
-  { text: 'Mes parties',   icon: <Event />,    to: '/mes-parties' },
-  { text: 'Parties', icon: <ListIcon />, to: '/analytics' },
-  { text: 'Mes disponibilités',     icon: <Schedule />,to: '/disponibilité' },
+  { text: 'Mes parties',   icon: <Event />,    to: '/mes-parties', children : [
+      {
+        section: 'Info',
+        item: [
+          { text: 'Mes disponibilités',     icon: <Schedule />, to: '/disponibilité' },
+        ]
+      },
+    ] 
+  },
+  { text: 'Parties', icon: <ListIcon />, to: '/parties', children : [
+      {
+        section: 'Type',
+        item: [
+          { text: 'Campagne', icon: <ListIcon />, to: '/campagne' },
+          { text: 'OneShot', icon: <ListIcon />, to: '/oneshot' },
+          { text: 'Event', icon: <ListIcon />, to: '/event' },
+        ]
+      },
+      {
+        section: 'Catégorie',
+        item: [
+          { text: 'Horreur', icon: <ListIcon />, to: '/horreur' },
+          { text: 'Action', icon: <ListIcon />, to: '/action' },
+          { text: 'Fantasy', icon: <ListIcon />, to: '/fantasy' },
+        ]
+      },
+    ] 
+  },
+  
+  { text: 'Administration',     icon: <Schedule />, to: '/admin', children : [
+      {
+        section: 'Site',
+        item: [
+          { text: 'Paramêtre',  icon: <SettingsRounded />,  to: '/settings' },
+          { text: 'Dashboard',  icon: <Dashboard />,  to: '/dashboard' },
+          { text: 'About',     icon: <InfoRounded />,      to: '/about' },
+          { text: 'Feedback',  icon: <HelpRounded />,      to: '/feedback' },
+        ]
+      },
+    ] 
+  },
 ];
 
 const secondaryListItems: MenuItem[] = [

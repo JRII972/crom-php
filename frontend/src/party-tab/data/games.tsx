@@ -3,9 +3,12 @@ import React from 'react';
 interface Game {
   nom: string;
   description: string;
+  short_coment?: string;
   image: string;
+  categories?: string[];
+  image_alt?: string;
   icon?: string;
-  displayName?: React.ReactNode; // JSX pour l'icône ou string pour le nom
+  displayName?: React.ReactNode; 
 }
 
 const games: Game[] = [
@@ -13,7 +16,8 @@ const games: Game[] = [
     "nom": "Warhammer",
     "description": "Warhammer est un jeu de rôle immersif dans un univers de dark fantasy où l’humanité lutte contre les forces du Chaos dans un monde médiéval brutal. Les joueurs incarnent des héros de l’Empire, confrontés à des cultistes, des mutants et des démons. Le système de jeu, riche et détaillé, met l’accent sur des combats tactiques et des choix aux conséquences souvent tragiques. L’ambiance est sombre, presque désespérée, mais c’est dans cette adversité que les personnages trouvent leur gloire. Parfait pour ceux qui aiment les récits épiques et les dilemmes moraux complexes.",
     "image": "https://cdn1.epicgames.com/offer/f640a0c1648147fea7e81565b45a3003/EGS_Warhammer40000SpaceMarine2_SaberInteractive_S1_2560x1440-975214651d1d1bc6c6e5779b53958840",
-    "icon": "/data/images/icon/Warhammer40k.png"
+    "icon": "/data/images/icon/Warhammer40k.png",
+    "categories" : ['Guerre', 'Espace', 'Alien'],
   },
   {
     "nom": "L’Appel de Cthulhu",
@@ -60,7 +64,7 @@ const games: Game[] = [
   {
     "nom": "Cyberpunk RED",
     "description": "Cyberpunk RED est un jeu de rôle dans l’univers de Cyberpunk 2077, se déroulant dans un futur où la technologie et la violence dominent. Les joueurs incarnent des mercenaires, hackers ou nomades dans Night City, affrontant mégacorporations et gangs. Le système, basé sur des dés et des compétences personnalisables, offre des combats dynamiques et des intrigues complexes. L’ambiance néon, teintée de désespoir et de rébellion, est parfaite pour les fans de récits cyberpunk modernes et immersifs.",
-    "image": "/data/images/Cyberpunk RED.jpg",
+    "image": "/data/images/Cyberpunk RED.png",
     // "icon": "https://cyberpunk.net/icons/chip_cyberware.png"
   },
   {

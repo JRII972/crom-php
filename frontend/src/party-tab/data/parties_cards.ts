@@ -1,4 +1,5 @@
 import { GameSession } from '../types/GameSession';
+import { groupByType } from '../utils/filter';
 import { parties } from './parties';
 
 export interface PartyCardData {
@@ -67,5 +68,7 @@ export const vos_partie: PartyCardData[] = [
       ]
   }
 ];
+
+export const les_parties = groupByType(parties);
 
 export default parties_card;

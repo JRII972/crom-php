@@ -11,6 +11,7 @@ import AppNavbar from './AppNavbar';
 import Header from './Header';
 import { useCurrentMeta } from '../utils/utils';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Container } from '@mui/material';
 
 export interface MainPageProps {
   /** Titre affiché dans le header */
@@ -49,7 +50,20 @@ const MainPage: React.FC<MainPageProps> = ({
 
 
   return (
-    <>
+    <Container 
+      maxWidth='lg'
+      sx={{
+        pt: {
+          sm: 2,
+          md: 13
+        },
+        px: {
+          sm: 0,
+          md: 0
+        }
+      }}
+    >
+      <Header noHeader={noHeader} title={title} /> 
       {/* TODO: Fix this import and material symbol */}
       <link
         rel="stylesheet"
@@ -57,7 +71,7 @@ const MainPage: React.FC<MainPageProps> = ({
       />
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
-        <SideMenu />
+        {/* <SideMenu /> */}
         <AppNavbar />
         <Box
           component="main"
@@ -79,7 +93,7 @@ const MainPage: React.FC<MainPageProps> = ({
             }}
           >
             
-            <Header noHeader={noHeader} title={title} /> 
+            
 
             {!noHeader && title &&  
 
@@ -97,7 +111,7 @@ const MainPage: React.FC<MainPageProps> = ({
           </Stack>
         </Box>
       </Box>
-    </>
+    </Container>
   );
 };
 

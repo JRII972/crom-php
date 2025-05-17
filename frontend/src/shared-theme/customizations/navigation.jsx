@@ -23,7 +23,7 @@ export const navigationCustomizations = {
           [`&.${menuItemClasses.focusVisible}`]: {
             backgroundColor: alpha(theme.palette.action.selected, 0.3),
           },
-        },
+        },        
       }),
     },
   },
@@ -273,6 +273,21 @@ export const navigationCustomizations = {
           ...theme.applyStyles('dark', { opacity: 0.5 }),
         },
       }),
+    },
+  },
+  MuiAppBar: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        [theme.breakpoints.up('md')]: {
+          padding: '13px 50px 13px 50px',
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          '& .MuiFormControl-root': {
+            height: '36px'
+          }
+        }
+      })
     },
   },
 };

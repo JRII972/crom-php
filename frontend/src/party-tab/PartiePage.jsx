@@ -481,33 +481,50 @@ function bandeauPrincipalPC(partie, isCampagne, isFermé, handleOpenPlayerModal,
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundImage: `url(${partie.image})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        // backgroundImage: `url(${partie.image})`,
+        // backgroundSize: 'cover',
+        // backgroundPosition: 'center',
         // agrandit légèrement pour éviter les bords noirs lors du flou
-        transform: 'scale(1.1)',
-        // filter: 'blur(8px)',
-      }} />
-    {/* <CardMedia
-        sx={{ position: 'relative'}}
-          component="img"
-          // height="50%"
-          image={partie.image}
-          alt={partie.party_name}
-        /> */}
+        transform: 'scale(1)',
+        filter: 'blur(10px)',
+      }}>
+        <img src={partie.image} alt={partie.alt} width='100%'/>
+    </Box>
+    <Box
+      sx={{
+        overflow: 'hidden',
+      }}
+    >
+      <CardMedia
+        sx={{ 
+          position: 'relative', 
+          // backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          transform: 'scale(1)',
+          
+        }}
+        component="img"
+        // height="50%"
+        image={partie.image}
+        alt={partie.party_name}
+      />
+    </Box>
     <CardContent
       sx={{
         position: 'relative',
         backgroundColor: 'background.mainContent',
       }}
     >
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h5">
         {partie.party_name}
       </Typography>
+
       <Typography variant="subtitle1">
         {partie.short_coment}
       </Typography>
-      <Divider sx={{ my: 2 }} />
+
+      <Divider sx={{ my: 1 }} />
+
       <Stack direction="row" spacing={2} alignItems="center" justifyContent='space-between'>
         <Stack direction='row' spacing={2} alignItems='center'>
           <Avatar src={partie.mj.avatar} />

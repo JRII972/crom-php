@@ -58,7 +58,7 @@ export function createDynamicTheme( imageUrl ) {
               dark: colors.primary.dark,
             },
             background: {
-              mainContent: `${alpha( colors.primary.light, 0.8)}`, // Use primary.main for avatar in light mode
+              mainContent: `${alpha( colors.primary.light, 0.7)}`, // Use primary.main for avatar in light mode
               subcontent: colors.primary.light, // Use primary.main for avatar in light mode
               avatar: colors.primary.main, // Use primary.main for avatar in light mode
               divider: colors.primary.main, // Use primary.main for avatar in light mode
@@ -77,7 +77,7 @@ export function createDynamicTheme( imageUrl ) {
               dark: colors.secondary.dark,
             },
             background: {
-              mainContent: `${alpha( colors.primary.dark, 0.8)}`,
+              mainContent: `${alpha( colors.primary.dark, 0.7)}`,
               subcontent: colors.primary.dark,
               avatar: colors.primary.light, // Consistent with dark mode
               divider: colors.primary.light, // Consistent with dark mode

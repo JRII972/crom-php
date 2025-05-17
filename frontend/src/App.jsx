@@ -20,6 +20,8 @@ import Blog from './blog/Blog';
 import UserManagement from './API/test/user';
 
 import PlayerParties from './party-tab/PlayerParties';
+import PartiesPage from './party-tab/PartiesPage';
+import { DisplayLBDR } from './utils/LBDRDisplay';
 
 const router = createBrowserRouter([
   {
@@ -40,7 +42,7 @@ const router = createBrowserRouter([
     handle: { breadcrumb: 'CROM' },
     children: [
       {
-        path: "partie/:id",   // Route dynamique
+        path: "partie/:id",   
         element: <PartiePage />, 
         handle: {
           breadcrumb: (match) => {
@@ -50,11 +52,19 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: "mes-parties",   // Route dynamique
+        path: "mes-parties",   
         element: <PlayerParties />, 
         handle: {
           breadcrumb: 'Mes Parties',
           title: 'Mes Parties',
+        }
+      },
+      {
+        path: "parties",   
+        element: <PartiesPage />, 
+        handle: {
+          breadcrumb: 'Parties',
+          title: 'Parties',
         }
       },
       {
@@ -102,6 +112,10 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
+  React.useEffect(() => {
+    DisplayLBDR();
+  }, []);
+
   return (
     <RouterProvider router={router} />
   );
