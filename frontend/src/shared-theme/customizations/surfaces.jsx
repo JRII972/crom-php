@@ -3,6 +3,31 @@ import { gray } from '../themePrimitives';
 
 /* eslint-disable import/prefer-default-export */
 export const surfacesCustomizations = {
+  MuiContainer: {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        '&:not(:first-child)': {
+          paddingTop: theme.spacing(2),
+          [theme.breakpoints.up('sm')]: {
+            paddingTop: theme.spacing(2),
+          },
+          [theme.breakpoints.up('md')]: {
+            paddingTop: theme.spacing(13),
+          },
+        },
+        paddingLeft: theme.spacing(0),
+        paddingRight: theme.spacing(0),
+        [theme.breakpoints.up('sm')]: {
+          paddingLeft: theme.spacing(0),
+          paddingRight: theme.spacing(0),
+        },
+        [theme.breakpoints.up('md')]: {
+          paddingLeft: theme.spacing(0),
+          paddingRight: theme.spacing(0),
+        },
+      }),
+    },
+  },
   MuiAccordion: {
     defaultProps: {
       elevation: 0,

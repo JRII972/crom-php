@@ -53,9 +53,17 @@ const MainPage: React.FC<MainPageProps> = ({
     <Container 
       maxWidth='lg'
       sx={{
+        pt: {
+          sm: 2,
+          md: 13
+        },
+        px: {
+          sm: 0,
+          md: 0
+        }
       }}
     >
-      
+      <Header noHeader={noHeader} title={title} /> 
       {/* TODO: Fix this import and material symbol */}
       <link
         rel="stylesheet"
@@ -63,7 +71,7 @@ const MainPage: React.FC<MainPageProps> = ({
       />
       <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex' }}>
-        <SideMenu />
+        {/* <SideMenu /> */}
         <AppNavbar />
         <Box
           component="main"
@@ -86,7 +94,7 @@ const MainPage: React.FC<MainPageProps> = ({
           >
             
             
-            <Header noHeader={noHeader} title={title} /> 
+
             {!noHeader && title &&  
 
             <Typography variant="h2" component="h1" sx={{
