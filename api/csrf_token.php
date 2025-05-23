@@ -1,12 +1,7 @@
 <?php
-require_once 'config.php';
+session_start();
+header('Content-Type: application/json');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/App/Database/config.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Method not allowed']);
-    exit;
-}
-
-$token = generateCsrfToken();
-echo json_encode(['csrf_token' => $token]);
-?>
+echo json_encode(['csrf_token' => generateCsrfToken()]);

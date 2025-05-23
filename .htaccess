@@ -1,1 +1,16 @@
-RewriteEngine On RewriteBase /api/ RewriteCond %{REQUEST_FILENAME} !-f RewriteCond %{REQUEST_FILENAME} !-d RewriteRule ^(.*)$ index.php [QSA,L] Header set Access-Control-Allow-Origin "http://localhost:3000" Header set Access-Control-Allow-Methods "POST" Header set Access-Control-Allow-Headers "Content-Type, X-CSRF-Token" Header set Access-Control-Allow-Credentials "true"
+RewriteEngine On
+RewriteBase /
+
+# Allow access to existing files or directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Redirect /assets/, /data/, /fonts/ to /public/
+RewriteRule ^(assets|data|fonts)/(.*)$ public/$1/$2 [L]
+
+# Redirect /api/ calls as-is
+RewriteRule ^api/(.*)$ api/index.php [QSA,L]
+
+# All other requests go to frontend/index.html
+RewriteRule ^.*$ frontend/index.html [L]
