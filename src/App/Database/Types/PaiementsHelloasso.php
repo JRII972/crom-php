@@ -9,6 +9,9 @@ use InvalidArgumentException;
 use PDO;
 use PDOException;
 
+// TODO: Ajouter des index sur paiements_helloasso(id_utilisateur, statut, date_creation) et notifications_helloasso(type_evenement, traite).
+// FIXME:Vérifier l’existence de id_utilisateur avant de créer un paiement.
+
 /**
  * Classe représentant un paiement Helloasso dans la base de données.
  */
@@ -227,7 +230,7 @@ class PaiementsHelloasso extends DefaultDatabaseType
      * @return array Liste des paiements
      * @throws PDOException En cas d'erreur SQL
      */
-    public static function search(PDO $pdo, string $idUtilisateur = '', string $statut = ''): array
+    public static function search(PDO $pdo, string $idUtilisateur = '', string $statut = '', string $dateDebut = '', string $dateFin = ''): array
     {
         $sql = 'SELECT id, id_notification, id_utilisateur, type_paiement, nom, montant, devise, date_echeance, statut, metadonnees, date_creation FROM paiements_helloasso WHERE 1=1';
         $params = [];
@@ -239,6 +242,14 @@ class PaiementsHelloasso extends DefaultDatabaseType
         if ($statut !== '') {
             $sql .= ' AND statut = :statut';
             $params['statut'] = $statut;
+        }
+        if ($dateDebut !== '' && isValidDate($dateDebut)) {
+            $sql .= ' AND date_creation >= :date_debut';
+            $params['date_debut'] = $dateDebut;
+        }
+        if ($dateFin !== '' && isValidDate($dateFin)) {
+            $sql .= ' AND date_creation <= :date_fin';
+            $params['date_fin'] = $dateFin;
         }
 
         $stmt = $pdo->prepare($sql);

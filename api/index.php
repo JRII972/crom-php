@@ -13,27 +13,27 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 try {
-    // Vérification du token JWT ou refresh token
-    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-    $user = null;
-    if (preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
-        $jwt = $matches[1];
-        try {
-            $decoded = JWT::decode($jwt, new Key('votre_secret_jwt_ici', 'HS256'));
-            $user = (array)$decoded;
-        } catch (Exception $e) {
-            throw new Exception('Token JWT invalide: ' . $e->getMessage(), 401);
-        }
-    }
+    // // Vérification du token JWT ou refresh token
+    // $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    // $user = null;
+    // if (preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+    //     $jwt = $matches[1];
+    //     try {
+    //         $decoded = JWT::decode($jwt, new Key('votre_secret_jwt_ici', 'HS256'));
+    //         $user = (array)$decoded;
+    //     } catch (Exception $e) {
+    //         throw new Exception('Token JWT invalide: ' . $e->getMessage(), 401);
+    //     }
+    // }
 
-    // Vérification CSRF pour les méthodes non-GET
-    $method = $_SERVER['REQUEST_METHOD'];
-    if (!in_array($method, ['GET', 'OPTIONS'])) {
-        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-        if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
-            throw new Exception('Jeton CSRF invalide', 403);
-        }
-    }
+    // // Vérification CSRF pour les méthodes non-GET
+    // $method = $_SERVER['REQUEST_METHOD'];
+    // if (!in_array($method, ['GET', 'OPTIONS'])) {
+    //     $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+    //     if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
+    //         throw new Exception('Jeton CSRF invalide', 403);
+    //     }
+    // }
 
     $uri = $_SERVER['REQUEST_URI'];
     $scriptName = dirname($_SERVER['SCRIPT_NAME']);

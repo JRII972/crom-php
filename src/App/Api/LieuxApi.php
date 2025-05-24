@@ -12,7 +12,7 @@ use PDO;
 use PDOException;
 use InvalidArgumentException;
 
-class LieuApi extends APIHandler
+class LieuxApi extends APIHandler
 {
     public function __construct()
     {

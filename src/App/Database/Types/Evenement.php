@@ -191,21 +191,32 @@ class Evenement extends DefaultDatabaseType
      * Recherche des événements avec filtre optionnel par nom ou date de début.
      *
      * @param PDO $pdo Instance PDO
-     * @param string $keyword Nom ou date de début (format Y-m-d, optionnel)
+     * @param string $keyword Nom
+     * @param string $dateFin 
+     * @param string $idLieu 
      * @return array Liste des événements
      * @throws PDOException En cas d'erreur SQL
      */
-    public static function search(PDO $pdo, string $keyword = ''): array
+    public static function search(PDO $pdo, string $keyword = '', string $dateFin = '', int $idLieu = 0): array
     {
         $sql = 'SELECT id, nom, description, date_debut, date_fin, id_lieu, regle_recurrence, exceptions, date_creation FROM evenements WHERE 1=1';
         $params = [];
 
         if ($keyword !== '') {
-            $sql .= ' AND (nom LIKE :keyword OR date_debut = :keyword)';
-            $params['keyword'] = $keyword;
-            if (!$keyword) {
-                $params['keyword'] = '%' . $keyword . '%';
-            }
+            $sql .= ' AND nom LIKE :keyword';
+            $params['keyword'] = '%' . $keyword . '%';
+        }
+        if ($keyword !== '' && isValidDate($keyword)) {
+            $sql .= ' OR date_debut = :date_debut';
+            $params['date_debut'] = $keyword;
+        }
+        if ($dateFin !== '' && isValidDate($dateFin)) {
+            $sql .= ' AND date_fin <= :date_fin';
+            $params['date_fin'] = $dateFin;
+        }
+        if ($idLieu > 0) {
+            $sql .= ' AND id_lieu = :id_lieu';
+            $params['id_lieu'] = $idLieu;
         }
 
         $stmt = $pdo->prepare($sql);

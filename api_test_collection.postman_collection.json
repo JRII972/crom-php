@@ -1,0 +1,466 @@
+{
+  "info": {
+    "name": "Collection API Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "List Parties",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Partie by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Partie",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_jeu\": \"4fa9b8e2-1c5a-4b2e-9f2c-7d8a1b2c3d4e\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_partie\": \"CAMPAGNE\",\n  \"type_campagne\": \"Classique\",\n  \"nom\": \"L'Appel de l'Aventure\",\n  \"description\": \"Une campagne \\u00e9pique \\u00e0 travers des terres inconnues.\",\n  \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Partie (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id_jeu\": \"6a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_partie\": \"S\\u00c9ANCE_UNIQUE\",\n  \"nom\": \"La Caverne Myst\\u00e9rieuse\",\n  \"description\": \"Une session unique de 4 heures dans une caverne p\\u00e9rilleuse.\",\n  \"verrouille\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Patch Partie",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"La Caverne Red\\u00e9couverte\",\n  \"verrouille\": false\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete Partie",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Add Member to Partie",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id/membres",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id",
+            "membres"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"9f8e7d6c-5b4a-3c2d-1b0a-9e8d7c6b5a4f\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Remove Member from Partie",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/parties/:id/membres/:userId",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "parties",
+            ":id",
+            "membres",
+            ":userId"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Jeu",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/jeux",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "jeux"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Carcassonne\",\n  \"description\": \"Un jeu de tuiles pos\\u00e9 et de contr\\u00f4le de territoire.\",\n  \"typeJeu\": \"JEU_DE_SOCIETE\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Update Jeu (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/jeux/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "jeux",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Carcassonne \\u2013 \\u00c9dition Deluxe\",\n  \"description\": \"\\u00c9dition revue et augment\\u00e9e avec extension incluse.\",\n  \"typeJeu\": \"JEU_DE_SOCIETE\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Patch Jeu",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/jeux/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "jeux",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"Version anniversaire avec nouveaux personnages.\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Marie\",\n  \"email\": \"marie.dupont@example.com\",\n  \"mot_de_passe\": \"S3cur3P@ssw0rd\",\n  \"role\": \"INSCRIT\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Get User by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update User (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Marie-Anne\",\n  \"email\": \"marie.dupont@nouveaudomaine.com\",\n  \"mot_de_passe\": \"Nouv3auP@ss\",\n  \"telephone\": \"+33 6 12 34 56 78\",\n  \"role\": \"ADMIN\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Patch User",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"telephone\": \"+33 7 98 76 54 32\",\n  \"role\": \"INSCRIT\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Add Creneau to User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id/creneaux",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id",
+            "creneaux"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"jour\": \"VENDREDI\",\n  \"heure_debut\": \"09:00\",\n  \"heure_fin\": \"12:30\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Remove Creneau from User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/:id/creneaux/:creneauId",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            ":id",
+            "creneaux",
+            ":creneauId"
+          ]
+        }
+      }
+    },
+    {
+      "name": "User Registration",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/utilisateurs/inscription",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "utilisateurs",
+            "inscription"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"prenom\": \"Sophie\",\n  \"nom\": \"Durand\",\n  \"email\": \"sophie.durand@example.com\",\n  \"mot_de_passe\": \"Secur1t3P@ss!\"\n}"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

@@ -10,7 +10,7 @@ use PDO;
 use PDOException;
 use InvalidArgumentException;
 
-class GenreApi
+class GenresApi
 {
     private PDO $pdo;
 

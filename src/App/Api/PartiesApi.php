@@ -11,7 +11,7 @@ use App\Utils\Image;
 use PDOException;
 use InvalidArgumentException;
 
-class PartieApi extends APIHandler
+class PartiesApi extends APIHandler
 {
     public function handle(?string $id): array
     {
@@ -154,7 +154,7 @@ class PartieApi extends APIHandler
             $partie = new Partie(
                 nom: trim($data['nom']),
                 jeuOuId: (int)$data['id_jeu'],
-                maitreJeuOuId: $data['id_maitre_jeu'],
+                maitreJeuOuId: $data['id_maitre_jeu'], //$this->user['sub']
                 typePartie: $typePartie,
                 typeCampagne: $typeCampagne,
                 descriptionCourte: $data['description_courte'] ?? null,
@@ -185,7 +185,7 @@ class PartieApi extends APIHandler
             return $this->sendResponse(400, 'error', null, 'Nom requis');
         }
 
-        try {
+        try {   
             $partie = new Partie(id: (int)$id);
             $this->verifyMasterOrAdmin($partie);
 

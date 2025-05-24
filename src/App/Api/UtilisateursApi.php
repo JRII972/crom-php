@@ -19,7 +19,7 @@ use DateTime;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-class UtilisateurApi extends APIHandler
+class UtilisateursApi extends APIHandler
 {
     public function __construct()
     {

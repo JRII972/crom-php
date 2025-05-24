@@ -25,6 +25,11 @@ class Session extends DefaultDatabaseType
     private ?Utilisateur $maitreJeu = null;
     private ?int $maxJoueurs = null;
 
+    // Cache configuration
+    private static $cacheEnabled = true; // Activer/désactiver le cache
+    private static $cacheTTL = 300; // 5 minutes en secondes
+    private static $cachePrefix = 'session_search_';
+
     /**
      * Constructeur de la classe Session.
      *
@@ -159,6 +164,11 @@ class Session extends DefaultDatabaseType
             ]);
             $this->id = (int) $this->pdo->lastInsertId();
         }
+
+        // Invalider le cache pour la partie
+        if (self::$cacheEnabled && $this->idPartie !== null) {
+            $this->invalidateCache($this->idPartie);
+        }
     }
 
     /**
@@ -173,30 +183,101 @@ class Session extends DefaultDatabaseType
             throw new InvalidArgumentException('Impossible de supprimer une session sans ID.');
         }
         $stmt = $this->pdo->prepare('DELETE FROM sessions WHERE id = :id');
-        return $stmt->execute(['id' => $this->id]);
+        $result = $stmt->execute(['id' => $id]);
+
+        // Invalider le cache pour la partie
+        if (self::$cacheEnabled && $this->idPartie !== null) {
+            $this->invalidateCache($this->idPartie);
+        }
+
+        return $result;
     }
 
     /**
-     * Recherche des sessions avec filtre optionnel par date.
+     * Recherche des sessions avec filtres optionnels.
      *
      * @param PDO $pdo Instance PDO
-     * @param string $keyword Date de recherche (format Y-m-d, optionnel)
+     * @param int $partieId ID de la partie (optionnel)
+     * @param int $lieuId ID du lieu (optionnel)
+     * @param string $dateDebut Date de début (format Y-m-d, optionnel)
+     * @param string $dateFin Date de fin (format Y-m-d, optionnel)
+     * @param int|null $maxJoueurs Nombre maximum de joueurs (optionnel)
      * @return array Liste des sessions
      * @throws PDOException En cas d'erreur SQL
      */
-    public static function search(PDO $pdo, string $keyword = ''): array
-    {
+    public static function search(
+        PDO $pdo,
+        int $partieId = 0,
+        int $lieuId = 0,
+        string $dateDebut = '',
+        string $dateFin = '',
+        ?int $maxJoueurs = null
+    ): array {
+        // Générer une clé de cache unique basée sur les paramètres
+        $cacheKey = self::$cachePrefix . md5(serialize([$partieId, $lieuId, $dateDebut, $dateFin, $maxJoueurs]));
+
+        // Vérifier le cache
+        if (self::$cacheEnabled && extension_loaded('apcu')) {
+            $cachedResult = apcu_fetch($cacheKey);
+            if ($cachedResult !== false) {
+                return $cachedResult;
+            }
+        }
+
         $sql = 'SELECT id, id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu, max_joueurs FROM sessions WHERE 1=1';
         $params = [];
 
-        if ($keyword !== '') {
-            $sql .= ' AND date_session = :keyword';
-            $params['keyword'] = $keyword;
+        if ($partieId > 0) {
+            $sql .= ' AND id_partie = :partie_id';
+            $params['partie_id'] = $partieId;
+        }
+        if ($lieuId > 0) {
+            $sql .= ' AND id_lieu = :lieu_id';
+            $params['lieu_id'] = $lieuId;
+        }
+        if ($dateDebut !== '' && isValidDate($dateDebut)) {
+            $sql .= ' AND date_session >= :date_debut';
+            $params['date_debut'] = $dateDebut;
+        }
+        if ($dateFin !== '' && isValidDate($dateFin)) {
+            $sql .= ' AND date_session <= :date_fin';
+            $params['date_fin'] = $dateFin;
+        }
+        if ($maxJoueurs !== null && $maxJoueurs >= 0) {
+            $sql .= ' AND max_joueurs = :max_joueurs';
+            $params['max_joueurs'] = $maxJoueurs;
         }
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Stocker dans le cache
+        if (self::$cacheEnabled && extension_loaded('apcu') && $partieId > 0) {
+            apcu_store($cacheKey, $results, self::$cacheTTL);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Invalide le cache pour une partie donnée.
+     *
+     * @param int $partieId ID de la partie
+     */
+    private function invalidateCache(int $partieId): void
+    {
+        if (!extension_loaded('apcu')) {
+            return;
+        }
+        // Invalider toutes les clés commençant par le préfixe et l'ID de la partie
+        $prefix = self::$cachePrefix . md5(serialize([$partieId]));
+        $cacheInfo = apcu_cache_info();
+        foreach ($cacheInfo['cache_list'] as $entry) {
+            if (strpos($entry['info'], $prefix) === 0) {
+                apcu_delete($entry['info']);
+            }
+        }
     }
 
     // Getters
@@ -278,16 +359,21 @@ class Session extends DefaultDatabaseType
     {
         $inscriptions = [];
 
-        $stmt = $this->pdo->prepare('SELECT id_session, id_utilisateur FROM joueurs_session WHERE id_session = :id_session');
+        $stmt = $this->pdo->prepare('
+            SELECT js.id_session, js.id_utilisateur, js.date_inscription
+            FROM joueurs_session js
+            WHERE js.id_session = :id_session
+        ');
         $stmt->execute(['id_session' => $this->id]);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($results as $result) {
-            try {
-                $inscriptions[] = new JoueursSession($result['id_session'], $result['id_utilisateur']);
-            } catch (PDOException) {
-                // Ignorer les inscriptions non trouvées
-            }
+            $inscription = new JoueursSession(
+                idSession: (int)$result['id_session'],
+                idUtilisateur: $result['id_utilisateur']
+            );
+            $inscription->setDateInscription($result['date_inscription']);
+            $inscriptions[] = $inscription;
         }
 
         return $inscriptions;

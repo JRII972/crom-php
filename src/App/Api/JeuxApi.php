@@ -14,7 +14,7 @@ use InvalidArgumentException;
 
 require_once __DIR__ . '/../Database/Types/Jeu.php';
 
-class JeuApi extends APIHandler
+class JeuxApi extends APIHandler
 {
     
 
