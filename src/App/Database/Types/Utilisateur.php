@@ -13,6 +13,7 @@ use PDOException;
 use RuntimeException;
 
 require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../../Utils/helpers.php';
 
 /**
  * Enumération pour le sexe de l'utilisateur.
@@ -123,7 +124,7 @@ class Utilisateur extends DefaultDatabaseType
                 $this->setPseudonyme($pseudonyme);
             }
             if ($image !== null) {
-                $this->setImage($image);
+                $this->image = Image::load($image);
             }
             if ($typeUtilisateur !== null) {
                 $this->setTypeUtilisateur($typeUtilisateur);
@@ -352,7 +353,7 @@ class Utilisateur extends DefaultDatabaseType
         try {
             $pdo = Database::getConnection();
             $stmt = $pdo->prepare('SELECT id FROM utilisateurs WHERE login = :login AND mot_de_passe = :mot_de_passe');
-            $hashedPassword = md5($password . PASSWORD_SALT);
+            $hashedPassword = password_hash($password . PASSWORD_SALT, PASSWORD_DEFAULT);
             $stmt->execute([
                 'login' => $login,
                 'mot_de_passe' => $hashedPassword
@@ -560,7 +561,7 @@ class Utilisateur extends DefaultDatabaseType
         if (empty(trim($motDePasse))) {
             throw new InvalidArgumentException('Le mot de passe ne peut pas être vide.');
         }
-        $this->motDePasse = md5($motDePasse . PASSWORD_SALT);
+        $this->motDePasse = password_hash($motDePasse . PASSWORD_SALT, PASSWORD_BCRYPT);
         return $this;
     }
 
@@ -616,7 +617,31 @@ class Utilisateur extends DefaultDatabaseType
         return $this;
     }
 
+    //FIXME: changer le retour json en fonction des demande
     public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'prenom' => $this->getPrenom(),
+            'nom' => $this->getNom(),
+            'id_discord' => $this->getIdDiscord(),
+            'pseudonyme' => $this->getPseudonyme(),
+            'image' => $this->getImage() ? $this->getImage()->getFilePath() : null,
+            // 'email' => $this->getEmail(),
+            // 'login' => $this->getNomUtilisateur(),
+            // 'date_de_naissance' => $this->getDateDeNaissance() ? $this->getDateDeNaissance()->format('Y-m-d') : null,
+            // 'sexe' => $this->getSexe()->value,
+            // 'type_utilisateur' => $this->getTypeUtilisateur()->value,
+            // 'date_inscription' => $this->getDateInscription() ? $this->getDateInscription()->format('Y-m-d') : null,
+            // 'ancien_utilisateur' => $this->getAncienUtilisateur(),
+            // 'premiere_connexion' => $this->getPremiereConnexion(),
+            // 'date_creation' => $this->getDateCreation()->format('Y-m-d H:i:s'),
+            // 'age' => $this->getAge(),
+            // 'annees_anciennete' => $this->getAnneesAnciennete(),
+        ];
+    }
+
+    public function private_jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),
@@ -628,7 +653,7 @@ class Utilisateur extends DefaultDatabaseType
             'sexe' => $this->getSexe()->value,
             'id_discord' => $this->getIdDiscord(),
             'pseudonyme' => $this->getPseudonyme(),
-            'image' => $this->getImage() ? $this->getImage()->getFilePath() : null,
+            'image' => $this->getImage() ? $this->getImage()->jsonSerialize() : null,
             'type_utilisateur' => $this->getTypeUtilisateur()->value,
             'date_inscription' => $this->getDateInscription() ? $this->getDateInscription()->format('Y-m-d') : null,
             'ancien_utilisateur' => $this->getAncienUtilisateur(),

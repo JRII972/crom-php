@@ -9,6 +9,9 @@ use InvalidArgumentException;
 use PDO;
 use PDOException;
 
+require_once __DIR__ . '/../../Utils/helpers.php';
+require_once __DIR__ . '/../../Utils/validate_rrule_json.php';
+
 /**
  * Enumération pour le type de récurrence.
  */
@@ -44,8 +47,8 @@ class HorairesLieu extends DefaultDatabaseType
      * @param string|null $heureDebut Heure de début (format H:i:s, requis si $id est null)
      * @param string|null $heureFin Heure de fin (format H:i:s, requis si $id est null)
      * @param TypeRecurrence|null $typeRecurrence Type de récurrence (requis si $id est null)
-     * @param string|null $regleRecurrence Règle de récurrence (JSON, optionnel)
-     * @param string|null $exceptions Exceptions (JSON, optionnel)
+     * @param string|array|null $regleRecurrence Règle de récurrence (JSON, optionnel)
+     * @param string|array|null $exceptions Exceptions (JSON, optionnel)
      * @param Evenement|int|null $evenementOuId Objet Evenement ou ID de l'événement (optionnel)
      * @throws InvalidArgumentException Si les paramètres sont incohérents
      * @throws PDOException Si l'horaire n'existe pas dans la base
@@ -56,8 +59,8 @@ class HorairesLieu extends DefaultDatabaseType
         ?string $heureDebut = null,
         ?string $heureFin = null,
         ?TypeRecurrence $typeRecurrence = null,
-        ?string $regleRecurrence = null,
-        ?string $exceptions = null,
+        array|string|null $regleRecurrence = null,
+        string|array|null $exceptions = null,
         Evenement|int|null $evenementOuId = null
     ) {
         parent::__construct();
@@ -254,14 +257,14 @@ class HorairesLieu extends DefaultDatabaseType
         return $this->typeRecurrence;
     }
 
-    public function getRegleRecurrence(): ?string
+    public function getRegleRecurrence(): ?\stdClass 
     {
-        return $this->regleRecurrence;
+        return json_decode($this->regleRecurrence);
     }
 
-    public function getExceptions(): ?string
+    public function getExceptions(): ?array 
     {
-        return $this->exceptions;
+        return json_decode($this->exceptions);
     }
 
     public function getEvenement(): ?Evenement
@@ -321,21 +324,39 @@ class HorairesLieu extends DefaultDatabaseType
         return $this;
     }
 
-    public function setRegleRecurrence(?string $regleRecurrence): self
+    public function setRegleRecurrence(array|string|null $regleRecurrence): self
     {
-        if ($regleRecurrence !== null && !isValidJson($regleRecurrence)) {
-            throw new InvalidArgumentException('La règle de récurrence doit être un JSON valide.');
+        
+        if ( is_array($regleRecurrence)){
+            if (!validateRRuleJson($regleRecurrence)){
+                throw new InvalidArgumentException('Les regle de recurrence doivent être au bon format.');
+            }
+            $this->regleRecurrence = json_encode($regleRecurrence);
+        } else {
+            if ($regleRecurrence !== null && !isValidJson($regleRecurrence)) {
+                throw new InvalidArgumentException('La règle de récurrence doit être un JSON valide.');
+            }
+            if (!validateRRuleJson(json_decode($regleRecurrence))){
+                throw new InvalidArgumentException('Les regle de recurrence doivent être au bon format.');
+            }
+            $this->regleRecurrence = $regleRecurrence;
         }
-        $this->regleRecurrence = $regleRecurrence;
         return $this;
     }
 
-    public function setExceptions(?string $exceptions): self
+    public function setExceptions(array|string|null $exceptions): self
     {
-        if ($exceptions !== null && !isValidJson($exceptions)) {
-            throw new InvalidArgumentException('Les exceptions doivent être un JSON valide.');
+        
+
+        if (is_array($exceptions)){            
+            $this->exceptions = json_encode($exceptions);
+        } else {
+            if ($exceptions !== null && !isValidJson($exceptions)) {
+                throw new InvalidArgumentException('Les exceptions doivent être un JSON valide.');
+            }
+            $this->exceptions = $exceptions;
         }
-        $this->exceptions = $exceptions;
+
         return $this;
     }
 

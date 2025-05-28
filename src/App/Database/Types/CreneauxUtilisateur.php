@@ -311,6 +311,7 @@ class CreneauxUtilisateur extends DefaultDatabaseType
         return [
             'id' => $this->getId(),
             'id_utilisateur' => $this->idUtilisateur,
+            'utilisateur' => $this->getUtilisateur()->jsonSerialize(),
             'type_creneau' => $this->getTypeCreneau()->value,
             'date_heure_debut' => $this->getDateHeureDebut(),
             'date_heure_fin' => $this->getDateHeureFin(),

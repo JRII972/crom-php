@@ -9,6 +9,8 @@ use InvalidArgumentException;
 use PDO;
 use PDOException;
 
+//FIXME: add max_joueurs_session
+
 /**
  * Classe représentant une session dans la base de données.
  */
@@ -24,6 +26,7 @@ class Session extends DefaultDatabaseType
     private ?string $idMaitreJeu;
     private ?Utilisateur $maitreJeu = null;
     private ?int $maxJoueurs = null;
+    private int $maxJoueursSession = 5; // Ajout de la propriété avec valeur par défaut
 
     // Cache configuration
     private static $cacheEnabled = true; // Activer/désactiver le cache
@@ -52,13 +55,14 @@ class Session extends DefaultDatabaseType
         ?string $heureDebut = null,
         ?string $heureFin = null,
         Utilisateur|string|null $maitreJeuOuId = null,
-        ?int $maxJoueurs = null
+        ?int $maxJoueurs = null,
+        ?int $maxJoueursSession = null // Ajout du paramètre
     ) {
         parent::__construct();
         $this->table = 'sessions';
 
         if ($id !== null && $partieOuId === null && $lieuOuId === null && $dateSession === null && 
-            $heureDebut === null && $heureFin === null && $maitreJeuOuId === null && $maxJoueurs === null) {
+            $heureDebut === null && $heureFin === null && $maitreJeuOuId === null && $maxJoueurs === null && $maxJoueursSession === null) {
             // Mode : Charger la session depuis la base
             $this->loadFromDatabase($id);
         } elseif ($id === null && $partieOuId !== null && $lieuOuId !== null && $dateSession !== null && 
@@ -80,10 +84,16 @@ class Session extends DefaultDatabaseType
             } else {
                 $this->setMaxJoueurs($maxJoueurs);
             }
+            // Gestion de maxJoueursSession
+            if ($maxJoueursSession !== null) {
+                $this->setMaxJoueursSession($maxJoueursSession);
+            } elseif ($maxJoueurs !== null && $maxJoueurs < 6) {
+                $this->setMaxJoueursSession($maxJoueurs);
+            } else {
+                $this->setMaxJoueursSession(5);
+            }
         } else {
-            throw new InvalidArgumentException(
-                'Vous devez fournir soit un ID seul, soit partieOuId, lieuOuId, dateSession, heureDebut, heureFin, et maitreJeuOuId.'
-            );
+            throw new InvalidArgumentException('Trop d\'argument on été fournis, soit ID seul, soit les donnée...'); //TODO: reformuler
         }
     }
 
@@ -110,7 +120,8 @@ class Session extends DefaultDatabaseType
         $this->heureDebut = $data['heure_debut'];
         $this->heureFin = $data['heure_fin'];
         $this->idMaitreJeu = $data['id_maitre_jeu'];
-        $this->maxJoueurs = isset($data['max_joueurs']) ? (int) $data['max_joueurs'] : null;
+        $this->maxJoueurs = isset($data['nombre_max_joueurs']) ? (int) $data['nombre_max_joueurs'] : null;
+        $this->maxJoueursSession = isset($data['max_joueurs_session']) ? (int) $data['max_joueurs_session'] : 5;
     }
 
     /**
@@ -130,7 +141,8 @@ class Session extends DefaultDatabaseType
                     heure_debut = :heure_debut,
                     heure_fin = :heure_fin,
                     id_maitre_jeu = :id_maitre_jeu,
-                    max_joueurs = :max_joueurs
+                    nombre_max_joueurs = :nombre_max_joueurs,
+                    max_joueurs_session = :max_joueurs_session
                 WHERE id = :id
             ');
             $stmt->execute([
@@ -141,16 +153,17 @@ class Session extends DefaultDatabaseType
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
                 'id_maitre_jeu' => $this->idMaitreJeu,
-                'max_joueurs' => $this->maxJoueurs,
+                'nombre_max_joueurs' => $this->maxJoueurs,
+                'max_joueurs_session' => $this->maxJoueursSession,
             ]);
         } else {
             // Insertion
             $stmt = $this->pdo->prepare('
                 INSERT INTO sessions (
-                    id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu, max_joueurs
+                    id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
                 )
                 VALUES (
-                    :id_partie, :id_lieu, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :max_joueurs
+                    :id_partie, :id_lieu, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :nombre_max_joueurs, :max_joueurs_session
                 )
             ');
             $stmt->execute([
@@ -160,14 +173,15 @@ class Session extends DefaultDatabaseType
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
                 'id_maitre_jeu' => $this->idMaitreJeu,
-                'max_joueurs' => $this->maxJoueurs,
+                'nombre_max_joueurs' => $this->maxJoueurs,
+                'max_joueurs_session' => $this->maxJoueursSession,
             ]);
             $this->id = (int) $this->pdo->lastInsertId();
         }
 
         // Invalider le cache pour la partie
         if (self::$cacheEnabled && $this->idPartie !== null) {
-            $this->invalidateCache($this->idPartie);
+            $this->invalidateCache();
         }
     }
 
@@ -183,11 +197,11 @@ class Session extends DefaultDatabaseType
             throw new InvalidArgumentException('Impossible de supprimer une session sans ID.');
         }
         $stmt = $this->pdo->prepare('DELETE FROM sessions WHERE id = :id');
-        $result = $stmt->execute(['id' => $id]);
+        $result = $stmt->execute(['id' => $this->id]);
 
         // Invalider le cache pour la partie
         if (self::$cacheEnabled && $this->idPartie !== null) {
-            $this->invalidateCache($this->idPartie);
+            $this->invalidateCache();
         }
 
         return $result;
@@ -216,15 +230,16 @@ class Session extends DefaultDatabaseType
         // Générer une clé de cache unique basée sur les paramètres
         $cacheKey = self::$cachePrefix . md5(serialize([$partieId, $lieuId, $dateDebut, $dateFin, $maxJoueurs]));
 
-        // Vérifier le cache
-        if (self::$cacheEnabled && extension_loaded('apcu')) {
-            $cachedResult = apcu_fetch($cacheKey);
-            if ($cachedResult !== false) {
-                return $cachedResult;
-            }
-        }
+        // Vérifier le cache (toujours, même si partieId = 0)
+        // if (self::$cacheEnabled && extension_loaded('apcu')) {
+        //     $cachedResult = apcu_fetch($cacheKey);
+        //     if ($cachedResult !== false) {
+        //         return $cachedResult;
+        //     }
+        // }
 
-        $sql = 'SELECT id, id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu, max_joueurs FROM sessions WHERE 1=1';
+        // 1. Sélectionne toutes les colonnes nécessaires
+        $sql = 'SELECT * FROM sessions WHERE 1=1';
         $params = [];
 
         if ($partieId > 0) {
@@ -244,38 +259,59 @@ class Session extends DefaultDatabaseType
             $params['date_fin'] = $dateFin;
         }
         if ($maxJoueurs !== null && $maxJoueurs >= 0) {
-            $sql .= ' AND max_joueurs = :max_joueurs';
-            $params['max_joueurs'] = $maxJoueurs;
+            $sql .= ' AND max_joueurs_session <= :nombre_max_joueurs';
+            $params['nombre_max_joueurs'] = $maxJoueurs;
         }
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Stocker dans le cache
-        if (self::$cacheEnabled && extension_loaded('apcu') && $partieId > 0) {
-            apcu_store($cacheKey, $results, self::$cacheTTL);
+        // 2. Utilise un constructeur statique pour créer les objets
+        $sessions = [];
+        foreach ($results as $row) {
+            try {
+                $session = new self((int)$row['id']);
+                $sessions[] = $session->jsonSerialize();
+            } catch (\Throwable $e) {
+                continue;
+            }
         }
 
-        return $results;
+        // Stocker dans le cache (toujours, même si partieId = 0)
+        if (self::$cacheEnabled && extension_loaded('apcu')) {
+            apcu_store($cacheKey, $sessions, self::$cacheTTL);
+        }
+
+        return $sessions;
     }
 
     /**
-     * Invalide le cache pour une partie donnée.
-     *
-     * @param int $partieId ID de la partie
+     * Invalide le cache pour une partie donnée OU pour tout filtre général qui inclurait cette session.
      */
-    private function invalidateCache(int $partieId): void
+    private function invalidateCache(): void
     {
         if (!extension_loaded('apcu')) {
             return;
         }
-        // Invalider toutes les clés commençant par le préfixe et l'ID de la partie
-        $prefix = self::$cachePrefix . md5(serialize([$partieId]));
         $cacheInfo = apcu_cache_info();
+        if (!isset($cacheInfo['cache_list'])) {
+            return;
+        }
+
+        // On invalide tous les caches qui pourraient contenir cette session :
+        // - ceux filtrés sur cette partie
+        // - ceux filtrés sur ce lieu
+        // - ceux filtrés sur la date de la session
+        // - ceux généraux (aucun filtre)
         foreach ($cacheInfo['cache_list'] as $entry) {
-            if (strpos($entry['info'], $prefix) === 0) {
-                apcu_delete($entry['info']);
+            if (!isset($entry['info'])) continue;
+            $key = $entry['info'];
+            // On décode la clé pour retrouver les paramètres du filtre
+            if (str_starts_with($key, self::$cachePrefix)) {
+                // On essaie de retrouver les paramètres du filtre à partir du hash
+                // Comme on ne peut pas inverser le hash, on invalide tout cache qui commence par le préfixe (stratégie simple)
+                apcu_delete($key);
             }
         }
     }
@@ -524,6 +560,22 @@ class Session extends DefaultDatabaseType
         return $this;
     }
 
+    // Getter et setter pour maxJoueursSession
+
+    public function getMaxJoueursSession(): int
+    {
+        return $this->maxJoueursSession;
+    }
+
+    public function setMaxJoueursSession(int $maxJoueursSession): self
+    {
+        if ($maxJoueursSession < 1) {
+            throw new InvalidArgumentException('max_joueurs_session doit être supérieur à 0.');
+        }
+        $this->maxJoueursSession = $maxJoueursSession;
+        return $this;
+    }
+
     // Helper Methods
 
     public function jsonSerialize(): array
@@ -532,14 +584,21 @@ class Session extends DefaultDatabaseType
             'id' => $this->getId(),
             'id_partie' => $this->idPartie,
             'id_lieu' => $this->idLieu,
-            'partie' => $this->getPartie(),
-            'lieu' => $this->getLieu(),
+            'partie' => $this->getPartie()->jsonSerialize(),
+            'lieu' => $this->getLieu()->jsonSerialize(),
             'date_session' => $this->getDateSession(),
             'heure_debut' => $this->getHeureDebut(),
             'heure_fin' => $this->getHeureFin(),
             'id_maitre_jeu' => $this->idMaitreJeu,
-            'maitre_jeu' => $this->getMaitreJeu(),
-            'max_joueurs' => $this->getMaxJoueurs(),
+            'maitre_jeu' => $this->getMaitreJeu()->jsonSerialize(),
+            'nombre_max_joueurs' => $this->getMaxJoueurs(),
+            'max_joueurs_session' => $this->getMaxJoueursSession(),
+            'nombre_joueurs_session' => $this->getNombreJoueursInscrits(),
+            'joueurs_session' => array_map(
+                fn($js) => $js->jsonSerialize(),
+                $this->getJoueursSession()
+            ),
         ];
     }
+
 }

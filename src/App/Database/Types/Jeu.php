@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Database\Types;
 
+use App\Utils\Image;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
@@ -26,6 +27,8 @@ class Jeu extends DefaultDatabaseType
     private string $nom;
     private ?string $description = null;
     private TypeJeu $typeJeu = TypeJeu::Autre;
+    private ?Image $image = null;
+    private ?Image $icon = null;
 
     /**
      * Constructeur de la classe Jeu.
@@ -33,6 +36,8 @@ class Jeu extends DefaultDatabaseType
      * @param int|null $id Identifiant du jeu (si fourni, charge depuis la base)
      * @param string|null $nom Nom du jeu (requis si $id est null)
      * @param string|null $description Description du jeu
+     * @param Image|string|array|null $image Image de la partie
+     * @param Image|string|array|null $icon Image de la partie
      * @param TypeJeu|null $typeJeu Type du jeu
      * @throws InvalidArgumentException Si les paramètres sont incohérents
      * @throws PDOException Si le jeu n'existe pas dans la base
@@ -41,6 +46,8 @@ class Jeu extends DefaultDatabaseType
         ?int $id = null,
         ?string $nom = null,
         ?string $description = null,
+        Image|string|array|null $image = null,
+        Image|string|array|null $icon = null,
         ?TypeJeu $typeJeu = null
     ) {
         parent::__construct();
@@ -57,6 +64,12 @@ class Jeu extends DefaultDatabaseType
             }
             if ($typeJeu !== null) {
                 $this->setTypeJeu($typeJeu);
+            }
+            if ($image !== null) {
+                $this->image = Image::load($image);
+            }
+            if ($icon !== null) {
+                $this->image = Image::load($icon);
             }
         } else {
             throw new InvalidArgumentException(
@@ -85,6 +98,8 @@ class Jeu extends DefaultDatabaseType
         $this->nom = $data['nom'];
         $this->description = $data['description'];
         $this->typeJeu = TypeJeu::from($data['type_jeu']);
+        $this->image = Image::load($data['image']);
+        $this->image = Image::load($data['icon']);
     }
 
     /**
@@ -100,6 +115,8 @@ class Jeu extends DefaultDatabaseType
                 UPDATE jeux SET
                     nom = :nom,
                     description = :description,
+                    image = :image,
+                    icon = :icon,
                     type_jeu = :type_jeu
                 WHERE id = :id
             ');
@@ -107,17 +124,21 @@ class Jeu extends DefaultDatabaseType
                 'id' => $this->id,
                 'nom' => $this->nom,
                 'description' => $this->description,
+                'image' => $this->image ? $this->image->getFilePath() : null,
+                'icon' => $this->icon ? $this->icon->getFilePath() : null,
                 'type_jeu' => $this->typeJeu->value,
             ]);
         } else {
             // Insertion
             $stmt = $this->pdo->prepare('
-                INSERT INTO jeux (nom, description, type_jeu)
-                VALUES (:nom, :description, :type_jeu)
+                INSERT INTO jeux (nom, description, type_jeu, image, icon)
+                VALUES (:nom, :description, :type_jeu, :image, :icon)
             ');
             $stmt->execute([
                 'nom' => $this->nom,
                 'description' => $this->description,
+                'image' => $this->image ? $this->image->getFilePath() : null,
+                'icon' => $this->icon ? $this->icon->getFilePath() : null,
                 'type_jeu' => $this->typeJeu->value,
             ]);
             $this->id = (int) $this->pdo->lastInsertId();
@@ -351,6 +372,16 @@ class Jeu extends DefaultDatabaseType
         return $this->typeJeu;
     }
 
+    public function getImage(): ?Image
+    {
+        return $this->image;
+    }
+
+    public function getIcon(): ?Image
+    {
+        return $this->icon;
+    }
+
     // Setters
 
     public function setNom(string $nom): self
@@ -374,6 +405,38 @@ class Jeu extends DefaultDatabaseType
         return $this;
     }
 
+    public function setImage(Image|string|array|null $image): self
+    {
+        if (!is_null($this->image)) {
+            $this->image->delete();
+        }
+        if ($image instanceof Image) {
+            $this->image = $image;
+        } else {
+            $this->image = new Image($image, 
+                        $this->nom, 
+                        '/Jeux', 
+                        'Image de ' . $this->nom, true);
+        }
+        return $this;
+    }
+
+    public function setIcon(Image|string|array $icon): self
+    {
+        if (!is_null($this->icon)) {
+            $this->icon->delete();
+        }
+        if ($icon instanceof Image) {
+            $this->icon = $icon;
+        } else {
+            $this->icon = new Image($icon, 
+                        $this->nom . '_icon', 
+                        '/Jeux', 
+                        'Icon de ' . $this->nom, true);
+        }
+        return $this;
+    }
+
     public function jsonSerialize(): array
     {
         $genres = array_map(fn($genre) => [
@@ -384,6 +447,8 @@ class Jeu extends DefaultDatabaseType
         return [
             'id' => $this->getId(),
             'nom' => $this->getNom(),
+            'image' => $this->getImage() ? $this->getImage()->jsonSerialize() : null,
+            'icon' => $this->getIcon() ? $this->getIcon()->jsonSerialize() : null,
             'description' => $this->getDescription(),
             'type_jeu' => $this->getTypeJeu()->value,
             'genres' => $genres,

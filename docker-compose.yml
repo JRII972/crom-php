@@ -10,6 +10,7 @@ services:
       - ./:/var/www/html:cached
     ports:
       - '80:80'
+      - '9003:9003'
     depends_on:
       - db
 

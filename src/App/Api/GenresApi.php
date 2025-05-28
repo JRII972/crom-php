@@ -10,10 +10,8 @@ use PDO;
 use PDOException;
 use InvalidArgumentException;
 
-class GenresApi
+class GenresApi extends APIHandler
 {
-    private PDO $pdo;
-
     public function __construct()
     {
         $this->pdo = Database::getConnection();
@@ -38,7 +36,7 @@ class GenresApi
             case 'PUT':
                 return $this->handlePut($id);
             case 'PATCH':
-                return $this->handlePut($id); //Pas besoin de Patch il n'y a qu'une valeur changer dans tout les cas
+                return $this->handlePut($id); // PATCH is identical to PUT as only one field exists
             case 'DELETE':
                 return $this->handleDelete($id);
             default:
@@ -81,6 +79,8 @@ class GenresApi
      */
     private function handlePost(): array
     {
+        $this->requirePermission('GenresApi', 'write');
+
         $data = json_decode(file_get_contents('php://input'), true);
         if (!$data || !isset($data['nom']) || empty(trim($data['nom']))) {
             return $this->sendResponse(400, 'error', null, 'Le nom du genre est requis et ne peut pas être vide');
@@ -113,6 +113,8 @@ class GenresApi
      */
     private function handlePut(?string $id): array
     {
+        $this->requirePermission('GenresApi', 'write');
+
         if ($id === null || !is_numeric($id)) {
             return $this->sendResponse(400, 'error', null, 'ID du genre requis');
         }
@@ -129,9 +131,8 @@ class GenresApi
             }
 
             $genre = new Genre(id: (int)$id);
-            $genre->update([
-                'nom' => $nom
-            ]);
+            $genre->setNom($nom);
+            $genre->save();
             return $this->sendResponse(200, 'success', $genre->jsonSerialize(), 'Genre mis à jour avec succès');
         } catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -151,6 +152,8 @@ class GenresApi
      */
     private function handleDelete(?string $id): array
     {
+        $this->requirePermission('GenresApi', 'delete');
+
         if ($id === null || !is_numeric($id)) {
             return $this->sendResponse(400, 'error', null, 'ID du genre requis');
         }
@@ -164,24 +167,5 @@ class GenresApi
         } catch (InvalidArgumentException $e) {
             return $this->sendResponse(400, 'error', null, $e->getMessage());
         }
-    }
-
-    /**
-     * Envoie une réponse JSON standardisée.
-     *
-     * @param int $status Code HTTP
-     * @param string $statusMessage Statut de la réponse (success|error)
-     * @param mixed $data Données à renvoyer
-     * @param string|null $message Message optionnel
-     * @return array Réponse formatée
-     */
-    private function sendResponse(int $status, string $statusMessage, $data = null, ?string $message = null): array
-    {
-        http_response_code($status);
-        return [
-            'status' => $statusMessage,
-            'data' => $data,
-            'message' => $message
-        ];
     }
 }

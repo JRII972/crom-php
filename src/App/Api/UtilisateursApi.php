@@ -17,7 +17,8 @@ use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use DateTime;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../Database/Types/Utilisateur.php';
+require_once __DIR__ . '/../Database/Types/CreneauxUtilisateur.php';
 
 class UtilisateursApi extends APIHandler
 {
@@ -37,6 +38,12 @@ class UtilisateursApi extends APIHandler
     {
         $method = $_SERVER['REQUEST_METHOD'];
 
+        $uri = $_SERVER['REQUEST_URI'];
+        $scriptName = dirname($_SERVER['SCRIPT_NAME']);
+        $path = preg_replace("#^$scriptName#", '', $uri);
+        $path = parse_url($path, PHP_URL_PATH);
+        $segments = array_values(array_filter(explode('/', $path)));
+
         if ($method === 'POST' && $id === 'inscription') {
             return $this->handleInscription();
         }
@@ -49,11 +56,15 @@ class UtilisateursApi extends APIHandler
             return $this->handleRefresh();
         }
 
+        if ($method === 'GET' && $id === 'suggestions') {
+            return $this->handleRefresh();
+        }
+
         // TODO: Ajoutez un endpoint /api/utilisateurs/deconnexion pour invalider les refresh tokens
         // TODO: Implémentez un script pour supprimer les refresh tokens expirés de la base.
 
-        if (preg_match('/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/creneaux$/', $id, $matches)) {
-            $userId = $matches[1];
+        if (count($segments) > 1 && $segments[2] == "creneaux") {
+            $userId = $segments[1];
             if ($method === 'GET') {
                 $this->requirePermission('UtilisateurApi', 'read');
                 return $this->handleGetCreneaux($userId);
@@ -66,16 +77,16 @@ class UtilisateursApi extends APIHandler
                 $this->requirePermission('UtilisateurApi', 'write');
                 return $this->handlePatchCreneau($userId);
             }
-        }
 
-        if (preg_match('/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\/creneaux\/(\d+)$/', $id, $matches)) {
-            $userId = $matches[1];
-            $creneauId = $matches[2];
-            if ($method === 'DELETE') {
-                $this->requirePermission('UtilisateurApi', 'delete');
-                return $this->handleDeleteCreneau($userId, $creneauId);
+            if ($segments[4]) {
+                $creneauId = $segments[3];
+                if ($method === 'DELETE') {
+                    $this->requirePermission('UtilisateurApi', 'delete');
+                    return $this->handleDeleteCreneau($userId, $creneauId);
+                }
             }
         }
+
 
         switch ($method) {
             case 'GET':
@@ -163,7 +174,7 @@ class UtilisateursApi extends APIHandler
 
             return $this->sendResponse(201, 'success', [
                 'token' => $jwt,
-                'utilisateur' => $utilisateur->jsonSerialize()
+                'utilisateur' => $utilisateur->private_jsonSerialize()
             ], 'Utilisateur créé avec succès');
         } catch (PDOException $e) {
             if ($e->getCode() == '23000') {
@@ -189,7 +200,7 @@ class UtilisateursApi extends APIHandler
 
         try {
             $utilisateur = Utilisateur::findByLogin($this->pdo, $data['login']);
-            if (!$utilisateur || !password_verify($data['mot_de_passe'], $utilisateur->getMotDePasse())) {
+            if (!$utilisateur || !password_verify($data['mot_de_passe'] . PASSWORD_SALT, $utilisateur->getMotDePasse())) {
                 return $this->sendResponse(401, 'error', null, 'Identifiants invalides');
             }
 
@@ -203,7 +214,7 @@ class UtilisateursApi extends APIHandler
 
             $response = [
                 'token' => $jwt,
-                'utilisateur' => $utilisateur->jsonSerialize()
+                'utilisateur' => $utilisateur->private_jsonSerialize()
             ];
 
             // Gérer "Rester connecté"
@@ -270,7 +281,7 @@ class UtilisateursApi extends APIHandler
 
             return $this->sendResponse(200, 'success', [
                 'token' => $jwt,
-                'utilisateur' => $utilisateur->jsonSerialize()
+                'utilisateur' => $utilisateur->private_jsonSerialize()
             ], 'Token renouvelé');
         } catch (PDOException $e) {
             return $this->sendResponse(500, 'error', null, 'Erreur serveur: ' . $e->getMessage());
@@ -296,7 +307,7 @@ class UtilisateursApi extends APIHandler
 
         try {
             $utilisateur = new Utilisateur($id);
-            return $this->sendResponse(200, 'success', $utilisateur->jsonSerialize());
+            return $this->sendResponse(200, 'success', $utilisateur->private_jsonSerialize());
         } catch (PDOException $e) {
             return $this->sendResponse(404, 'error', null, 'Utilisateur non trouvé: ' . $e->getMessage());
         }
@@ -371,7 +382,7 @@ class UtilisateursApi extends APIHandler
             }
 
             $utilisateur->save();
-            return $this->sendResponse(200, 'success', $utilisateur->jsonSerialize(), 'Utilisateur mis à jour avec succès');
+            return $this->sendResponse(200, 'success', $utilisateur->private_jsonSerialize(), 'Utilisateur mis à jour avec succès');
         } catch (PDOException $e) {
             if ($e->getCode() == '23000') {
                 return $this->sendResponse(409, 'error', null, 'Login, email ou ID Discord déjà utilisé');

@@ -10,6 +10,7 @@
     "bmewburn.vscode-intelephense-client",   // PHP intelligence
     "felixfbecker.php-debug",                // Xdebug support
     "cweijan.vscode-database-client2",       // Database Client
+    "xdebug.php-debug",       // Xdebug support
     "junstyle.php-cs-fixer"                  // Code formatting
   ],
 

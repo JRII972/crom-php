@@ -10,6 +10,8 @@ use PDO;
 use DateTime;
 use PDOException;
 
+require_once __DIR__ . '/../../Utils/helpers.php';
+
 /**
  * Enumération pour le type de partie.
  */
@@ -112,7 +114,7 @@ class Partie extends DefaultDatabaseType
                 $this->setNombreMaxJoueurs($nombreMaxJoueurs);
             }
             if ($image !== null) {
-                $this->setImage($image);
+                $this->image = Image::load($image);
             }
             if ($texteAltImage !== null) {
                 $this->setTexteAltImage($texteAltImage);
@@ -155,7 +157,7 @@ class Partie extends DefaultDatabaseType
         $this->description = $data['description'];
         $this->nombreMaxJoueurs = (int) $data['nombre_max_joueurs'];
         $this->maxJoueursSession = (int) $data['max_joueurs_session'];
-        $this->verrouille = (bool) $data['verrouille'];
+        $this->verrouille = (bool) $data['verrouille'];        
         $this->image = Image::load($data['image']);
         $this->texteAltImage = $data['texte_alt_image'];
         $this->dateCreation = $data['date_creation'];
@@ -182,9 +184,8 @@ class Partie extends DefaultDatabaseType
                     nombre_max_joueurs = :nombre_max_joueurs,
                     max_joueurs_session = :max_joueurs_session,
                     verrouille = :verrouille,
-                    url_image = :url_image,
-                    texte_alt_image = :texte_alt_image,
-                    date_creation = :date_creation
+                    image = :image,
+                    texte_alt_image = :texte_alt_image
                 WHERE id = :id
             ');
             $stmt->execute([
@@ -199,20 +200,19 @@ class Partie extends DefaultDatabaseType
                 'nombre_max_joueurs' => $this->nombreMaxJoueurs,
                 'max_joueurs_session' => $this->maxJoueursSession,
                 'verrouille' => $this->verrouille ? 1 : 0,
-                'url_image' => $this->image ? $this->image->getFilePath() : null,
-                'texte_alt_image' => $this->texteAltImage,
-                'date_creation' => $this->dateCreation,
+                'image' => $this->image ? $this->image->getFilePath() : null,
+                'texte_alt_image' => $this->texteAltImage
             ]);
         } else {
             // Insertion
             $stmt = $this->pdo->prepare('
                 INSERT INTO parties (
                     nom, id_jeu, id_maitre_jeu, type_partie, type_campagne, description_courte,
-                    description, nombre_max_joueurs, max_joueurs_session, verrouille, url_image, texte_alt_image, date_creation
+                    description, nombre_max_joueurs, max_joueurs_session, verrouille, image, texte_alt_image
                 )
                 VALUES (
                     :nom, :id_jeu, :id_maitre_jeu, :type_partie, :type_campagne, :description_courte,
-                    :description, :nombre_max_joueurs, :max_joueurs_session, :verrouille, :url_image, :texte_alt_image, :date_creation
+                    :description, :nombre_max_joueurs, :max_joueurs_session, :verrouille, :image, :texte_alt_image
                 )
             ');
             $stmt->execute([
@@ -226,9 +226,8 @@ class Partie extends DefaultDatabaseType
                 'nombre_max_joueurs' => $this->nombreMaxJoueurs,
                 'max_joueurs_session' => $this->maxJoueursSession,
                 'verrouille' => $this->verrouille ? 1 : 0,
-                'url_image' => $this->image ? $this->image->getFilePath() : null,
+                'image' => $this->image ? $this->image->getFilePath() : null,
                 'texte_alt_image' => $this->texteAltImage,
-                'date_creation' => $this->dateCreation,
             ]);
             $this->id = (int) $this->pdo->lastInsertId();
         }
@@ -542,7 +541,7 @@ class Partie extends DefaultDatabaseType
         return $this;
     }
 
-    public function setImage(Image|string|array $image): self
+    public function setImage(Image|string|array|null $image): self
     {
         if (!is_null($this->image)) {
             $this->image->delete();
@@ -553,7 +552,7 @@ class Partie extends DefaultDatabaseType
             $this->image = new Image($image, 
                         $this->nom . '_' . (
                                 $this->getMaitreJeu()->getPseudonyme() ? $this->getMaitreJeu()->getPseudonyme() : $this->getMaitreJeu()->getNom() . $this->getMaitreJeu()->getPrenom()
-                            ) . '_' . $this->getTypePartie() . '_' . $this->getJeu()->getNom(), 
+                            ) . '_' . $this->getTypePartie()->value . '_' . $this->getJeu()->getNom(), 
                         '/Parties', 
                         'Image de présentation pour la partie ' . $this->nom . ' de ' . $this->getJeu()->getNom() . ' par ' . ($this->getMaitreJeu()->getPseudonyme() ? $this->getMaitreJeu()->getPseudonyme() : $this->getMaitreJeu()->getNom()), true);
         }
@@ -623,9 +622,13 @@ class Partie extends DefaultDatabaseType
      */
     private function getNombreJoueursInscrits(): int
     {
-        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM membres_partie WHERE id_partie = :id_partie');
-        $stmt->execute(['id_partie' => $this->id]);
-        return (int) $stmt->fetchColumn();
+        if (isset( $this->id ) ) {
+            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM membres_partie WHERE id_partie = :id_partie');
+            $stmt->execute(['id_partie' => $this->id]);
+            return (int) $stmt->fetchColumn();
+        }
+
+        return -1;
     }
 
     /**
@@ -664,10 +667,11 @@ class Partie extends DefaultDatabaseType
     {
         return [
             'id' => $this->getId(),
+            'nom' => $this->nom,
             'id_jeu' => $this->idJeu,
             'id_maitre_jeu' => $this->idMaitreJeu,
-            'jeu' => $this->getJeu(),
-            'maitre_jeu' => $this->getMaitreJeu(),
+            'jeu' => $this->getJeu()->jsonSerialize(),
+            'maitre_jeu' => $this->getMaitreJeu()->jsonSerialize(),
             'type_partie' => $this->getTypePartie()->value,
             'type_campagne' => $this->getTypeCampagne()?->value,
             'description_courte' => $this->getDescriptionCourte(),
@@ -675,7 +679,7 @@ class Partie extends DefaultDatabaseType
             'nombre_max_joueurs' => $this->getNombreMaxJoueurs(),
             'max_joueurs_session' => $this->getMaxJoueursSession(),
             'verrouille' => $this->getVerrouille(),
-            'image' => $this->getImage(),
+            'image' => $this->getImage() ? $this->getImage()->jsonSerialize() : null,
             'texte_alt_image' => $this->getTexteAltImage(),
             'date_creation' => $this->getDateCreation(),
         ];

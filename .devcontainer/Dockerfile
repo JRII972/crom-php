@@ -1,6 +1,8 @@
 # .devcontainer/Dockerfile
 FROM php:8.1-apache
 
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - 
+
 # Install system dependencies & PHP extensions
 RUN apt-get update \
  && apt-get install -y \
@@ -12,6 +14,7 @@ RUN apt-get update \
       autoconf \
       wget \
       git \
+      nodejs \
  && docker-php-ext-install \
       pdo_mysql \
       mbstring \
@@ -34,6 +37,8 @@ RUN wget https://xdebug.org/files/xdebug-3.4.3.tgz \
 
 # (optional) Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+RUN npm install
 
 # Set up directories and permissions
 RUN mkdir -p /var/www/html/public/data/uploads/images \

@@ -9,31 +9,37 @@ header('Content-Type: application/json');
 // header('Access-Control-Allow-Credentials: true');
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/App/Utils/helpers.php';
+
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 try {
-    // // Vérification du token JWT ou refresh token
-    // $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-    // $user = null;
-    // if (preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
-    //     $jwt = $matches[1];
-    //     try {
-    //         $decoded = JWT::decode($jwt, new Key('votre_secret_jwt_ici', 'HS256'));
-    //         $user = (array)$decoded;
-    //     } catch (Exception $e) {
-    //         throw new Exception('Token JWT invalide: ' . $e->getMessage(), 401);
-    //     }
-    // }
+    // Vérification du token JWT ou refresh token
+    // NOTE: ?? array_change_key_case(apache_request_headers(), CASE_LOWER)['authorization'] 
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    $user = null;
+    if (preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+        $jwt = $matches[1];
+        try {
+            $decoded = JWT::decode($jwt, new Key('votre_secret_jwt_ici', 'HS256'));
+            $user = (array)$decoded;
+        } catch (Exception $e) {
+            throw new Exception('Token JWT invalide: ' . $e->getMessage(), 401);
+        }
+    }
 
-    // // Vérification CSRF pour les méthodes non-GET
-    // $method = $_SERVER['REQUEST_METHOD'];
-    // if (!in_array($method, ['GET', 'OPTIONS'])) {
-    //     $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-    //     if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
-    //         throw new Exception('Jeton CSRF invalide', 403);
-    //     }
-    // }
+    // Vérification CSRF pour les méthodes non-GET
+    $method = $_SERVER['REQUEST_METHOD'];
+    if (!in_array($method, ['GET', 'OPTIONS'])) {
+        $csrfToken = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (!$csrfToken) {
+            throw new Exception('Jeton CSRF absent', 403);
+        }
+        if (!hash_equals($_SESSION['csrf_token'] ?? '', $csrfToken)) {
+            throw new Exception('Jeton CSRF invalide', 403);
+        }
+    }
 
     $uri = $_SERVER['REQUEST_URI'];
     $scriptName = dirname($_SERVER['SCRIPT_NAME']);
@@ -48,12 +54,18 @@ try {
     $resource = ucfirst($segments[0] ?? '');
     $id = $segments[1] ?? null;
 
+    if ($segments[0] == 'csrf_token') {
+        echo json_encode(['csrf_token' => generateCsrfToken()]);
+        return ;
+    }
+
     $class = "App\\Api\\{$resource}Api";
     if (!class_exists($class)) {
         throw new Exception("Ressource '$resource' non trouvée", 404);
     }
 
     $handler = new $class();
+    $handler->setUser($user);
     $response = $handler->handle($id);
 
     echo json_encode($response);

@@ -66,19 +66,12 @@ class SessionsApi extends APIHandler
             $partieId = isset($queryParams['partie_id']) ? (int)$queryParams['partie_id'] : 0;
             $lieuId = isset($queryParams['lieu_id']) ? (int)$queryParams['lieu_id'] : 0;
             $dateDebut = $queryParams['date_debut'] ?? '';
+            $dateDebut = $queryParams['date_fin'] ?? '';
             $maxJoueurs = isset($queryParams['max_joueurs']) ? (int)$queryParams['max_joueurs'] : null;
 
-            $sessions = Session::search($this->pdo, $dateDebut);
+            $sessions = Session::search($this->pdo, $partieId, $lieuId, $dateDebut, $dateDebut, $maxJoueurs);
 
-            // Filtrer les résultats
-            $filteredSessions = array_filter($sessions, function ($session) use ($partieId, $lieuId, $maxJoueurs) {
-                $matchesPartie = $partieId === 0 || ((int)$session['id_partie'] === $partieId);
-                $matchesLieu = $lieuId === 0 || ((int)$session['id_lieu'] === $lieuId);
-                $matchesMaxJoueurs = $maxJoueurs === null || ((int)$session['max_joueurs'] === $maxJoueurs);
-                return $matchesPartie && $matchesLieu && $matchesMaxJoueurs;
-            });
-
-            return $this->sendResponse(200, 'success', array_values($filteredSessions));
+            return $this->sendResponse(200, 'success', $sessions);
         } catch (PDOException $e) {
             return $this->sendResponse(500, 'error', null, 'Erreur lors de la recherche: ' . $e->getMessage());
         }
@@ -104,7 +97,8 @@ class SessionsApi extends APIHandler
                 heureDebut: $data['heure_debut'],
                 heureFin: $data['heure_fin'],
                 maitreJeuOuId: $data['id_maitre_jeu'],
-                maxJoueurs: isset($data['nombre_max_joueurs']) ? (int)$data['nombre_max_joueurs'] : null
+                maxJoueurs: isset($data['nombre_max_joueurs']) ? (int)$data['nombre_max_joueurs'] : null,
+                maxJoueursSession: isset($data['max_joueurs_session']) ? (int)$data['max_joueurs_session'] : null // Ajout ici
             );
             $session->save();
 
@@ -151,6 +145,9 @@ class SessionsApi extends APIHandler
             }
             if (isset($data['nombre_max_joueurs'])) {
                 $session->setMaxJoueurs((int)$data['nombre_max_joueurs']);
+            }
+            if (isset($data['max_joueurs_session'])) { // Ajout ici
+                $session->setMaxJoueursSession((int)$data['max_joueurs_session']);
             }
 
             $session->save();

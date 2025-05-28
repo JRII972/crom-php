@@ -11,6 +11,8 @@ use App\Utils\Image;
 use PDOException;
 use InvalidArgumentException;
 
+require_once __DIR__ . '/../Database/Types/Partie.php';
+
 class PartiesApi extends APIHandler
 {
     public function handle(?string $id): array

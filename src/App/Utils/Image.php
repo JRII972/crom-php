@@ -9,6 +9,15 @@ use RuntimeException;
 use GdImage;
 use JsonSerializable;
 
+use function imagecreatefromjpeg;
+use function imagecreatefrompng;
+use function imagecreatefromgif;
+use function imagecreatefrombmp;
+use function imagecreatefromwbmp;
+use function imagecreatefromgd2;
+use function imagecreatefromwebp;
+use function imagecreatefromavif;
+
 // Global variables
 const DEFAULT_STORAGE_PATH = __DIR__ . '/../../../public';
 const RELATIVE_IMAGE_PATH = '/data/images';
@@ -30,7 +39,7 @@ class Image implements JsonSerializable
     /**
      * Constructor for the Image class.
      *
-     * @param string|array $source Image source (local file path, URL, data URL, or $_FILES array)
+     * @param string|array|null $source Image source (local file path, URL, data URL, or $_FILES array)
      * @param string|null $name Optional name for the image; defaults to source filename if not provided
      * @param string|null $subdirectory Optional subdirectory within storage path
      * @param string|null $imageAlt Optional alt text for the image; defaults to name if not provided
@@ -39,13 +48,17 @@ class Image implements JsonSerializable
      * @throws RuntimeException If image processing or file operations fail
      */
     public function __construct(
-        string|array $source,
+        string|array|null $source,
         ?string $name = null,
         ?string $subdirectory = null,
         ?string $imageAlt = null,
         bool $isUpload = true
     ) {
         $isLocalFile = false;
+
+        if ($source == null) {
+            return null;
+        } 
         
         if (!realpath(DEFAULT_IMAGE_STORAGE_PATH)){
             if (!mkdir(DEFAULT_IMAGE_STORAGE_PATH, 0755, true)){
@@ -58,11 +71,11 @@ class Image implements JsonSerializable
 
         // TODO: Add support of URL 
         if (is_string($source)) {
-            if (!file_exists($storagePath . $source) || !is_readable($storagePath.$source)){
+            if (!file_exists(rtrim(DEFAULT_STORAGE_PATH, '/') . $source) || !is_readable(rtrim(DEFAULT_STORAGE_PATH, '/') . $source)){
                 //TODO: make a new type of execption
                 throw new RuntimeException('Fichier non trouver ' . $source);
             }
-            $sourcePath = $storagePath . $source;
+            $sourcePath = rtrim(DEFAULT_STORAGE_PATH, '/') . $source;
             $isUpload = false; //Prevent double '/upload'
             $isLocalFile = true;
             
@@ -222,33 +235,33 @@ class Image implements JsonSerializable
      */
     private function loadImageResource(string $extension): void
     {
-        $fullPath = DEFAULT_IMAGE_STORAGE_PATH . $this->filePath;
+        $fullPath = DEFAULT_STORAGE_PATH . $this->filePath;
         switch (strtolower($extension)) {
             case 'jpeg':
             case 'jpg':
-                $this->imageResource = @imagecreatefromjpeg($fullPath);
+                $this->imageResource = @\imagecreatefromjpeg($fullPath);
                 break;
             case 'png':
-                $this->imageResource = @imagecreatefrompng($fullPath);
+                $this->imageResource = @\imagecreatefrompng($fullPath);
                 break;
             case 'gif':
-                $this->imageResource = @imagecreatefromgif($fullPath);
+                $this->imageResource = @\imagecreatefromgif($fullPath);
                 break;
             case 'bmp':
-                $this->imageResource = @imagecreatefrombmp($fullPath);
+                $this->imageResource = @\imagecreatefrombmp($fullPath);
                 break;
             case 'wbmp':
-                $this->imageResource = @imagecreatefromwbmp($fullPath);
+                $this->imageResource = @\imagecreatefromwbmp($fullPath);
                 break;
             case 'gd2':
-                $this->imageResource = @imagecreatefromgd2($fullPath);
+                $this->imageResource = @\imagecreatefromgd2($fullPath);
                 break;
             case 'webp':
-                $this->imageResource = @imagecreatefromwebp($fullPath);
+                $this->imageResource = @\imagecreatefromwebp($fullPath);
                 break;
             case 'avif':
                 if (function_exists('imagecreatefromavif')) {
-                    $this->imageResource = @imagecreatefromavif($fullPath);
+                    $this->imageResource = @\imagecreatefromavif($fullPath);
                 } else {
                     throw new RuntimeException('AVIF format is not supported by this PHP installation');
                 }
@@ -317,7 +330,8 @@ class Image implements JsonSerializable
      */
     public function delete(): void
     {
-        $fullPath = DEFAULT_IMAGE_STORAGE_PATH . $this->filePath;
+        return;
+        $fullPath = DEFAULT_STORAGE_PATH . $this->filePath;
         if (file_exists($fullPath) && !unlink($fullPath)) {
             throw new RuntimeException('Failed to delete image file: ' . $fullPath);
         }
@@ -624,10 +638,14 @@ class Image implements JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize(): ?array
     {
+        if (is_null($this->imageResource)){
+            return null;
+        }
+
         return [
-            'url' => RELATIVE_IMAGE_PATH . $this->getFilePath(),
+            'url' => $this->getFilePath(),
             'imageAlt' => $this->getImageAlt(),
             'name' => $this->getName(),
             'format' => $this->getFormat(),

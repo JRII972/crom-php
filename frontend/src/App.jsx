@@ -1,122 +1,35 @@
-import * as React from 'react';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import ProTip from './ProTip';
-import Copyright from './Copyright';import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-import SignIn from './sign-in/SignIn'
-import Dashboard from './dashboard/Dashboard'
-import PartyTab from './party-tab/PartyTab'
-import MainPage from './components/MainPage';
-import PartiePage from './party-tab/PartiePage';
-import { getPartieNameFromId } from './utils/utils';
-import NotFound404 from './404';
-import NotFound404_v2 from './404_v2';
-import Blog from './blog/Blog';
-import UserManagement from './API/test/user';
-
-import PlayerParties from './party-tab/PlayerParties';
-import PartiesPage from './party-tab/PartiesPage';
-import { DisplayLBDR } from './utils/LBDRDisplay';
-
-const router = createBrowserRouter([
-  {
-    path: "/*", //TODO: verifiquer si ca ne bloque pas l'accès à d'autre page
-    element: <MainPage noHeader/>,
-    handle: { breadcrumb: 'CROM' },
-    children: [
-      {
-        index: true,
-        element: <PartyTab />,
-        handle: { breadcrumb: 'Parties', title: 'Calendrier Rôliste à Option Multiples' },
-      }
-    ]
-  },
-  {
-    path: "/", //TODO: verifiquer si ca ne bloque pas l'accès à d'autre page
-    element: <MainPage/>,
-    handle: { breadcrumb: 'CROM' },
-    children: [
-      {
-        path: "partie/:id",   
-        element: <PartiePage />, 
-        handle: {
-          breadcrumb: (match) => {
-            const partieName = getPartieNameFromId(match.params.id); 
-            return partieName || "Chargement...";
-          }
-        }
-      },
-      {
-        path: "mes-parties",   
-        element: <PlayerParties />, 
-        handle: {
-          breadcrumb: 'Mes Parties',
-          title: 'Mes Parties',
-        }
-      },
-      {
-        path: "parties",   
-        element: <PartiesPage />, 
-        handle: {
-          breadcrumb: 'Parties',
-          title: 'Parties',
-        }
-      },
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-        handle: { breadcrumb: 'Dashboard' },
-      },
-      {
-        path: "blog",
-        element: <Blog />,
-        handle: { breadcrumb: 'Dashboard' },
-      },
-      {
-        path: "api",
-        // element: <UserManagement />,
-        handle: { breadcrumb: 'API' },
-        children: [
-          {
-            path: "user",
-            element: <UserManagement />,
-            handle: { breadcrumb: 'USER' },
-            children: [
-              
-            ]
-          },
-        ]
-      },
-    ]
-  }, 
-  {
-    path: "/login",
-    element: <SignIn />,
-    handle: { breadcrumb: 'Connexion' },
-  },
-  {
-    path: "/404",
-    element: <NotFound404 />,
-    handle: { breadcrumb: 'Connexion' },
-  },
-  {
-    path: "/404_v2",
-    element: <NotFound404_v2 />,
-    handle: { breadcrumb: 'Connexion' },
-  },
-]);
-
-export default function App() {
-  React.useEffect(() => {
-    DisplayLBDR();
-  }, []);
+function App() {
+  const [count, setCount] = useState(0)
 
   return (
-    <RouterProvider router={router} />
-  );
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
 }
+
+export default App

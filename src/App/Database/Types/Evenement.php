@@ -8,6 +8,8 @@ use InvalidArgumentException;
 use PDO;
 use PDOException;
 
+require_once __DIR__ . '/../../Utils/helpers.php';
+
 /**
  * Classe représentant un événement dans la base de données.
  */

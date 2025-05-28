@@ -52,6 +52,9 @@ class PaiementsApi extends APIHandler
         try {
             $queryParams = $_GET;
             $idUtilisateur = $queryParams['utilisateur_id'] ?? '';
+            if ($this->user['sub'] !== $idUtilisateur && $this->user['type_utilisateur'] !== 'ADMINISTRATEUR') {
+                $idUtilisateur = $this->user['sub'];
+            }
             $statut = $queryParams['statut'] ?? '';
             $paiements = PaiementsHelloasso::search($this->pdo, $idUtilisateur, $statut);
             return $this->sendResponse(200, 'success', array_values($paiements));

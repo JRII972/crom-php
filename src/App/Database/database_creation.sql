@@ -1,4 +1,4 @@
--- Active: 1747739094266@@db@3306@lbdr_db
+-- Active: 1747739094266@@db@3306@mydb
 -- === Création de la base et encodage ===
 CREATE DATABASE IF NOT EXISTS lbdr_db
   DEFAULT CHARACTER SET = utf8mb4
@@ -48,6 +48,7 @@ CREATE TABLE jeux (
   nom              VARCHAR(255) NOT NULL UNIQUE,
   description      TEXT,
   image            VARCHAR(512),
+  icon             VARCHAR(512),
   type_jeu         ENUM('JDR','JEU_DE_SOCIETE','AUTRE') NOT NULL DEFAULT 'AUTRE'
 ) ENGINE=InnoDB;
 
@@ -73,6 +74,7 @@ CREATE TABLE jeux_genres (
 CREATE TABLE lieux (
   id               INT AUTO_INCREMENT PRIMARY KEY,
   nom              VARCHAR(255) NOT NULL,
+  short_nom        VARCHAR(5),
   adresse          VARCHAR(255),
   latitude         DECIMAL(10,8),
   longitude        DECIMAL(11,8),
@@ -112,10 +114,10 @@ CREATE TABLE parties (
   description           TEXT,
   nombre_max_joueurs    INT    DEFAULT 0,
   max_joueurs_session   INT    DEFAULT 5,
-  verrouille            BOOLEAN AS ( FALSE ),
+  verrouille            BOOLEAN NOT NULL DEFAULT FALSE,
   image                 VARCHAR(512),
   texte_alt_image       VARCHAR(255),
-  date_creation         TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_creation         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (id_jeu)        REFERENCES jeux(id)        ON DELETE CASCADE,
   FOREIGN KEY (id_maitre_jeu) REFERENCES utilisateurs(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;

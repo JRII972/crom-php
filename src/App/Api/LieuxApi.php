@@ -12,6 +12,8 @@ use PDO;
 use PDOException;
 use InvalidArgumentException;
 
+require_once __DIR__ . '/../Database/Types/HorairesLieu.php';
+
 class LieuxApi extends APIHandler
 {
     public function __construct()
@@ -31,8 +33,7 @@ class LieuxApi extends APIHandler
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = $_SERVER['REQUEST_URI'];
         $scriptName = dirname($_SERVER['SCRIPT_NAME']);
-        $path = preg_replace("#^$scriptName#", '', $uri);
-        $path = parse_url($path, PHP_URL_PATH);
+        $path = parse_url($uri, PHP_URL_PATH);
         $segments = array_values(array_filter(explode('/', $path)));
 
         // Base route: /api/lieux
