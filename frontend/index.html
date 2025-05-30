@@ -1,60 +1,23 @@
 <!doctype html>
-<html lang="en" data-theme="caramellatte">
+<html lang="fr">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mon App</title>
-    <link rel="stylesheet" href="/src/index.css" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="./src/index.css"
+    />
+    <title>Vite + Material UI + TS</title>
   </head>
   <body>
-    <div class="drawer drawer-mobile h-screen">
-      <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-side">
-        <label for="my-drawer" class="drawer-overlay"></label>
-        <ul class="menu p-4 w-60 bg-base-200 text-base-content space-y-2">
-          <li class="menu-title"><span>Menu</span></li>
-          <li><a>Home</a></li>
-          <li><a>About</a></li>
-          <li><a>Contact</a></li>
-        </ul>
-      </div>
-      <div class="drawer-content flex flex-col">
-        <!-- Navbar -->
-        <div class="navbar bg-base-100 px-4 shadow-sm">
-          <div class="flex-none lg:hidden">
-            <label for="my-drawer" class="btn btn-square btn-ghost">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 12h16M4 18h16"/>
-              </svg>
-            </label>
-          </div>
-          <div class="navbar-start">
-            <div class="breadcrumbs">
-              <ul>
-                <li><a>Home</a></li>
-                <li>Dashboard</li>
-              </ul>
-            </div>
-          </div>
-          <div class="navbar-end">
-            <span id="current-date" class="text-sm"></span>
-          </div>
-        </div>
-        <!-- Main content -->
-        <main class="p-4 flex-1 bg-base-100">
-          <!-- contenu vide -->
-        </main>
-      </div>
-    </div>
-
-    <script>
-      document.getElementById('current-date').textContent =
-        new Date().toLocaleDateString('fr-FR', {
-          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
-    </script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
