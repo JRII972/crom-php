@@ -1,7 +1,8 @@
 import React from 'react';
 import { Stack, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Schedule, Dashboard, Event, List as ListIcon, HomeRounded, AnalyticsRounded, PeopleRounded, AssignmentRounded, SettingsRounded, InfoRounded, HelpRounded } from '@mui/icons-material';
+import { Schedule, Dashboard, Event, List as ListIcon, HomeRounded, AnalyticsRounded, PeopleRounded, AssignmentRounded, SettingsRounded, InfoRounded, HelpRounded, LoginRounded, LogoutRounded } from '@mui/icons-material';
 import { NavLink, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Définition du type pour chaque entrée
 interface MenuItem {
@@ -45,7 +46,7 @@ const mainListItems: MenuItem[] = [
       {
         section: 'Site',
         item: [
-          { text: 'Paramêtre',  icon: <SettingsRounded />,  to: '/settings' },
+          { text: 'Paramètre',  icon: <SettingsRounded />,  to: '/settings' },
           { text: 'Dashboard',  icon: <Dashboard />,  to: '/dashboard' },
           { text: 'About',     icon: <InfoRounded />,      to: '/about' },
           { text: 'Feedback',  icon: <HelpRounded />,      to: '/feedback' },
@@ -55,15 +56,35 @@ const mainListItems: MenuItem[] = [
   },
 ];
 
-const secondaryListItems: MenuItem[] = [
-  { text: 'Paramêtre',  icon: <SettingsRounded />,  to: '/settings' },
-  { text: 'Dashboard',  icon: <Dashboard />,  to: '/dashboard' },
-  { text: 'About',     icon: <InfoRounded />,      to: '/about' },
-  { text: 'Feedback',  icon: <HelpRounded />,      to: '/feedback' },
-];
-
 export default function MenuContent() {
   const { pathname } = useLocation();
+  const { user, isAuthenticated, logout } = useAuth();
+
+  // Items secondaires avec authentification conditionnelle
+  const authItems: MenuItem[] = isAuthenticated ? 
+    [
+      { text: 'Dashboard',  icon: <Dashboard />,  to: '/dashboard' },
+      { text: 'Paramètre',  icon: <SettingsRounded />,  to: '/settings' },
+      { text: 'Se déconnecter', icon: <LogoutRounded />, to: '#' }, // Sera géré par l'événement onClick
+    ] : 
+    [
+      { text: 'Se connecter', icon: <LoginRounded />, to: '/login' },
+    ];
+
+  const secondaryListItems: MenuItem[] = [
+    { text: 'About',     icon: <InfoRounded />,      to: '/about' },
+    { text: 'Feedback',  icon: <HelpRounded />,      to: '/feedback' },
+    ...authItems,
+  ];
+
+  //FIXME: faire quelque chose de plus robuste
+  const handleItemClick = (item: MenuItem) => {
+    if (item.text === 'Se déconnecter') {
+      logout();
+      // Rediriger vers la page d'accueil après déconnexion
+      window.location.href = '/';
+    }
+  };
 
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
@@ -90,10 +111,11 @@ export default function MenuContent() {
 
       <List dense>
         {secondaryListItems.map((item) => (
-          <ListItem key={item.to} disablePadding sx={{ display: 'block' }}>
+          <ListItem key={item.text} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
-              component={NavLink}
-              to={item.to}
+              component={item.text === 'Se déconnecter' ? 'button' : NavLink}
+              to={item.text === 'Se déconnecter' ? undefined : item.to}
+              onClick={() => handleItemClick(item)}
               selected={pathname === item.to}
               sx={{
                 display: 'flex',

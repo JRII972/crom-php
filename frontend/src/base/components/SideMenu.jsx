@@ -86,6 +86,7 @@ export default function SideMenu() {
             </Typography>
             } />
         </MenuItem>
+
       </Box>
       <Divider />
       <Box
@@ -97,6 +98,7 @@ export default function SideMenu() {
         }}
       >
         <MenuContent />
+        
         <CardAlert
           type="NEW"
           title="Bienvenue"

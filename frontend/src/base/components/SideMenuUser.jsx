@@ -10,8 +10,15 @@ import SelectContent from './SelectContent';
 import MenuContent from './MenuContent';
 import CardAlert from './CardAlert';
 import OptionsMenu from './OptionsMenu';
+import { useAuth } from '../../contexts/AuthContext';
 
-export default function SideMenuUser(){
+export default function SideMenuUser() {
+    const { user, isAuthenticated } = useAuth();
+    
+    if (!isAuthenticated) {
+        return null; // Ne pas afficher si non connecté
+    }
+    
     return(
         <Stack
             direction="row"
@@ -25,16 +32,18 @@ export default function SideMenuUser(){
         >
             <Avatar
             sizes="small"
-            alt="Riley Carter"
-            src="/static/images/avatar/7.jpg"
+            alt={user?.prenom || 'U'}
+            src={user?.image || ''}
             sx={{ width: 36, height: 36 }}
-            />
+            >
+                {!user?.image && (user?.prenom?.[0]?.toUpperCase() || 'U')}
+            </Avatar>
             <Box sx={{ mr: 'auto' }}>
             <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: '16px' }}>
-                Riley Carter
+                {`${user?.prenom || ''} ${user?.nom || ''}`}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                riley@email.com
+                {user?.email || user?.nomUtilisateur || ''}
             </Typography>
             </Box>
             <OptionsMenu />
