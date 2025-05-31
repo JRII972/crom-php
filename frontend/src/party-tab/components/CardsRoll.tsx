@@ -47,8 +47,8 @@ export default function CardsRoll({ title, sessions, type, displayDate }: { titl
         </Typography>
       </Box>
       <Box sx={{ display:'inline-flex', gap:'1em' }}>
-        {sessions.map((partie:GameSession) => ( 
-          <PartyCard partie={partie} key={partie.id} type={type} displayDate={displayDate}/>
+        {sessions.map((session:GameSession) => ( 
+          <PartyCard session={session} key={session.id} type={type} displayDate={displayDate}/>
           ))}
       </Box>
     </Stack>

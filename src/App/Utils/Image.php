@@ -216,14 +216,15 @@ class Image implements JsonSerializable
         ?string $subdirectory = null,
         ?string $imageAlt = null,
         bool $isUpload = true
-    ) {
+    ): ?self {
         if (is_null($source)){
             return null;
         }
         try {
             return new self($source, $name, $subdirectory, $imageAlt, $isUpload);
         } catch (\Throwable $th) {
-            //throw $th;
+            // Log l'erreur si besoin
+            // error_log('Erreur lors du chargement de l\'image: ' . $th->getMessage());
             return null;
         }
     }
@@ -640,7 +641,7 @@ class Image implements JsonSerializable
      */
     public function jsonSerialize(): ?array
     {
-        if (is_null($this->imageResource)){
+        if (!$this->isValid()){
             return null;
         }
 
@@ -650,5 +651,12 @@ class Image implements JsonSerializable
             'name' => $this->getName(),
             'format' => $this->getFormat(),
         ];
+    }
+
+    /**
+     * Ajouter une méthode isValid pour vérifier si l'image est valide
+     */
+    public function isValid(): bool {
+        return $this->imageResource !== null;
     }
 }

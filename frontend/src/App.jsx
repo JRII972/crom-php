@@ -14,8 +14,6 @@ import PartyTab from './party-tab/PartyTab'
 import MainPage from './base/MainPage';
 import PartiePage from './party-tab/PartiePage';
 import { getPartieNameFromId } from './utils/utils';
-import NotFound404 from './404';
-import NotFound404_v2 from './404_v2';
 import Blog from './blog/Blog';
 import UserManagement from './API/test/user';
 
@@ -23,6 +21,9 @@ import PlayerParties from './party-tab/PlayerParties';
 import PartiesPage from './party-tab/PartiesPage';
 import { DisplayLBDR } from './utils/LBDRDisplay';
 import TestApp from './test';
+import { AuthProvider } from './contexts/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import Profile from './profile/Profile';
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,7 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard />,
+        element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
         handle: { breadcrumb: 'Dashboard' },
       },
       {
@@ -89,6 +90,7 @@ const router = createBrowserRouter([
         handle: { breadcrumb: 'Dashboard' },
       },
       {
+        // Only for test purpose
         path: "api",
         // element: <UserManagement />,
         handle: { breadcrumb: 'API' },
@@ -103,6 +105,11 @@ const router = createBrowserRouter([
           },
         ]
       },
+      {
+        path: "profile",
+        element: <ProtectedRoute><Profile /></ProtectedRoute>,
+        handle: { breadcrumb: 'Profil' },
+      },
     ]
   }, 
   {
@@ -110,24 +117,12 @@ const router = createBrowserRouter([
     element: <SignIn />,
     handle: { breadcrumb: 'Connexion' },
   },
-  {
-    path: "/404",
-    element: <NotFound404 />,
-    handle: { breadcrumb: 'Connexion' },
-  },
-  {
-    path: "/404_v2",
-    element: <NotFound404_v2 />,
-    handle: { breadcrumb: 'Connexion' },
-  },
 ]);
 
 export default function App() {
-  React.useEffect(() => {
-    DisplayLBDR();
-  }, []);
-
   return (
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   );
 }

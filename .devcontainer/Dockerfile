@@ -2,6 +2,9 @@
 FROM php:8.1-apache
 
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - 
+    
+# Copy development php.ini and ensure extensions are properly loaded
+RUN cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" 
 
 # Install system dependencies & PHP extensions
 RUN apt-get update \
@@ -15,7 +18,14 @@ RUN apt-get update \
       wget \
       git \
       nodejs \
- && docker-php-ext-install \
+      libjpeg62-turbo-dev \
+      libfreetype6-dev \
+      libwebp-dev \
+      libxpm-dev \
+      libavif-dev \
+      libheif-dev \
+ && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype --with-avif --with-xpm \
+ && docker-php-ext-install -j$(nproc) \
       pdo_mysql \
       mbstring \
       exif \
@@ -23,6 +33,7 @@ RUN apt-get update \
       bcmath \
       gd \
  && a2enmod rewrite
+
 
 # Install Xdebug 3.4.3
 RUN wget https://xdebug.org/files/xdebug-3.4.3.tgz \
@@ -37,8 +48,6 @@ RUN wget https://xdebug.org/files/xdebug-3.4.3.tgz \
 
 # (optional) Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
-
-RUN npm install
 
 # Set up directories and permissions
 RUN mkdir -p /var/www/html/public/data/uploads/images \

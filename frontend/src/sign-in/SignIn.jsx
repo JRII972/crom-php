@@ -19,7 +19,8 @@ import ColorModeSelect from '../shared-theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
 import utilisateurService from '../api/services/utilisateurService';
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useAuth } from '../contexts/AuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -67,30 +68,34 @@ export default function SignIn(props) {
   const [login, setLogin] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
-  const [error, setError] = useState('');
   const [loginError, setLoginError] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   const [open, setOpen] = useState(false);
-  let navigate = useNavigate();
-
+  
+  const { login: authLogin, error } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     if (loginError || passwordError) {
       return;
     }
+    
+    if (!validateInputs()) {
+      return;
+    }
+    
     try {
-      const { token, refresh_token, utilisateur } = await utilisateurService.login(login, motDePasse, keepLoggedIn);
-      localStorage.setItem('token', token);
-      if (keepLoggedIn) {
-        localStorage.setItem('refreshToken', refresh_token);
-      }
-      console.log('Logged in user:', utilisateur);
-      return navigate("/");
+      await authLogin(login, motDePasse, keepLoggedIn);
+      
+      // Redirection vers la page demandée ou la page d'accueil
+      const from = location.state?.from?.pathname || "/";
+      navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message);
+      // L'erreur est gérée par le contexte Auth
     }
   };
 

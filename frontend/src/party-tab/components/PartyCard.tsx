@@ -12,21 +12,19 @@ import {
   useTheme, useColorScheme
 } from '@mui/material';
 import BrokenImageIcon from '@mui/icons-material/BrokenImage';
-import GameSession from '../../types/GameSession';
+import { Session } from '../../api/types/db';
 import { Link } from 'react-router-dom';
-
-import { findGameByName } from '../data/games';
 import { PartyCardContent } from './PartyCardContent';
+import { default_image } from '../utils/default_image';
 
-
+// Interface mise à jour pour utiliser Session
 interface PartyCardProps {
-  partie: GameSession;
+  session: Session;
   type?: 'session' | 'game' | 'party';
   displayDate?: boolean;
 }
 
-
-const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=false }) => {
+const PartyCard: FC<PartyCardProps> = ({ session, type='session', displayDate=false }) => {
   // états
   const [loaded, setLoaded] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -34,25 +32,9 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
   const theme = useTheme();
   const isMobileScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const { mode, systemMode, setMode } = useColorScheme();
+  const { mode, systemMode } = useColorScheme();
   const actualMode = systemMode || mode;
 
-  //TODO: Scroll quand survolle
-  // 1) ref pour le contenu du Collapse
-  // const collapseRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-
-  // 2) scroll quand on ouvre
-  // useEffect(() => {
-  //   if (open && collapseRef.current) {
-  //     collapseRef.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'end',
-  //       inline: 'nearest',
-  //     });
-  //   }
-  // }, [open]);
-
-  // 3) handlers
   const handleMouseEnter = (): void => setOpen(true);
   const handleMouseLeave = (): void => setOpen(false);
 
@@ -72,68 +54,84 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
   // Change les tailles de la carte en fonction de la taille de l'écran
   const cardStyles = {
     minWidth: isMobileScreen ? 160 : 200,
-    height: type == 'session' ? (isMobileScreen ? 300 : 350) : (isMobileScreen ? 300 : 280),
+    height: type === 'session' ? (isMobileScreen ? 300 : 350) : (isMobileScreen ? 300 : 280),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'stretch',
     maxWidth: isMobileScreen ? 160 : 550,
     p: 0,
-    
-    // px: isMobileScreen ? 1 : 2,    
   };
 
   const cardImageSize = isMobileScreen ? 100 : 140;
-  const titleSize = isMobileScreen ? '1em' : '1.15em';
   const subTitleSize = isMobileScreen ? '0.8em' : '0.9em';
-  const subTitleLineHeight = isMobileScreen ? '0.8em' : '0.9em';
-  const commentSize = isMobileScreen ? '0.75em' : '0.85em';
-  const playerListPadding = isMobileScreen ? 0 : 0;
+
+  // Récupérer l'image appropriée
+  const getImage = () => {
+    if (session.partie.image && session.partie.image.url) {
+      return session.partie.image.url;
+    } else if (session.partie.jeu.image && session.partie.jeu.image.url) {
+      return session.partie.jeu.image.url;
+    } else {
+      return default_image(session.partie.type_partie);
+    }
+  };
+
+  // Récupérer le texte alternatif approprié
+  const getImageAlt = () => {
+    if (session.partie.image && session.partie.image.imageAlt) {
+      return session.partie.image.imageAlt;
+    } else if (session.partie.jeu.image && session.partie.jeu.image.imageAlt) {
+      return session.partie.jeu.image.imageAlt;
+    } else {
+      return 'Image par défaut pour ' + session.partie.type_partie;
+    }
+  };
+
+  const imageUrl = getImage();
 
   return (
     <Card
       sx={cardStyles}
-      key={partie.id}
+      key={session.id}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-
       variant={actualMode === 'light' ? 'outlined' : ''}
     >
       <Box sx={{ width: cardStyles.minWidth, height: '100%', position: 'relative', overflow: 'hidden' }}>
-
-      {loaded && !error && (<Box
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundImage: `url(${findGameByName(partie.jeu).image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(10px)', // Ajustez la valeur du flou selon vos besoins
-          zIndex: 0, // Derrière l'image principale
-        }}
-      />)}
+        {loaded && !error && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `url(${imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(10px)',
+              zIndex: 0,
+            }}
+          />
+        )}
 
         <CardActionArea
           component={Link}
-          to={"/partie/" + partie.id}
+          to={"/partie/" + session.partie.id}
           sx={{
-            flex: 1, // Prend l'espace disponible
+            flex: 1,
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
           <Box
-           sx={{
-            m: 1,
-            height: cardImageSize,
-            // borderTopLeftRadius: 5,
-            // borderTopRightRadius: 5,
-            borderRadius: 1,
-            overflow: 'hidden',
-           }}
+            sx={{
+              m: 1,
+              height: cardImageSize,
+              borderRadius: 1,
+              overflow: 'hidden',
+            }}
           >
             {!loaded && !error && (
               <Skeleton variant="rectangular" width="100%" height={cardImageSize} />
@@ -142,9 +140,8 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
               <CardMedia
                 component="img"
                 height={cardImageSize}
-                // image={partie.image}
-                image={findGameByName(partie.jeu).image}
-                alt={partie.image_alt}
+                image={imageUrl}
+                alt={getImageAlt()}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
                 sx={{ display: loaded ? 'block' : 'none', objectFit: 'cover', width: '100%' }}
@@ -161,16 +158,9 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
               </Box>
             )}
           </Box>
-
-          {/* <Divider sx={{ my: 1 }}/> */}
-
           
-          <PartyCardContent partie={partie} cardMinWidth={cardStyles.minWidth} type={type} displayDate={displayDate}/>
-
-            
+          <PartyCardContent session={session} cardMinWidth={cardStyles.minWidth} type={type} displayDate={displayDate} />
         </CardActionArea>
-
-        
       </Box>
 
       <Collapse
@@ -183,13 +173,10 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
           transformOrigin: 'left center',
         }}
       >
-        {/* 4) ref ici */}
         <Box
-          // ref={collapseRef}
           sx={{
             width: 250,
             p: 2,
-            // backgroundColor: 'grey.100',
             height: '100%',
           }}
         >
@@ -205,7 +192,7 @@ const PartyCard: FC<PartyCardProps> = ({ partie, type='session', displayDate=fal
               fontSize: subTitleSize,
             }}
           >
-            {partie.coment}
+            {session.partie.description}
           </Typography>
         </Box>
       </Collapse>

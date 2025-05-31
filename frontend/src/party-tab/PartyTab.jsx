@@ -95,8 +95,8 @@ export default function PartyTab(props) {
 
       <Divider sx={{margin: '2em'}} orientation="horizontal" variant="middle" flexItem />
 
-      {view === 'table' && <PartiesTables sessionsList={sessionsList} setSessionsList={setSessionsList} />}
-      {view === 'card' && <PartiesCard sessionsList={sessionsList} setSessionsList={setSessionsList}  />}
+      {view === 'table' && <PartiesTables sessionsList={sessionsList || []} setSessionsList={setSessionsList} />}
+      {view === 'card' && <PartiesCard sessionsList={sessionsList || []} setSessionsList={setSessionsList}  />}
       {/* {view === 'quilt' && <PartiesRecomendations {...parties} />} */}
     </Stack>
   );
