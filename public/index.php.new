@@ -1,0 +1,49 @@
+<?php
+// Fichier point d'entrée principal de l'application
+// Définir le chemin absolu vers la racine de l'application
+define('ROOT_PATH', dirname(__DIR__));
+
+// Charger l'autoloader de Composer
+require_once ROOT_PATH . '/vendor/autoload.php';
+
+// Vérifier si la requête est pour un fichier statique
+$requestUri = $_SERVER['REQUEST_URI'];
+if (preg_match('/\.(css|js|jpg|jpeg|png|gif|ico|svg|woff|woff2|ttf|eot)$/', $requestUri)) {
+    // Si le fichier existe dans public, le servir directement
+    $filePath = __DIR__ . $requestUri;
+    if (file_exists($filePath)) {
+        $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+        $contentTypes = [
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'ico' => 'image/x-icon',
+            'svg' => 'image/svg+xml',
+            'woff' => 'font/woff',
+            'woff2' => 'font/woff2',
+            'ttf' => 'font/ttf',
+            'eot' => 'application/vnd.ms-fontobject'
+        ];
+        
+        if (isset($contentTypes[$extension])) {
+            header('Content-Type: ' . $contentTypes[$extension]);
+        }
+        
+        readfile($filePath);
+        exit;
+    }
+}
+
+// Si c'est une requête pour le frontend
+if (!preg_match('#^/api/#', $requestUri)) {
+    // Inclure le fichier HTML principal de votre application frontend
+    include __DIR__ . '/index.html';
+    exit;
+}
+
+// Si on arrive ici, c'est une erreur (ne devrait pas arriver avec la config .htaccess)
+http_response_code(404);
+echo "Page non trouvée";

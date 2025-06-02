@@ -1,51 +1,54 @@
-/* Thin */
+@import './App.css';
+
 @font-face {
     font-family: 'Ravenholm';
     font-weight: 300;
     font-style: normal;
     src: url('/fonts/Ravenholm-Thin.ttf') format('truetype');
   }
-  /* Bold */
-  @font-face {
-    font-family: 'Ravenholm';
-    font-weight: 700;
-    font-style: normal;
-    src: url('/fonts/Ravenholm-Bold.ttf') format('truetype');
-  }
-  /* Inline (poids intermédiaire ou display) */
-  @font-face {
-    font-family: 'Ravenholm Inline';
-    font-weight: 400;
-    font-style: normal;
-    src: url('/fonts/Ravenholm-Inline.ttf') format('truetype');
-  }
-  /* Color (attention : support variable selon le navigateur) */
-  @font-face {
-    font-family: 'Ravenholm Color';
-    font-weight: 400;
-    font-style: normal;
-    src: url('/fonts/Ravenholm-Color.otf') format('truetype');
-  }
   
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Bold */
+@font-face {
+font-family: 'Ravenholm';
+font-weight: 700;
+font-style: normal;
+src: url('/fonts/Ravenholm-Bold.ttf') format('truetype');
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Inline (poids intermédiaire ou display) */
+@font-face {
+font-family: 'Ravenholm Inline';
+font-weight: 400;
+font-style: normal;
+src: url('/fonts/Ravenholm-Inline.ttf') format('truetype');
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(65, 65, 65, 0.5);
-  border-radius: 4px;
+/* Color (attention : support variable selon le navigateur) */
+@font-face {
+font-family: 'Ravenholm Color';
+font-weight: 400;
+font-style: normal;
+src: url('/fonts/Ravenholm-Color.otf') format('truetype');
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.5);
+/* Classes pour appliquer les polices */
+.font-ravenholm-thin {
+  font-family: 'Ravenholm', sans-serif;
+  font-weight: 300;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(65, 65, 65, 0.5) transparent;
+.font-ravenholm-bold {
+  font-family: 'Ravenholm', sans-serif;
+  font-weight: 700;
 }
+
+.font-ravenholm-inline {
+  font-family: 'Ravenholm Inline', sans-serif;
+  font-weight: 400;
+}
+
+.font-ravenholm-color {
+  font-family: 'Ravenholm Color', sans-serif;
+  font-weight: 400;
+}
+

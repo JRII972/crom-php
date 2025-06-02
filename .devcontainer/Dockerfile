@@ -33,7 +33,8 @@ RUN apt-get update \
       bcmath \
       gd \
  && a2enmod rewrite
-
+ 
+RUN pecl install apcu && docker-php-ext-enable apcu
 
 # Install Xdebug 3.4.3
 RUN wget https://xdebug.org/files/xdebug-3.4.3.tgz \
@@ -54,6 +55,6 @@ RUN mkdir -p /var/www/html/public/data/uploads/images \
     && mkdir -p /var/www/html/public/data/uploads/files \
     && mkdir -p /var/www/html/public/data/icon \
     && chown -R www-data:www-data /var/www/html/public/data \
-    && chmod -R 770 /var/www/html/public/data
+    && chmod -R 755 /var/www/html/public/data
 
 WORKDIR /var/www/html

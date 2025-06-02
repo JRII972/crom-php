@@ -9,7 +9,7 @@ header('Content-Type: application/json');
 // header('Access-Control-Allow-Credentials: true');
 
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/App/Utils/helpers.php';
+require_once __DIR__ . '/../App/Utils/helpers.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
