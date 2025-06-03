@@ -12,6 +12,18 @@
             "webRoot": "${workspaceFolder}"
         },
         {
+            "type": "msedge",
+            "request": "launch",
+            "name": "Launch Edge against localhost",
+            "url": "http://localhost",
+            "webRoot": "${workspaceFolder}",
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+            "${workspaceFolder}/**",
+            "!**/node_modules/**"
+            ]
+        },
+        {
             "name": "Listen for Xdebug",
             "type": "php",
             "request": "launch",

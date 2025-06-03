@@ -55,6 +55,8 @@ RUN mkdir -p /var/www/html/public/data/uploads/images \
     && mkdir -p /var/www/html/public/data/uploads/files \
     && mkdir -p /var/www/html/public/data/icon \
     && chown -R www-data:www-data /var/www/html/public/data \
-    && chmod -R 755 /var/www/html/public/data
+    && chmod -R 755 /var/www/html/public/data \
+    && mkdir -p /var/www/html/App/cache \
+    && chmod -R 777 /var/www/html/App/cache 
 
 WORKDIR /var/www/html

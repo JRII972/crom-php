@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Database\Types;
 
+require_once __DIR__ ."/../../Utils/helpers.php";
+
 use DateTime;
 use InvalidArgumentException;
 use PDO;
@@ -223,10 +225,10 @@ class Session extends DefaultDatabaseType
      */
     public static function search(
         PDO $pdo,
-        int $partieId = 0,
-        int $lieuId = 0,
-        string $dateDebut = '',
-        string $dateFin = '',
+        ?int $partieId = 0,
+        ?int $lieuId = 0,
+        ?string $dateDebut = '',
+        ?string $dateFin = '',
         ?int $maxJoueurs = null,
         ?array $categories = null,
         ?array $jours = null
@@ -252,6 +254,21 @@ class Session extends DefaultDatabaseType
             $sql .= ' JOIN jeux j ON p.id_jeu = j.id';
             $sql .= ' JOIN jeux_genres jg ON j.id = jg.id_jeu';
             $sql .= ' JOIN genres g ON jg.id_genre = g.id';
+            $placeholders = [];
+            foreach ($categories as $key => $value) {
+                // Si c'est un objet Genre, on prend son id, sinon on prend la valeur brute
+                if (is_object($value) && method_exists($value, 'getId')) {
+                    $paramValue = $value->getId();
+                } else if (is_array($value) && isset($value['id'])) {
+                    $paramValue = $value['id'];
+                } else {
+                    $paramValue = $value;
+                }
+                $paramName = 'category_' . $key;
+                $placeholders[] = ':' . $paramName;
+                $params[$paramName] = $paramValue;
+            }
+            $sql .= ' AND g.id IN (' . implode(', ', $placeholders) . ')';
         }
         
         $sql .= ' WHERE 1=1';
@@ -275,17 +292,6 @@ class Session extends DefaultDatabaseType
         if ($maxJoueurs !== null && $maxJoueurs >= 0) {
             $sql .= ' AND s.max_joueurs_session <= :nombre_max_joueurs';
             $params['nombre_max_joueurs'] = $maxJoueurs;
-        }
-        
-        // Filtre par catégories/genres
-        if ($categories !== null && !empty($categories)) {
-            $placeholders = [];
-            foreach ($categories as $key => $value) {
-                $paramName = 'category_' . $key;
-                $placeholders[] = ':' . $paramName;
-                $params[$paramName] = $value;
-            }
-            $sql .= ' AND g.nom IN (' . implode(', ', $placeholders) . ')';
         }
         
         // Filtre par jours de la semaine

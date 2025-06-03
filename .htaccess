@@ -14,5 +14,25 @@ RewriteRule ^ - [L]
 # Redirect static assets to /public/
 RewriteRule ^(assets|data|fonts)/(.*)$ public/$1/$2 [L]
 
-# For frontend routes, redirect to public/index.php
+# For frontend routes, redirect to corresponding files in public directory
+
+# Rediriger /nom vers public/nom.php si ce fichier existe
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
+RewriteRule ^([^/]+)$ public/$1.php [L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/$1/index.php -f
+RewriteRule ^(.*)$ public/$1/index.php [L]
+
+# Fallback global : tout le reste va sur public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ public/index.php [L]
+
+# Rediriger la racine / vers public/index.php si aucun fichier n'est trouvé
+RewriteCond %{REQUEST_URI} ^/$
+RewriteCond %{DOCUMENT_ROOT}/public/index.php -f
+RewriteRule ^$ public/index.php [L]

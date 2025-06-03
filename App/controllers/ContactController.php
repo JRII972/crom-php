@@ -18,7 +18,7 @@ class ContactController extends BaseController {
         ];
 
         // Render the template
-        return $this->render('pages.contact', $data);
+        return $this->render('pages.partie', $data);
     }
     
     /**

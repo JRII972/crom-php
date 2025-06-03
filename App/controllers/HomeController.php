@@ -3,21 +3,30 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/BaseController.php';
 
+use App\Database\Types\Genre;
+use App\Database\Types\Session;
+use App\Database\Types\Partie;
+
 class HomeController extends BaseController {
     /**
      * Display the home page
      * 
      * @return string Rendered HTML
      */
+    
     public function index() {
         // Data to pass to the template
         $data = [
-            'page_title' => 'Accueil - Blade',
-            'message' => 'Bienvenue sur mon site !',
-            'current_date' => date('Y-m-d H:i:s')
+            'page_title' => 'CROM | BDR',
+            'suggestion' => [
+                'Fantaisie' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'fantasy')]),
+                'Enquête' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'Enquête')]),
+                'Coopératif' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'Coopératif')])
+            ],
+            'next_week' => Session::search($this->pdo, dateDebut:'2025-06-02', dateFin:'2025-06-08'),
         ];
 
         // Render the template
-        return $this->render('pages.home', $data);
+        return $this->render('pages.parties', $data);
     }
 }
