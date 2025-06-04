@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ $pageTitle ?? 'LBDR' }} - LBDR</title>
-  <link rel="stylesheet" crossorigin href="/assets/css/index-0DkcRR_m.css">
+  <link rel="stylesheet" crossorigin href="/assets/css/index-C2_PU_81.css">
   <style>
     @font-face {
       font-family: 'Ravenholm-Bold';

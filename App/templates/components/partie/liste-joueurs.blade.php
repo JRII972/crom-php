@@ -1,4 +1,8 @@
 {{-- Liste des joueurs inscrits à une partie --}}
+@props([
+    'joueurs'
+  ])
+
 <div class="card bg-base-200 shadow-xl mt-6" id="partie-joueurs-container">
   <div class="card-body">
     <h3 class="card-title text-lg">
@@ -14,12 +18,12 @@
           <li class="flex items-center gap-3">
             <div class="avatar">
               <div class="w-10 rounded-full">
-                <img src="{{ $joueur['avatar'] ?? 'https://picsum.photos/200' }}" alt="Avatar joueur" />
+                <img src="{{ $joueur->getImageURL() }}" alt="Avatar de {{ $joueur->getNom() }}" />
               </div>
             </div>
             <div>
-              <div class="font-medium">{{ $joueur['nom'] }}</div>
-              <div class="text-xs text-base-content/70">{{ $joueur['pseudo'] }}</div>
+              <div class="font-medium">{{ $joueur->getNom() }}</div>
+              <div class="text-xs text-base-content/70">{{ $joueur->getPseudonyme() }}</div>
             </div>
           </li>
         @endforeach
@@ -32,30 +36,8 @@
             </div>
           </div>
           <div>
-            <div class="font-medium">Emma Martin</div>
-            <div class="text-xs text-base-content/70">@Emm4</div>
-          </div>
-        </li>
-        <li class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-10 rounded-full">
-              <img src="https://picsum.photos/201" alt="Avatar joueur" />
-            </div>
-          </div>
-          <div>
-            <div class="font-medium">Lucas Bernard</div>
-            <div class="text-xs text-base-content/70">@LucasB</div>
-          </div>
-        </li>
-        <li class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-10 rounded-full">
-              <img src="https://picsum.photos/202" alt="Avatar joueur" />
-            </div>
-          </div>
-          <div>
-            <div class="font-medium">Chloé Petit</div>
-            <div class="text-xs text-base-content/70">@ChloeP</div>
+            <div class="font-medium">PERSONNE</div>
+            <div class="text-xs text-base-content/70">PERSONNE</div>
           </div>
         </li>
       @endif

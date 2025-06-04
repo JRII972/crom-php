@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $page_title ?? 'CROM | LBDR'}}</title>
     <link rel="stylesheet" crossorigin href="/assets/css/index.css">
-  <link rel="stylesheet" crossorigin href="/assets/css/index-DH7LcWtt.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="/assets/css/index-C2_PU_81.css">
   </head>
   <body>
     {{-- Structure principale du drawer --}}

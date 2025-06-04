@@ -1,5 +1,16 @@
 {
   "github.copilot.chat.codeGeneration.instructions": [
     
-  ]
+  ],
+  "php.validate.executablePath": "/usr/local/bin/php",
+  "php.executablePath": "/usr/local/bin/php",
+  "php.debug.executablePath": "/usr/local/bin/php",
+  "intelephense.files.maxSize": 5000000,
+  "php.suggest.basic": false,
+  "files.associations": {
+    "*.php": "php"
+  },
+  "emmet.includeLanguages": {
+    "php": "html"
+  }
 }

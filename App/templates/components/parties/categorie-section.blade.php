@@ -1,7 +1,7 @@
 {{-- Composant section de catégorie --}}
 @props([
     'titre' => 'Catégorie',
-    'parties' => []
+    'sessions' => []
 ])
 
 <div class="roll-section">
@@ -11,8 +11,10 @@
 
   <!-- Cartes des parties -->
   <div class="roll-content justify-between gap-1 md:gap-2">
-    @forelse($parties as $partie)
-      @include('components.parties.carte-partie', $partie)
+    @forelse($sessions as $session)
+      @include('components.parties.carte-partie', [
+        'session' => $session
+      ])
     @empty
       <div class="text-center w-full p-4">
         <p>Aucune partie disponible dans cette catégorie.</p>

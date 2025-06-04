@@ -31,7 +31,7 @@ class Session extends DefaultDatabaseType
     private int $maxJoueursSession = 5; // Ajout de la propriété avec valeur par défaut
 
     // Cache configuration
-    private static $cacheEnabled = true; // Activer/désactiver le cache
+    private static $cacheEnabled = false; // Activer/désactiver le cache
     private static $cacheTTL = 300; // 5 minutes en secondes
     private static $cachePrefix = 'session_search_';
 
@@ -220,6 +220,7 @@ class Session extends DefaultDatabaseType
      * @param int|null $maxJoueurs Nombre maximum de joueurs (optionnel)
      * @param array|null $categories Liste des catégories/genres pour filtrer (optionnel)
      * @param array|null $jours Liste des jours de la semaine pour filtrer (optionnel)
+     * @param bool|null $serialize 
      * @return array Liste des sessions
      * @throws PDOException En cas d'erreur SQL
      */
@@ -231,7 +232,8 @@ class Session extends DefaultDatabaseType
         ?string $dateFin = '',
         ?int $maxJoueurs = null,
         ?array $categories = null,
-        ?array $jours = null
+        ?array $jours = null,
+        ?bool $serialize = true
     ): array {
         // Générer une clé de cache unique basée sur les paramètres
         $cacheKey = self::$cachePrefix . md5(serialize([$partieId, $lieuId, $dateDebut, $dateFin, $maxJoueurs, $categories, $jours]));
@@ -328,14 +330,18 @@ class Session extends DefaultDatabaseType
         foreach ($results as $row) {
             try {
                 $session = new self((int)$row['id']);
-                $sessions[] = $session->jsonSerialize();
+                if ( $serialize ) {
+                    $sessions[] = $session->jsonSerialize();
+                } else {
+                    $sessions[] = $session;
+                }
             } catch (\Throwable $e) {
                 continue;
             }
         }
 
         // Stocker dans le cache (toujours, même si partieId = 0)
-        if (self::$cacheEnabled && extension_loaded('apcu')) {
+        if (self::$cacheEnabled && extension_loaded('apcu') && $serialize) {
             apcu_store($cacheKey, $sessions, self::$cacheTTL);
         }
 

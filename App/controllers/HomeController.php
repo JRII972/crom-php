@@ -3,8 +3,8 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/BaseController.php';
 
+use App\Controllers\Class\SessionDisplay;
 use App\Database\Types\Genre;
-use App\Database\Types\Session;
 use App\Database\Types\Partie;
 
 class HomeController extends BaseController {
@@ -19,13 +19,16 @@ class HomeController extends BaseController {
         $data = [
             'page_title' => 'CROM | BDR',
             'suggestion' => [
-                'Fantaisie' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'fantasy')]),
-                'Enquête' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'Enquête')]),
-                'Coopératif' => Session::search($this->pdo, categories:[Genre::search($this->pdo, 'Coopératif')])
+                'Fantaisie' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'fantasy'), serialize:false),
+                'Enquête' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'Enquête'), serialize:false),
+                'Coopératif' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'Coopératif'), serialize:false)
             ],
-            'next_week' => Session::search($this->pdo, dateDebut:'2025-06-02', dateFin:'2025-06-08'),
+            'next_week' => [
+                'Vendredi' => SessionDisplay::search($this->pdo, dateDebut:'2025-06-02', dateFin:'2025-06-08', serialize:false),
+                'Samedi' => SessionDisplay::search($this->pdo, dateDebut:'2025-06-02', dateFin:'2025-06-08', serialize:false),
+            ],
         ];
-
+        
         // Render the template
         return $this->render('pages.parties', $data);
     }

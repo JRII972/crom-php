@@ -1,4 +1,5 @@
 {{-- Liste des sessions d'une partie --}}
+
 <div id="tab-content-sessions" class="py-4 {{ $activeTab === 'sessions' ? '' : 'hidden' }}">
   <h3 class="text-lg font-bold mb-4">Prochaines sessions</h3>
   

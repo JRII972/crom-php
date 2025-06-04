@@ -40,7 +40,7 @@ class Partie extends DefaultDatabaseType
     private ?int $idJeu;
     private ?string $nom;
     private ?Jeu $jeu = null;
-    private ?string $idMaitreJeu;
+    protected ?string $idMaitreJeu;
     private ?Utilisateur $maitreJeu = null;
     private TypePartie $typePartie;
     private ?TypeCampagne $typeCampagne = null;
@@ -471,6 +471,9 @@ class Partie extends DefaultDatabaseType
 
     public function getImage(): ?Image
     {
+        if (!is_null($this->image) && !$this->image->isValid()){
+            $this->image = null;
+        }
         return $this->image;
     }
 
@@ -651,7 +654,7 @@ class Partie extends DefaultDatabaseType
         if ($image instanceof Image) {
             $this->image = $image;
         } else {
-            $this->image = new Image($image, 
+            $this->image = Image::load($image, 
                         $this->nom . '_' . (
                                 $this->getMaitreJeu()->getPseudonyme() ? $this->getMaitreJeu()->getPseudonyme() : $this->getMaitreJeu()->getNom() . $this->getMaitreJeu()->getPrenom()
                             ) . '_' . $this->getTypePartie()->value . '_' . $this->getJeu()->getNom(), 

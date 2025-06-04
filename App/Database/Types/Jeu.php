@@ -30,7 +30,7 @@ class Jeu extends DefaultDatabaseType
     private ?Image $image = null;
     private ?Image $icon = null;
 
-    private static $cacheEnabled = true; // Activer/désactiver le cache
+    private static $cacheEnabled = false; // Activer/désactiver le cache
     private static $cacheTTL = 300; // 5 minutes en secondes
     private static $cachePrefix = 'jeu_search_';
 
@@ -103,7 +103,7 @@ class Jeu extends DefaultDatabaseType
         $this->description = $data['description'];
         $this->typeJeu = TypeJeu::from($data['type_jeu']);
         $this->image = Image::load($data['image']);
-        $this->image = Image::load($data['icon']);
+        $this->icon = Image::load($data['icon']);
     }
 
     /**

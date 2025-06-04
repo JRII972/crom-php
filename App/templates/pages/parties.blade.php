@@ -18,33 +18,20 @@
   {{-- Suggestions ("Pourrais vous intéresser") --}}
   @include('components.parties.liste-parties', [
     'titre_section' => 'Pourrais vous intérésser !',
-    'categories' => [
-      [
-        'titre' => 'Fantaisie',
-        'parties' => $parties_suggestions_fantasy ?? []
-      ],
-      [
-        'titre' => 'Nouvelle campagne',
-        'parties' => $parties_suggestions_campaign ?? []
-      ]
-    ]
+    'sections' => $suggestion
   ])
   
   {{-- La semaine prochaine --}}
   @include('components.parties.liste-parties', [
     'titre_section' => 'La semaine prochaine',
-    'categories' => [
-      [
-        'titre' => 'Vendredi de 20h à 0h',
-        'parties' => $parties_vendredi ?? []
-      ],
-      [
-        'titre' => 'Samedi de 14h à 20H',
-        'parties' => $parties_samedi ?? []
-      ]
-    ]
+    'sections' => $next_week
   ])
 </div>
+
+  <!-- Bouton "Voir plus" -->
+  <div class="flex justify-center mt-6">
+    <button class="btn btn-outline">Voir plus de parties</button>
+  </div>
 @endsection
 
 @section('scripts')

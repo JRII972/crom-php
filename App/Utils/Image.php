@@ -19,7 +19,7 @@ use function imagecreatefromwebp;
 use function imagecreatefromavif;
 
 // Global variables
-const DEFAULT_STORAGE_PATH = __DIR__ . '/../../../public';
+const DEFAULT_STORAGE_PATH = __DIR__ . '/../../public';
 const RELATIVE_IMAGE_PATH = '/data/images';
 const DEFAULT_IMAGE_STORAGE_PATH = DEFAULT_STORAGE_PATH . RELATIVE_IMAGE_PATH;
 const UPLOAD_SUBFOLDER = '/uploads';
@@ -32,7 +32,6 @@ class Image implements JsonSerializable
     private string $filePath;
     private ?string $name;
     private ?string $imageAlt;
-    private ?GdImage $imageResource = null;
     private string $format;
     private array $supportedFormats = ['jpeg', 'png', 'gif', 'bmp', 'wbmp', 'gd2', 'webp', 'avif'];
 
@@ -195,8 +194,6 @@ class Image implements JsonSerializable
             }
         }
 
-        // Load image resource
-        $this->loadImageResource($this->format);
     }
 
     /**
@@ -228,101 +225,7 @@ class Image implements JsonSerializable
             return null;
         }
     }
-    /**
-     * Loads the image resource from the file.
-     *
-     * @param string $extension Image extension
-     * @throws RuntimeException If image loading fails
-     */
-    private function loadImageResource(string $extension): void
-    {
-        $fullPath = DEFAULT_STORAGE_PATH . $this->filePath;
-        switch (strtolower($extension)) {
-            case 'jpeg':
-            case 'jpg':
-                $this->imageResource = @\imagecreatefromjpeg($fullPath);
-                break;
-            case 'png':
-                $this->imageResource = @\imagecreatefrompng($fullPath);
-                break;
-            case 'gif':
-                $this->imageResource = @\imagecreatefromgif($fullPath);
-                break;
-            case 'bmp':
-                $this->imageResource = @\imagecreatefrombmp($fullPath);
-                break;
-            case 'wbmp':
-                $this->imageResource = @\imagecreatefromwbmp($fullPath);
-                break;
-            case 'gd2':
-                $this->imageResource = @\imagecreatefromgd2($fullPath);
-                break;
-            case 'webp':
-                $this->imageResource = @\imagecreatefromwebp($fullPath);
-                break;
-            case 'avif':
-                if (function_exists('imagecreatefromavif')) {
-                    $this->imageResource = @\imagecreatefromavif($fullPath);
-                } else {
-                    throw new RuntimeException('AVIF format is not supported by this PHP installation');
-                }
-                break;
-            default:
-                throw new RuntimeException('Unsupported image format: ' . $extension);
-        }
 
-        if ($this->imageResource === false) {
-            throw new RuntimeException('Failed to load image resource from: ' . $fullPath);
-        }
-    }
-
-    /**
-     * Saves the image resource to the file.
-     *
-     * @param string $filePath Path to save the image
-     * @param string $extension Image extension
-     * @throws RuntimeException If saving fails
-     */
-    private function saveImageResource(string $filePath, string $extension): void
-    {
-        switch (strtolower($extension)) {
-            case 'jpeg':
-            case 'jpg':
-                $result = imagejpeg($this->imageResource, $filePath, 90);
-                break;
-            case 'png':
-                $result = imagepng($this->imageResource, $filePath, 9);
-                break;
-            case 'gif':
-                $result = imagegif($this->imageResource, $filePath);
-                break;
-            case 'bmp':
-                $result = imagebmp($this->imageResource, $filePath);
-                break;
-            case 'wbmp':
-                $result = imagewbmp($this->imageResource, $filePath);
-                break;
-            case 'gd2':
-                $result = imagegd2($this->imageResource, $filePath);
-                break;
-            case 'webp':
-                $result = imagewebp($this->imageResource, $filePath, 90);
-                break;
-            case 'avif':
-                if (function_exists('imageavif')) {
-                    $result = imageavif($this->imageResource, $filePath, 90);
-                } else {
-                    throw new RuntimeException('AVIF format is not supported by this PHP installation');
-                }
-                break;
-            default:
-                throw new RuntimeException('Unsupported image format: ' . $extension);
-        }
-
-        if (!$result) {
-            throw new RuntimeException('Failed to save image to: ' . $filePath);
-        }
-    }
 
     /**
      * Deletes the image file.
@@ -335,10 +238,6 @@ class Image implements JsonSerializable
         $fullPath = DEFAULT_STORAGE_PATH . $this->filePath;
         if (file_exists($fullPath) && !unlink($fullPath)) {
             throw new RuntimeException('Failed to delete image file: ' . $fullPath);
-        }
-        if ($this->imageResource !== null) {
-            imagedestroy($this->imageResource);
-            $this->imageResource = null;
         }
     }
 
@@ -417,131 +316,6 @@ class Image implements JsonSerializable
         $this->imageAlt = $newAlt ?? $this->name;
     }
 
-    /**
-     * Crops the image to the specified dimensions.
-     *
-     * @param int $x X-coordinate of the top-left corner
-     * @param int $y Y-coordinate of the top-left corner
-     * @param int $width Width of the crop
-     * @param int $height Height of the crop
-     * @throws InvalidArgumentException If crop parameters are invalid
-     * @throws RuntimeException If cropping fails
-     */
-    public function crop(int $x, int $y, int $width, int $height): void
-    {
-        if ($x < 0 || $y < 0 || $width <= 0 || $height <= 0) {
-            throw new InvalidArgumentException('Crop parameters must be positive');
-        }
-
-        $imageWidth = imagesx($this->imageResource);
-        $imageHeight = imagesy($this->imageResource);
-
-        if ($x + $width > $imageWidth || $y + $height > $imageHeight) {
-            throw new InvalidArgumentException('Crop dimensions exceed image boundaries');
-        }
-
-        $newImage = imagecreatetruecolor($width, $height);
-        if ($newImage === false) {
-            throw new RuntimeException('Failed to create new image resource for cropping');
-        }
-
-        // Preserve transparency for PNG and GIF
-        $extension = pathinfo($this->filePath, PATHINFO_EXTENSION);
-        if (strtolower($extension) === 'png') {
-            imagealphablending($newImage, false);
-            imagesavealpha($newImage, true);
-            $transparent = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
-            imagefill($newImage, 0, 0, $transparent);
-        } elseif (strtolower($extension) === 'gif') {
-            $transparentIndex = imagecolortransparent($this->imageResource);
-            if ($transparentIndex >= 0) {
-                $transparentColor = imagecolorsforindex($this->imageResource, $transparentIndex);
-                $transparentIndex = imagecolorallocate($newImage, $transparentColor['red'], $transparentColor['green'], $transparentColor['blue']);
-                imagefill($newImage, 0, 0, $transparentIndex);
-                imagecolortransparent($newImage, $transparentIndex);
-            }
-        }
-
-        if (!imagecopy($newImage, $this->imageResource, 0, 0, $x, $y, $width, $height)) {
-            imagedestroy($newImage);
-            throw new RuntimeException('Failed to crop image');
-        }
-
-        imagedestroy($this->imageResource);
-        $this->imageResource = $newImage;
-
-        // Save the cropped image
-        $this->saveImageResource(DEFAULT_IMAGE_STORAGE_PATH . $this->filePath, $extension);
-    }
-
-    /**
-     * Resizes the image to the specified dimensions.
-     *
-     * @param int $width New width
-     * @param int $height New height
-     * @param bool $maintainAspectRatio Maintain aspect ratio (default: true)
-     * @throws InvalidArgumentException If dimensions are invalid
-     * @throws RuntimeException If resizing fails
-     */
-    public function resize(int $width, int $height, bool $maintainAspectRatio = true): void
-    {
-        if ($width <= 0 || $height <= 0) {
-            throw new InvalidArgumentException('Width and height must be positive');
-        }
-
-        $imageWidth = imagesx($this->imageResource);
-        $imageHeight = imagesy($this->imageResource);
-
-        if ($maintainAspectRatio) {
-            $ratio = min($width / $imageWidth, $height / $imageHeight);
-            $width = (int) ($imageWidth * $ratio);
-            $height = (int) ($imageHeight * $ratio);
-        }
-
-        $newImage = imagecreatetruecolor($width, $height);
-        if ($newImage === false) {
-            throw new RuntimeException('Failed to create new image resource for resizing');
-        }
-
-        // Preserve transparency for PNG and GIF
-        $extension = pathinfo($this->filePath, PATHINFO_EXTENSION);
-        if (strtolower($extension) === 'png') {
-            imagealphablending($newImage, false);
-            imagesavealpha($newImage, true);
-            $transparent = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
-            imagefill($newImage, 0, 0, $transparent);
-        } elseif (strtolower($extension) === 'gif') {
-            $transparentIndex = imagecolortransparent($this->imageResource);
-            if ($transparentIndex >= 0) {
-                $transparentColor = imagecolorsforindex($this->imageResource, $transparentIndex);
-                $transparentIndex = imagecolorallocate($newImage, $transparentColor['red'], $transparentColor['green'], $transparentColor['blue']);
-                imagefill($newImage, 0, 0, $transparentIndex);
-                imagecolortransparent($newImage, $transparentIndex);
-            }
-        }
-
-        if (!imagecopyresampled($newImage, $this->imageResource, 0, 0, 0, 0, $width, $height, $imageWidth, $imageHeight)) {
-            imagedestroy($newImage);
-            throw new RuntimeException('Failed to resize image');
-        }
-
-        imagedestroy($this->imageResource);
-        $this->imageResource = $newImage;
-
-        // Save the resized image
-        $this->saveImageResource(DEFAULT_IMAGE_STORAGE_PATH . $this->filePath, $extension);
-    }
-
-    /**
-     * Destructor to clean up image resources.
-     */
-    public function __destruct()
-    {
-        if ($this->imageResource !== null) {
-            imagedestroy($this->imageResource);
-            $this->imageResource = null;
-        }
-    }
 
     /**
      * Returns the image file path as a string.
@@ -654,9 +428,36 @@ class Image implements JsonSerializable
     }
 
     /**
-     * Ajouter une méthode isValid pour vérifier si l'image est valide
+     * Vérifie si l'image est valide en s'assurant que toutes les propriétés nécessaires sont initialisées
      */
     public function isValid(): bool {
-        return $this->imageResource !== null;
+        // Vérifier que le chemin du fichier est défini et non vide
+        if (empty($this->filePath)) {
+            return false;
+        }
+        
+        // Vérifier que le nom est défini et non vide
+        if (empty($this->name)) {
+            return false;
+        }
+        
+        // Vérifier que le format est défini et supporté
+        if (empty($this->format) || !in_array(strtolower($this->format), $this->supportedFormats)) {
+            return false;
+        }
+        
+        // Vérifier que le fichier existe physiquement
+        $fullPath = rtrim(DEFAULT_STORAGE_PATH, '/') . $this->filePath;
+        if (!file_exists($fullPath) || !is_readable($fullPath)) {
+            return false;
+        }
+        
+        // Vérifier que c'est bien un fichier image valide
+        $imageInfo = @getimagesize($fullPath);
+        if ($imageInfo === false) {
+            return false;
+        }
+        
+        return true;
     }
 }
