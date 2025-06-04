@@ -37,7 +37,7 @@ enum TypeCampagne: string
  */
 class Partie extends DefaultDatabaseType
 {
-    private ?int $idJeu;
+    protected ?int $idJeu;
     private ?string $nom;
     private ?Jeu $jeu = null;
     protected ?string $idMaitreJeu;
@@ -725,7 +725,7 @@ class Partie extends DefaultDatabaseType
      *
      * @return int
      */
-    private function getNombreJoueursInscrits(): int
+    public function getNombreJoueursInscrits(): int
     {
         if (isset( $this->id ) ) {
             $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM membres_partie WHERE id_partie = :id_partie');

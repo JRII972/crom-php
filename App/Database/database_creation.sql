@@ -134,6 +134,7 @@ CREATE TABLE membres_partie (
 -- === Sessions (RDV de jeu) ===
 CREATE TABLE sessions (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
+  nom                   VARCHAR(255) NOT NULL,
   id_partie             INT         NOT NULL,
   id_lieu               INT         NOT NULL,
   date_session          DATE        NOT NULL,

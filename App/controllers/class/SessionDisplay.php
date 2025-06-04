@@ -132,6 +132,14 @@ class SessionDisplay extends Session
         return $this->displayImage->getImageAlt();
     }
 
+    public function getNomPartie(): string {
+        return $this->getPartie()->getNom();
+    }
+
+    public function getNom(): string {
+        return parent::getNom() ? parent::getNom() : $this->getNomPartie();
+    }
+
     public function getTypeFormatted(): string {
         $partie = $this->getPartie();
         $typePartie = $partie->getTypePartie();

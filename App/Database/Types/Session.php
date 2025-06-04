@@ -22,6 +22,7 @@ class Session extends DefaultDatabaseType
     private ?Partie $partie = null;
     private ?int $idLieu;
     private ?Lieu $lieu = null;
+    private string $nom;
     private string $dateSession;
     private string $heureDebut;
     private string $heureFin;
@@ -33,14 +34,13 @@ class Session extends DefaultDatabaseType
     // Cache configuration
     private static $cacheEnabled = false; // Activer/désactiver le cache
     private static $cacheTTL = 300; // 5 minutes en secondes
-    private static $cachePrefix = 'session_search_';
-
-    /**
+    private static $cachePrefix = 'session_search_';    /**
      * Constructeur de la classe Session.
      *
      * @param int|null $id Identifiant de la session (si fourni, charge depuis la base)
      * @param Partie|int|null $partieOuId Objet Partie ou ID de la partie (requis si $id est null)
      * @param Lieu|int|null $lieuOuId Objet Lieu ou ID du lieu (requis si $id est null)
+     * @param string|null $nom Nom de la session (optionnel, défaut "Session")
      * @param string|null $dateSession Date de la session (format Y-m-d, requis si $id est null)
      * @param string|null $heureDebut Heure de début (format H:i:s, requis si $id est null)
      * @param string|null $heureFin Heure de fin (format H:i:s, requis si $id est null)
@@ -48,11 +48,11 @@ class Session extends DefaultDatabaseType
      * @param int|null $maxJoueurs Nombre maximum de joueurs pour la session (optionnel)
      * @throws InvalidArgumentException Si les paramètres sont incohérents
      * @throws PDOException Si la session n'existe pas dans la base
-     */
-    public function __construct(
+     */public function __construct(
         ?int $id = null,
         Partie|int|null $partieOuId = null,
         Lieu|int|null $lieuOuId = null,
+        ?string $nom = null,
         ?string $dateSession = null,
         ?string $heureDebut = null,
         ?string $heureFin = null,
@@ -61,9 +61,7 @@ class Session extends DefaultDatabaseType
         ?int $maxJoueursSession = null // Ajout du paramètre
     ) {
         parent::__construct();
-        $this->table = 'sessions';
-
-        if ($id !== null && $partieOuId === null && $lieuOuId === null && $dateSession === null && 
+        $this->table = 'sessions';        if ($id !== null && $partieOuId === null && $lieuOuId === null && $nom === null && $dateSession === null && 
             $heureDebut === null && $heureFin === null && $maitreJeuOuId === null && $maxJoueurs === null && $maxJoueursSession === null) {
             // Mode : Charger la session depuis la base
             $this->loadFromDatabase($id);
@@ -72,6 +70,7 @@ class Session extends DefaultDatabaseType
             // Mode : Créer une nouvelle session
             $this->setPartie($partieOuId);
             $this->setLieu($lieuOuId);
+            $this->setNom($nom ?? 'Session'); // Valeur par défaut si nom non fourni
             $this->setDateSession($dateSession);
             $this->setHeureDebut($heureDebut);
             $this->setHeureFin($heureFin);
@@ -113,11 +112,10 @@ class Session extends DefaultDatabaseType
 
         if ($data === false) {
             throw new PDOException('Session non trouvée pour l\'ID : ' . $id);
-        }
-
-        $this->id = (int) $data['id'];
+        }        $this->id = (int) $data['id'];
         $this->idPartie = (int) $data['id_partie'];
         $this->idLieu = (int) $data['id_lieu'];
+        $this->nom = $data['nom'] ?? 'Session'; // Valeur par défaut si colonne nom n'existe pas
         $this->dateSession = $data['date_session'];
         $this->heureDebut = $data['heure_debut'];
         $this->heureFin = $data['heure_fin'];
@@ -133,12 +131,12 @@ class Session extends DefaultDatabaseType
      */
     public function save(): void
     {
-        if (isset($this->id)) {
-            // Mise à jour
+        if (isset($this->id)) {            // Mise à jour
             $stmt = $this->pdo->prepare('
                 UPDATE sessions SET
                     id_partie = :id_partie,
                     id_lieu = :id_lieu,
+                    nom = :nom,
                     date_session = :date_session,
                     heure_debut = :heure_debut,
                     heure_fin = :heure_fin,
@@ -151,6 +149,7 @@ class Session extends DefaultDatabaseType
                 'id' => $this->id,
                 'id_partie' => $this->idPartie,
                 'id_lieu' => $this->idLieu,
+                'nom' => $this->nom,
                 'date_session' => $this->dateSession,
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
@@ -158,19 +157,19 @@ class Session extends DefaultDatabaseType
                 'nombre_max_joueurs' => $this->maxJoueurs,
                 'max_joueurs_session' => $this->maxJoueursSession,
             ]);
-        } else {
-            // Insertion
+        } else {            // Insertion
             $stmt = $this->pdo->prepare('
                 INSERT INTO sessions (
-                    id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
+                    id_partie, id_lieu, nom, date_session, heure_debut, heure_fin, id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
                 )
                 VALUES (
-                    :id_partie, :id_lieu, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :nombre_max_joueurs, :max_joueurs_session
+                    :id_partie, :id_lieu, :nom, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :nombre_max_joueurs, :max_joueurs_session
                 )
             ');
             $stmt->execute([
                 'id_partie' => $this->idPartie,
                 'id_lieu' => $this->idLieu,
+                'nom' => $this->nom,
                 'date_session' => $this->dateSession,
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
@@ -456,9 +455,7 @@ class Session extends DefaultDatabaseType
             }
         }
         return $this->partie;
-    }
-
-    public function getLieu(): ?Lieu
+    }    public function getLieu(): ?Lieu
     {
         if ($this->lieu === null && $this->idLieu !== null) {
             try {
@@ -468,6 +465,11 @@ class Session extends DefaultDatabaseType
             }
         }
         return $this->lieu;
+    }
+
+    public function getNom(): string
+    {
+        return $this->nom;
     }
 
     public function getDateSession(): string
@@ -500,13 +502,50 @@ class Session extends DefaultDatabaseType
     public function getMaxJoueurs(): ?int
     {
         return $this->maxJoueurs;
-    }
-
-    public function getNombreJoueursInscrits(): int
+    }    public function getNombreJoueursInscrits(): int
     {
         $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM joueurs_session WHERE id_session = :id_session');
         $stmt->execute(['id_session' => $this->id]);
         return (int) $stmt->fetchColumn();
+    }
+
+    /**
+     * Retourne le numéro de la session par rapport à sa partie.
+     * Filtre toutes les sessions de la partie, les trie par date et retourne le rang de cette session.
+     *
+     * @return int Le numéro de la session (commence à 1)
+     * @throws InvalidArgumentException Si l'ID de la session ou de la partie n'est pas défini
+     */
+    public function getSessionNumber(): int
+    {
+        if (!isset($this->id)) {
+            throw new InvalidArgumentException('L\'ID de la session doit être défini pour calculer son numéro.');
+        }
+        
+        if (!isset($this->idPartie)) {
+            throw new InvalidArgumentException('L\'ID de la partie doit être défini pour calculer le numéro de session.');
+        }
+
+        // Récupérer toutes les sessions de la partie triées par date et heure
+        $stmt = $this->pdo->prepare('
+            SELECT id 
+            FROM sessions 
+            WHERE id_partie = :id_partie 
+            ORDER BY date_session ASC, heure_debut ASC
+        ');
+        $stmt->execute(['id_partie' => $this->idPartie]);
+        $sessionIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // Trouver le rang de cette session dans la liste
+        $sessionNumber = array_search($this->id, $sessionIds);
+        
+        // array_search retourne false si non trouvé, sinon l'index (commence à 0)
+        if ($sessionNumber === false) {
+            throw new InvalidArgumentException('Cette session n\'a pas été trouvée dans la partie associée.');
+        }
+
+        // Retourner le numéro de session (commence à 1)
+        return $sessionNumber + 1;
     }
 
     /**
@@ -611,9 +650,7 @@ class Session extends DefaultDatabaseType
             $this->partie = null; // Lazy loading
         }
         return $this;
-    }
-
-    public function setLieu(Lieu|int $lieu): self
+    }    public function setLieu(Lieu|int $lieu): self
     {
         if ($lieu instanceof Lieu) {
             $this->lieu = $lieu;
@@ -622,6 +659,15 @@ class Session extends DefaultDatabaseType
             $this->idLieu = $lieu;
             $this->lieu = null; // Lazy loading
         }
+        return $this;
+    }
+
+    public function setNom(string $nom): self
+    {
+        if (empty(trim($nom))) {
+            throw new InvalidArgumentException('Le nom de la session ne peut pas être vide.');
+        }
+        $this->nom = trim($nom);
         return $this;
     }
 
@@ -696,8 +742,7 @@ class Session extends DefaultDatabaseType
             throw new InvalidArgumentException('max_joueurs_session doit être supérieur à 0.');
         }
         $this->maxJoueursSession = $maxJoueursSession;
-        return $this;
-    }
+        return $this;    }
 
     // Helper Methods
 
@@ -707,6 +752,7 @@ class Session extends DefaultDatabaseType
             'id' => $this->getId(),
             'id_partie' => $this->idPartie,
             'id_lieu' => $this->idLieu,
+            'nom' => $this->getNom(),
             'partie' => $this->getPartie()->jsonSerialize(),
             'lieu' => $this->getLieu()->jsonSerialize(),
             'date_session' => $this->getDateSession(),

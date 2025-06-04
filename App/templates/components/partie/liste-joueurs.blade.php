@@ -29,17 +29,7 @@
         @endforeach
       @else
         {{-- Exemple de joueurs statiques si aucun joueur n'est fourni --}}
-        <li class="flex items-center gap-3">
-          <div class="avatar">
-            <div class="w-10 rounded-full">
-              <img src="https://picsum.photos/200" alt="Avatar joueur" />
-            </div>
-          </div>
-          <div>
-            <div class="font-medium">PERSONNE</div>
-            <div class="text-xs text-base-content/70">PERSONNE</div>
-          </div>
-        </li>
+        <p class="text-sm italic">Aucun joueur inscrit pour le moment.</p>
       @endif
     </ul>
   </div>

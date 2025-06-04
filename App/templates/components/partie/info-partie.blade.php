@@ -8,7 +8,7 @@
     </div>
     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
       <h2 class="card-title text-2xl mb-1" id="partie-nom">{{ $partie->getNom() }}</h2>
-      <p class="badge badge-sm badge-secondary opacity-80" id="partie-jeu">Jeu: {{ $partie->getNomJeu() }}</p>
+      <p class="badge badge-sm badge-secondary opacity-80" id="partie-jeu">Jeu: {{ $partie->getJeu()->getNom() }}</p>
     </div>
   </figure>
   
@@ -18,7 +18,7 @@
       @if($partie->getTypeCampagne())
         <div class="badge badge-outline badge-accent" id="type-campagne-badge">{{ $partie->getTypeFormatted() }}</div>
       @endif
-      <div class="badge badge-outline" id="partie-place-badge">{{ $partie->getJoueursInscrits() ?? '0' }}/{{ $partie->getMaxJoueurs() ?? '5' }} places</div>
+      <div class="badge badge-outline" id="partie-place-badge">{{ $partie->getNombreJoueursInscrits() }}/{{ $partie->getMaxJoueurs()}} places</div>
     </div>
     
     {{-- Maître du jeu --}}
@@ -56,6 +56,11 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
         </svg>
         <span id="partie-lieu">{{ $partie->getLieu() }}</span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined">info</span>
+        <span id="partie-lieu">{{ $partie->getStatutFormatted() }}</span>
       </div>
     </div>
     

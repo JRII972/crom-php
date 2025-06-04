@@ -6,6 +6,7 @@ use App\Database\Types\Partie;
 use App\Database\Types\Jeu;
 use App\Database\Types\Utilisateur;
 use App\Utils\Image;
+use Illuminate\Support\Arr;
 use PDO;
 use PDOException;
 
@@ -205,12 +206,12 @@ class PartieDisplay extends Partie
         return $typeDisplay;
     }
 
+
     /**
-     * Retourne le nom du jeu associé à la partie
+     * Retourne le jeu sous forme de JeuDisplay
      */
-    public function getNomJeu(): string {
-        $jeu = $this->getJeu();
-        return $jeu ? $jeu->getNom() : 'Jeu inconnu';
+    public function getJeu(): JeuDisplay {
+        return new JeuDisplay($this->idJeu);
     }
 
     /**
@@ -245,13 +246,23 @@ class PartieDisplay extends Partie
     /**
      * Retourne le nombre de joueurs inscrits à la partie
      */
-    public function getJoueursInscrits(): int {
-        if (isset($this->id)) {
-            $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM membres_partie WHERE id_partie = :id_partie');
-            $stmt->execute(['id_partie' => $this->id]);
-            return (int) $stmt->fetchColumn();
+    public function getJoueursInscrits(): array {
+        $membres = [];
+
+        $stmt = $this->pdo->prepare('SELECT id_utilisateur FROM membres_partie WHERE id_partie = :id_partie');
+        $stmt->execute(['id_partie' => $this->id]);
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($results as $result) {
+            try {
+                $utilisateur = new UtilisateurDisplay($result['id_utilisateur']);
+                $membres[] = $utilisateur; // À ajuster si MembrePartie est requis
+            } catch (PDOException) {
+                // Ignorer les utilisateurs non trouvés
+            }
         }
-        return 0;
+
+        return $membres;
     }
 
     /**
@@ -289,5 +300,34 @@ class PartieDisplay extends Partie
         }
         return 'Image de la partie ' . $this->getNom();
     }
+
+    public function getSessions(): array {
+        
+        try {
+            $sessions = [];
+
+            $stmt = $this->pdo->prepare('SELECT id FROM sessions WHERE id_partie = :id_partie ORDER BY date_session ASC');
+            $stmt->execute(['id_partie' => $this->id]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results as $result) {
+                try {
+                    $sessions[] = new SessionDisplay($result['id']);
+                } catch (PDOException) {
+                    // Ignorer les sessions non trouvées
+                }
+            }
+
+            return $sessions;
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    public function getStatutFormatted() : string {
+        return $this->getVerrouille() ? "Fermer à l'inscription" : "Ouverte à l'inscription";
+    }
+
+
 
 }

@@ -27,8 +27,10 @@ class PartieController extends BaseController {
         $data = [
             'page_title' => 'Partie - ' . $partie->getNom(),
             'partie' => $partie,
+            'jeu' => $partie->getJeu(),
+            'maitre_de_jeu' => $partie->getMaitreJeu(),
             'sessions' => $partie->getSessions(), // TODO: Récupérer les sessions de cette partie
-            'joueurs' => $partie->getMembresPartie(), // TODO: Récupérer les joueurs de cette partie
+            'joueurs' => $partie->getJoueursInscrits(), // TODO: Récupérer les joueurs de cette partie
             'activeTab' => 'description'
         ];
 
