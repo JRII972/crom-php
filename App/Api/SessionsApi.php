@@ -65,7 +65,7 @@ class SessionsApi extends APIHandler
 
         try {
             $queryParams = $_GET;
-            $partieId = isset($queryParams['partie_id']) ? (int)$queryParams['partie_id'] : 0;
+            $activiteId = isset($queryParams['activite_id']) ? (int)$queryParams['activite_id'] : 0;
             $lieuId = isset($queryParams['lieu_id']) ? (int)$queryParams['lieu_id'] : 0;
             $dateDebut = $queryParams['date_debut'] ?? '';
             $dateFin = $queryParams['date_fin'] ?? '';
@@ -107,7 +107,7 @@ class SessionsApi extends APIHandler
 
             $sessions = Session::search(
                 $this->pdo, 
-                $partieId, 
+                $activiteId, 
                 $lieuId, 
                 $dateDebut, 
                 $dateFin, 
@@ -125,8 +125,8 @@ class SessionsApi extends APIHandler
     private function handlePost(): array
     {
         $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data || !isset($data['id_partie'], $data['id_lieu'], $data['date_session'], $data['heure_debut'], $data['heure_fin'], $data['id_maitre_jeu'])) {
-            return $this->sendResponse(400, 'error', null, 'id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu requis');
+        if (!$data || !isset($data['id_activite'], $data['id_lieu'], $data['date_session'], $data['heure_debut'], $data['heure_fin'], $data['id_maitre_jeu'])) {
+            return $this->sendResponse(400, 'error', null, 'id_activite, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu requis');
         }
 
         try {
@@ -136,7 +136,7 @@ class SessionsApi extends APIHandler
             }
 
             $session = new Session(
-                partieOuId: (int)$data['id_partie'],
+                activiteOuId: (int)$data['id_activite'],
                 lieuOuId: (int)$data['id_lieu'],
                 dateSession: $data['date_session'],
                 heureDebut: $data['heure_debut'],
@@ -170,8 +170,8 @@ class SessionsApi extends APIHandler
             $session = new Session(id: (int)$id);
             $this->verifyMasterOrAdmin($session);
 
-            if (isset($data['id_partie'])) {
-                $session->setPartie((int)$data['id_partie']);
+            if (isset($data['id_activite'])) {
+                $session->setActivite((int)$data['id_activite']);
             }
             if (isset($data['id_lieu'])) {
                 $session->setLieu((int)$data['id_lieu']);

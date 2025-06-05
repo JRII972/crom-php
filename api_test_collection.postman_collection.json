@@ -5,42 +5,42 @@
   },
   "item": [
     {
-      "name": "List Parties",
+      "name": "List Activites",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parties",
+          "raw": "{{baseUrl}}/api/activites",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties"
+            "activites"
           ]
         }
       }
     },
     {
-      "name": "Get Partie by ID",
+      "name": "Get Activite by ID",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id",
+          "raw": "{{baseUrl}}/api/activites/:id",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id"
           ]
         }
       }
     },
     {
-      "name": "Create Partie",
+      "name": "Create Activite",
       "request": {
         "method": "POST",
         "header": [
@@ -50,23 +50,23 @@
           }
         ],
         "url": {
-          "raw": "{{baseUrl}}/api/parties",
+          "raw": "{{baseUrl}}/api/activites",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties"
+            "activites"
           ]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_jeu\": \"4fa9b8e2-1c5a-4b2e-9f2c-7d8a1b2c3d4e\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_partie\": \"CAMPAGNE\",\n  \"type_campagne\": \"Classique\",\n  \"nom\": \"L'Appel de l'Aventure\",\n  \"description\": \"Une campagne \\u00e9pique \\u00e0 travers des terres inconnues.\",\n  \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...\"\n}"
+          "raw": "{\n  \"id_jeu\": \"4fa9b8e2-1c5a-4b2e-9f2c-7d8a1b2c3d4e\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_activite\": \"CAMPAGNE\",\n  \"type_campagne\": \"Classique\",\n  \"nom\": \"L'Appel de l'Aventure\",\n  \"description\": \"Une campagne \\u00e9pique \\u00e0 travers des terres inconnues.\",\n  \"image\": \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...\"\n}"
         }
       }
     },
     {
-      "name": "Update Partie (PUT)",
+      "name": "Update Activite (PUT)",
       "request": {
         "method": "PUT",
         "header": [
@@ -76,24 +76,24 @@
           }
         ],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id",
+          "raw": "{{baseUrl}}/api/activites/:id",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id"
           ]
         },
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"id_jeu\": \"6a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_partie\": \"S\\u00c9ANCE_UNIQUE\",\n  \"nom\": \"La Caverne Myst\\u00e9rieuse\",\n  \"description\": \"Une session unique de 4 heures dans une caverne p\\u00e9rilleuse.\",\n  \"verrouille\": true\n}"
+          "raw": "{\n  \"id_jeu\": \"6a1b2c3d-4e5f-6a7b-8c9d-0e1f2a3b4c5d\",\n  \"id_maitre_jeu\": \"7cf9d2a1-5b6e-4c3a-8f9d-0e1a2b3c4d5e\",\n  \"type_activite\": \"S\\u00c9ANCE_UNIQUE\",\n  \"nom\": \"La Caverne Myst\\u00e9rieuse\",\n  \"description\": \"Une session unique de 4 heures dans une caverne p\\u00e9rilleuse.\",\n  \"verrouille\": true\n}"
         }
       }
     },
     {
-      "name": "Patch Partie",
+      "name": "Patch Activite",
       "request": {
         "method": "PATCH",
         "header": [
@@ -103,13 +103,13 @@
           }
         ],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id",
+          "raw": "{{baseUrl}}/api/activites/:id",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id"
           ]
         },
@@ -120,25 +120,25 @@
       }
     },
     {
-      "name": "Delete Partie",
+      "name": "Delete Activite",
       "request": {
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id",
+          "raw": "{{baseUrl}}/api/activites/:id",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id"
           ]
         }
       }
     },
     {
-      "name": "Add Member to Partie",
+      "name": "Add Member to Activite",
       "request": {
         "method": "POST",
         "header": [
@@ -148,13 +148,13 @@
           }
         ],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id/membres",
+          "raw": "{{baseUrl}}/api/activites/:id/membres",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id",
             "membres"
           ]
@@ -166,18 +166,18 @@
       }
     },
     {
-      "name": "Remove Member from Partie",
+      "name": "Remove Member from Activite",
       "request": {
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}/api/parties/:id/membres/:userId",
+          "raw": "{{baseUrl}}/api/activites/:id/membres/:userId",
           "host": [
             "{{baseUrl}}"
           ],
           "path": [
             "api",
-            "parties",
+            "activites",
             ":id",
             "membres",
             ":userId"

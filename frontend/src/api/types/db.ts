@@ -2,7 +2,7 @@
 export type Sexe = 'M' | 'F' | 'Autre';
 export type TypeUtilisateur = 'NON_INSCRIT' | 'INSCRIT' | 'ADMINISTRATEUR';
 export type TypeJeu = 'JDR' | 'JEU_DE_SOCIETE' | 'AUTRE';
-export type TypePartie = 'CAMPAGNE' | 'ONESHOT' | 'JEU_DE_SOCIETE' | 'EVENEMENT';
+export type TypeActivite = 'CAMPAGNE' | 'ONESHOT' | 'JEU_DE_SOCIETE' | 'EVENEMENT';
 export type TypeCampagne = 'OUVERTE' | 'FERMEE';
 export type TypeCreneau = 'DISPONIBILITE' | 'INDISPONIBILITE';
 export type TypeRecurrence = 'AUCUNE' | 'QUOTIDIENNE' | 'HEBDOMADAIRE' | 'MENSUELLE' | 'ANNUELLE';
@@ -43,14 +43,14 @@ export interface Jeu {
   genres: Genre[];
 }
 
-// Partie
-export interface Partie {
+// Activite
+export interface Activite {
   id: number;
   id_jeu: number;
   id_maitre_jeu: string;
   jeu: Jeu|null;
   maitre_jeu: Utilisateur|null;
-  type_partie: TypePartie;
+  type_activite: TypeActivite;
   type_campagne?: TypeCampagne;
   description_courte?: string|null;
   description?: string|null;
@@ -65,8 +65,8 @@ export interface Partie {
 // Session
 export interface Session {
   id: number;
-  id_partie: number;
-  partie: Partie|null;
+  id_activite: number;
+  activite: Activite|null;
   id_lieu: number;
   lieu: Lieu|null;
   date_session: string;
@@ -100,9 +100,9 @@ export interface CreneauUtilisateur {
   regle_recurrence: string|null;
 }
 
-// Membre de partie
-export interface MembrePartie {
-  id_partie: number;
+// Membre de activite
+export interface MembreActivite {
+  id_activite: number;
   id_utilisateur: string;
 }
 

@@ -78,13 +78,13 @@
                       </div>
                       
                       <div class="stat">
-                        <div class="stat-title">Parties jouées</div>
+                        <div class="stat-title">Activites jouées</div>
                         <div class="stat-value text-xl text-secondary">42</div>
                         <div class="stat-desc">+8% par rapport à l'année dernière</div>
                       </div>
                       
                       <div class="stat">
-                        <div class="stat-title">Parties créées</div>
+                        <div class="stat-title">Activites créées</div>
                         <div class="stat-value text-xl text-accent">7</div>
                         <div class="stat-desc">En tant que maître de jeu</div>
                       </div>
@@ -98,23 +98,23 @@
                 <div class="card bg-base-200 shadow-xl h-full">
                   <div class="card-body">
                     <div role="tablist" class="tabs tabs-lifted">
-                      <a role="tab" class="tab tab-active" id="tab-parties" aria-selected="true">Mes Parties</a>
+                      <a role="tab" class="tab tab-active" id="tab-activites" aria-selected="true">Mes Activites</a>
                       <a role="tab" class="tab" id="tab-disponibilites">Disponibilités</a>
                       <a role="tab" class="tab" id="tab-historique">Historique</a>
                       <a role="tab" class="tab" id="tab-preference">Préférences</a>
                       <a role="tab" class="tab" id="tab-paiements">Paiements</a>
                     </div>
                     
-                    <!-- Contenu du tab Mes Parties -->
-                    <div id="tab-content-parties" class="py-4">
-                      <h3 class="text-lg font-bold mb-4">Mes parties en cours</h3>
+                    <!-- Contenu du tab Mes Activites -->
+                    <div id="tab-content-activites" class="py-4">
+                      <h3 class="text-lg font-bold mb-4">Mes activites en cours</h3>
                       
-                      <!-- Liste des parties -->
+                      <!-- Liste des activites -->
                       <div class="overflow-x-auto">
                         <table class="table table-zebra">
                           <thead>
                             <tr>
-                              <th>Nom de la partie</th>
+                              <th>Nom de la activite</th>
                               <th>Type</th>
                               <th>Rôle</th>
                               <th>Prochaine session</th>
@@ -159,13 +159,13 @@
                         </table>
                       </div>
                       
-                      <!-- Bouton créer une partie -->
+                      <!-- Bouton créer une activite -->
                       <div class="mt-6 flex justify-end">
                         <button class="btn btn-primary">
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                           </svg>
-                          Créer une nouvelle partie
+                          Créer une nouvelle activite
                         </button>
                       </div>
                     </div>
@@ -260,13 +260,13 @@
                     
                     <!-- Contenu du tab Historique -->
                     <div id="tab-content-historique" class="py-4 hidden">
-                      <h3 class="text-lg font-bold mb-4">Historique des parties</h3>
+                      <h3 class="text-lg font-bold mb-4">Historique des activites</h3>
                       
                       <!-- Filtres -->
                       <div class="flex flex-wrap gap-2 mb-6">
                         <select class="select select-bordered w-full max-w-xs">
                           <option disabled selected>Filtrer par type</option>
-                          <option>Toutes les parties</option>
+                          <option>Toutes les activites</option>
                           <option>Campagnes</option>
                           <option>OneShots</option>
                           <option>Jeux de société</option>
@@ -285,7 +285,7 @@
                         <table class="table table-zebra">
                           <thead>
                             <tr>
-                              <th>Nom de la partie</th>
+                              <th>Nom de la activite</th>
                               <th>Type</th>
                               <th>Date</th>
                               <th>Rôle</th>
@@ -335,21 +335,21 @@
                                     </svg>
                                     Préférences d'affichage des cartes
                                 </h2>
-                                <p class="text-sm text-base-content/70 mb-4">Personnalisez l'affichage des cartes de parties et d'événements.</p>
+                                <p class="text-sm text-base-content/70 mb-4">Personnalisez l'affichage des cartes de activites et d'événements.</p>
                                 
                                 <div class="space-y-4">
                                     <div class="flex items-center justify-between">
                                     <div>
                                         <h3 class="font-medium">Afficher les joueurs</h3>
-                                        <p class="text-sm text-base-content/70">Montrer la liste des joueurs inscrits sur les cartes de parties</p>
+                                        <p class="text-sm text-base-content/70">Montrer la liste des joueurs inscrits sur les cartes de activites</p>
                                     </div>
                                     <input type="checkbox" class="toggle toggle-primary" checked />
                                     </div>
                                     
                                     <div class="flex items-center justify-between">
                                     <div>
-                                        <h3 class="font-medium">Afficher les noms de parties</h3>
-                                        <p class="text-sm text-base-content/70">Montrer les noms complets des parties plutôt que des descriptions courtes</p>
+                                        <h3 class="font-medium">Afficher les noms de activites</h3>
+                                        <p class="text-sm text-base-content/70">Montrer les noms complets des activites plutôt que des descriptions courtes</p>
                                     </div>
                                     <input type="checkbox" class="toggle toggle-primary" checked />
                                     </div>
@@ -374,7 +374,7 @@
                                 </svg>
                                 Notifications et rappels
                             </h2>
-                            <p class="text-sm text-base-content/70 mb-4">Gérez vos préférences de notifications et rappels pour les parties et événements.</p>
+                            <p class="text-sm text-base-content/70 mb-4">Gérez vos préférences de notifications et rappels pour les activites et événements.</p>
                             
                             <div class="space-y-4">
                                 <div class="flex items-center justify-between">
@@ -388,7 +388,7 @@
                                 <div class="flex items-center justify-between">
                                 <div>
                                     <h3 class="font-medium">Envoyer des notifications de rappel</h3>
-                                    <p class="text-sm text-base-content/70">Recevoir des rappels pour vos parties à venir</p>
+                                    <p class="text-sm text-base-content/70">Recevoir des rappels pour vos activites à venir</p>
                                 </div>
                                 <input type="checkbox" class="toggle toggle-primary" checked />
                                 </div>
@@ -416,7 +416,7 @@
                                 </svg>
                                 Synchronisation du calendrier
                             </h2>
-                            <p class="text-sm text-base-content/70 mb-4">Synchronisez vos parties et événements avec votre calendrier personnel.</p>
+                            <p class="text-sm text-base-content/70 mb-4">Synchronisez vos activites et événements avec votre calendrier personnel.</p>
                             
                             <div class="space-y-6">
                                 <div>
@@ -451,7 +451,7 @@
                                 </div>
                                 <p class="text-xs text-base-content/70 mt-2">
                                     Copiez ce lien et ajoutez-le à votre calendrier préféré (Google Calendar, Apple Calendar, Outlook, etc.) 
-                                    pour synchroniser automatiquement vos parties et événements.
+                                    pour synchroniser automatiquement vos activites et événements.
                                 </p>
                                 </div>
                                 
@@ -461,11 +461,11 @@
                                 <h3 class="font-medium mb-3">Données à synchroniser</h3>
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between">
-                                    <span class="text-sm">Mes parties en tant que MJ</span>
+                                    <span class="text-sm">Mes activites en tant que MJ</span>
                                     <input type="checkbox" class="toggle toggle-sm toggle-primary" checked />
                                     </div>
                                     <div class="flex items-center justify-between">
-                                    <span class="text-sm">Mes parties en tant que joueur</span>
+                                    <span class="text-sm">Mes activites en tant que joueur</span>
                                     <input type="checkbox" class="toggle toggle-sm toggle-primary" checked />
                                     </div>
                                     <div class="flex items-center justify-between">

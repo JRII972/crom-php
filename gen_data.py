@@ -155,7 +155,7 @@ try:
         if recherche == "Vampire: La Mascarade":
             image = images_jeux.get(recherche)
         else:
-            # Recherche partielle pour les autres jeux
+            # Recherche activitelle pour les autres jeux
             for cle in images_jeux:
                 if cle in recherche:
                     image = images_jeux[cle]
@@ -240,83 +240,83 @@ try:
     utilisateurs_ids = [row[0] for row in cursor.fetchall()]
     
     # --- GÉNÉRATION DES PARTIES ---
-    print("Génération des parties...")
+    print("Génération des activites...")
     
-    types_partie = ["CAMPAGNE", "ONESHOT", "JEU_DE_SOCIETE", "EVENEMENT"]
+    types_activite = ["CAMPAGNE", "ONESHOT", "JEU_DE_SOCIETE", "EVENEMENT"]
     types_campagne = ["OUVERTE", "FERMEE"]
     
-    parties_data = []
+    activites_data = []
     for i in range(15):
-        nom = f"Partie {i+1}: L'aventure fantastique"
+        nom = f"Activite {i+1}: L'aventure fantastique"
         id_jeu = random.choice(jeux_ids)
         id_maitre_jeu = random.choice(utilisateurs_ids)
-        type_partie = random.choice(types_partie)
-        type_campagne = random.choice(types_campagne) if type_partie == "CAMPAGNE" else None
-        description_courte = f"Une aventure palpitante vous attend dans cette partie de jeu n°{i+1}!"
-        description = f"Description complète de la partie {i+1}. Beaucoup de détails sur l'univers et les règles."
+        type_activite = random.choice(types_activite)
+        type_campagne = random.choice(types_campagne) if type_activite == "CAMPAGNE" else None
+        description_courte = f"Une aventure palpitante vous attend dans cette activite de jeu n°{i+1}!"
+        description = f"Description complète de la activite {i+1}. Beaucoup de détails sur l'univers et les règles."
         nombre_max_joueurs = random.randint(3, 8)
         max_joueurs_session = min(nombre_max_joueurs, random.randint(2, 5))
         verrouille = random.random() > 0.8
         
-        # Récupérer l'image du jeu associé pour l'utiliser comme image de la partie
+        # Récupérer l'image du jeu associé pour l'utiliser comme image de la activite
         image = jeux_images_dict.get(id_jeu)
-        texte_alt_image = f"Image pour la partie {nom}" if image else None
+        texte_alt_image = f"Image pour la activite {nom}" if image else None
         
-        parties_data.append((
-            nom, id_jeu, id_maitre_jeu, type_partie, type_campagne,
+        activites_data.append((
+            nom, id_jeu, id_maitre_jeu, type_activite, type_campagne,
             description_courte, description, nombre_max_joueurs,
             max_joueurs_session, verrouille, image, texte_alt_image
         ))
     
-    parties_sql = """
-    INSERT INTO parties (
-        nom, id_jeu, id_maitre_jeu, type_partie, type_campagne,
+    activites_sql = """
+    INSERT INTO activites (
+        nom, id_jeu, id_maitre_jeu, type_activite, type_campagne,
         description_courte, description, nombre_max_joueurs,
         max_joueurs_session, verrouille, image, texte_alt_image
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     
-    cursor.executemany(parties_sql, parties_data)
+    cursor.executemany(activites_sql, activites_data)
     conn.commit()
-    print(f"✅ {len(parties_data)} parties créées avec succès!")
+    print(f"✅ {len(activites_data)} activites créées avec succès!")
     
     # --- OBTENTION DES IDS DES PARTIES CRÉÉES ---
-    cursor.execute("SELECT id FROM parties")
-    parties_ids = [row[0] for row in cursor.fetchall()]
+    cursor.execute("SELECT id FROM activites")
+    activites_ids = [row[0] for row in cursor.fetchall()]
     
     # --- GÉNÉRATION DES SESSIONS ---
     print("Génération des sessions...")
     
     sessions_data = []
-    for partie_id in parties_ids:
-        # Chaque partie aura 1 à 5 sessions
+    for activite_id in activites_ids:
+        # Chaque activite aura 1 à 5 sessions
         for j in range(random.randint(1, 5)):
-            id_partie = partie_id
+            id_activite = activite_id
             id_lieu = random.choice(lieux_ids)
             # Les sessions sont programmées dans le futur
             date_session = (datetime.now() + timedelta(days=random.randint(1, 60))).strftime('%Y-%m-%d')
             heure_debut = f"{random.randint(18, 20)}:00:00"
             heure_fin = f"{random.randint(21, 23)}:00:00"
             
-            # Récupérer le maître de jeu de la partie
-            cursor.execute("SELECT id_maitre_jeu FROM parties WHERE id = %s", (id_partie,))
+            # Récupérer le maître de jeu de la activite
+            cursor.execute("SELECT id_maitre_jeu FROM activites WHERE id = %s", (id_activite,))
             id_maitre_jeu = cursor.fetchone()[0]
             
-            # Récupérer max_joueurs_session de la partie
-            cursor.execute("SELECT max_joueurs_session FROM parties WHERE id = %s", (id_partie,))
+            # Récupérer max_joueurs_session de la activite
+            cursor.execute("SELECT max_joueurs_session FROM activites WHERE id = %s", (id_activite,))
             max_joueurs_session = cursor.fetchone()[0]
             
-            # Le nombre max de joueurs est souvent le même que celui de la partie, mais peut varier
+            # Le nombre max de joueurs est souvent le même que celui de la activite, mais peut varier
             nombre_max_joueurs = max_joueurs_session if random.random() > 0.3 else random.randint(2, max_joueurs_session)
             
             sessions_data.append((
-                id_partie, id_lieu, date_session, heure_debut, heure_fin,
+                id_activite, id_lieu, date_session, heure_debut, heure_fin,
                 id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
             ))
     
     sessions_sql = """
     INSERT INTO sessions (
-        id_partie, id_lieu, date_session, heure_debut, heure_fin,
+        id_activite, id_lieu, date_session, heure_debut, heure_fin,
         id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """
@@ -364,40 +364,40 @@ try:
     print(f"✅ {len(joueurs_session_data)} inscriptions aux sessions créées!")
     
     # --- GÉNÉRATION DES MEMBRES DE PARTIES FERMÉES ---
-    print("Génération des membres de parties fermées...")
+    print("Génération des membres de activites fermées...")
     
-    membres_partie_data = []
-    for partie_id in parties_ids:
+    membres_activite_data = []
+    for activite_id in activites_ids:
         # Vérifier si c'est une campagne fermée
-        cursor.execute("SELECT type_partie, type_campagne FROM parties WHERE id = %s", (partie_id,))
+        cursor.execute("SELECT type_activite, type_campagne FROM activites WHERE id = %s", (activite_id,))
         result = cursor.fetchone()
-        type_partie, type_campagne = result
+        type_activite, type_campagne = result
         
-        if type_partie == "CAMPAGNE" and type_campagne == "FERMEE":
-            # Récupérer le maître de jeu de cette partie
-            cursor.execute("SELECT id_maitre_jeu FROM parties WHERE id = %s", (partie_id,))
+        if type_activite == "CAMPAGNE" and type_campagne == "FERMEE":
+            # Récupérer le maître de jeu de cette activite
+            cursor.execute("SELECT id_maitre_jeu FROM activites WHERE id = %s", (activite_id,))
             id_maitre_jeu = cursor.fetchone()[0]
             
-            # Récupérer le nombre max de joueurs pour cette partie
-            cursor.execute("SELECT nombre_max_joueurs FROM parties WHERE id = %s", (partie_id,))
+            # Récupérer le nombre max de joueurs pour cette activite
+            cursor.execute("SELECT nombre_max_joueurs FROM activites WHERE id = %s", (activite_id,))
             max_joueurs = cursor.fetchone()[0]
             
-            # Chaque partie fermée aura un nombre aléatoire de membres
+            # Chaque activite fermée aura un nombre aléatoire de membres
             nombre_membres = random.randint(1, max_joueurs)
             membres_potentiels = [u for u in utilisateurs_ids if u != id_maitre_jeu]
             membres_selectionnes = random.sample(membres_potentiels, min(nombre_membres, len(membres_potentiels)))
             
             for membre_id in membres_selectionnes:
-                membres_partie_data.append((partie_id, membre_id))
+                membres_activite_data.append((activite_id, membre_id))
     
-    membres_partie_sql = """
-    INSERT INTO membres_partie (id_partie, id_utilisateur)
+    membres_activite_sql = """
+    INSERT INTO membres_activite (id_activite, id_utilisateur)
     VALUES (%s, %s)
     """
     
-    cursor.executemany(membres_partie_sql, membres_partie_data)
+    cursor.executemany(membres_activite_sql, membres_activite_data)
     conn.commit()
-    print(f"✅ {len(membres_partie_data)} membres de parties fermées créés!")
+    print(f"✅ {len(membres_activite_data)} membres de activites fermées créés!")
     
     print("\n✅ GÉNÉRATION DES DONNÉES TERMINÉE AVEC SUCCÈS! ✅")
 

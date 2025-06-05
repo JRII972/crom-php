@@ -11,10 +11,10 @@ class ProfileController extends BaseController {
      * Affiche la page de profil
      * 
      * @param int|null $userId ID de l'utilisateur (facultatif, utilise l'utilisateur connecté par défaut)
-     * @param string|null $activeTab Onglet actif (facultatif, utilise 'parties' par défaut)
+     * @param string|null $activeTab Onglet actif (facultatif, utilise 'activites' par défaut)
      * @return string Rendu HTML de la page
      */
-    public function show(?int $userId = null, ?string $activeTab = 'parties'): string {
+    public function show(?int $userId = null, ?string $activeTab = 'activites'): string {
         // Si l'utilisateur n'est pas spécifié, utiliser l'utilisateur connecté
         if (!$userId) {
             // Logique pour obtenir l'utilisateur connecté (à adapter selon l'authentification)
@@ -27,10 +27,10 @@ class ProfileController extends BaseController {
         // Récupérer les statistiques de l'utilisateur
         $stats = $this->getUserStats($userId);
         
-        // Récupérer les parties de l'utilisateur
-        $parties = $this->getUserParties($userId);
+        // Récupérer les activites de l'utilisateur
+        $activites = $this->getUserActivites($userId);
         
-        // Récupérer l'historique des parties
+        // Récupérer l'historique des activites
         $historique = $this->getUserHistorique($userId);
         
         // Récupérer les disponibilités
@@ -60,7 +60,7 @@ class ProfileController extends BaseController {
         return $this->render('pages.profile-modular', [
             'user' => $user,
             'stats' => $stats,
-            'parties' => $parties,
+            'activites' => $activites,
             'historique' => $historique,
             'disponibilites' => $disponibilites,
             'calendar' => $calendar,
@@ -101,16 +101,16 @@ class ProfileController extends BaseController {
      */
     private function getUserStats(int $userId) {
         return (object) [
-            'parties_jouees' => 42,
-            'parties_creees' => 7,
-            'pourcentage_parties' => 8
+            'activites_jouees' => 42,
+            'activites_creees' => 7,
+            'pourcentage_activites' => 8
         ];
     }
     
     /**
-     * Simuler la récupération des parties de l'utilisateur
+     * Simuler la récupération des activites de l'utilisateur
      */
-    private function getUserParties(int $userId) {
+    private function getUserActivites(int $userId) {
         return [
             (object) [
                 'id' => 1,
@@ -137,7 +137,7 @@ class ProfileController extends BaseController {
     }
     
     /**
-     * Simuler la récupération de l'historique des parties
+     * Simuler la récupération de l'historique des activites
      */
     private function getUserHistorique(int $userId) {
         return [

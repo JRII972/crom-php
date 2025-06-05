@@ -1,12 +1,12 @@
 {{-- Contenu de l'onglet "Historique" --}}
 <div id="tab-content-historique" class="py-4 {{ $activeTab != 'historique' ? 'hidden' : '' }}">
-  <h3 class="text-lg font-bold mb-4">Historique des parties</h3>
+  <h3 class="text-lg font-bold mb-4">Historique des activites</h3>
   
   {{-- Filtres --}}
   <div class="flex flex-wrap gap-2 mb-6">
     <select class="select select-bordered w-full max-w-xs" id="filter-type">
       <option disabled selected>Filtrer par type</option>
-      <option value="all">Toutes les parties</option>
+      <option value="all">Toutes les activites</option>
       <option value="campagne">Campagnes</option>
       <option value="oneshot">OneShots</option>
       <option value="jeu-societe">Jeux de société</option>
@@ -25,7 +25,7 @@
     <table class="table table-zebra">
       <thead>
         <tr>
-          <th>Nom de la partie</th>
+          <th>Nom de la activite</th>
           <th>Type</th>
           <th>Date</th>
           <th>Rôle</th>
@@ -34,24 +34,24 @@
       </thead>
       <tbody>
         @if(isset($historique) && count($historique) > 0)
-          @foreach($historique as $partie)
-          <tr data-type="{{ $partie->type_slug }}" data-role="{{ $partie->role_slug }}">
-            <td>{{ $partie->nom }}</td>
+          @foreach($historique as $activite)
+          <tr data-type="{{ $activite->type_slug }}" data-role="{{ $activite->role_slug }}">
+            <td>{{ $activite->nom }}</td>
             <td>
               <div class="badge badge-{{ 
-                $partie->type == 'Campagne' ? 'primary' : 
-                ($partie->type == 'OneShot' ? 'secondary' : 'accent') 
-              }}">{{ $partie->type }}</div>
+                $activite->type == 'Campagne' ? 'primary' : 
+                ($activite->type == 'OneShot' ? 'secondary' : 'accent') 
+              }}">{{ $activite->type }}</div>
             </td>
             <td>
-              @if(isset($partie->date))
-                @include('components.date-formatter', ['date' => $partie->date, 'format' => 'j F Y'])
+              @if(isset($activite->date))
+                @include('components.date-formatter', ['date' => $activite->date, 'format' => 'j F Y'])
               @else
                 -
               @endif
             </td>
-            <td>{{ $partie->role }}</td>
-            <td>{{ $partie->lieu }}</td>
+            <td>{{ $activite->role }}</td>
+            <td>{{ $activite->lieu }}</td>
           </tr>
           @endforeach
         @else

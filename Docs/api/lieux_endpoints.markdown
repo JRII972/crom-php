@@ -270,7 +270,7 @@ This document describes the endpoints for managing locations and their schedules
     {
       "status": "error",
       "data": null,
-      "message": "L'horaire n'appartient pas à ce lieu"
+      "message": "L'horaire n'apactivitent pas à ce lieu"
     }
     ```
 
@@ -301,6 +301,6 @@ This document describes the endpoints for managing locations and their schedules
     {
       "status": "error",
       "data": null,
-      "message": "L'horaire n'appartient pas à ce lieu"
+      "message": "L'horaire n'apactivitent pas à ce lieu"
     }
     ```

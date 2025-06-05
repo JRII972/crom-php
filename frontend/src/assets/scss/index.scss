@@ -119,8 +119,8 @@ label.selected {
   }
 }
 
-/* Styles spécifiques pour le formulaire de partie */
-.partie-form {
+/* Styles spécifiques pour le formulaire de activite */
+.activite-form {
   .selectize-control {
     .selectize-input {
       border: 1px solid var(--color-base-300);
@@ -293,7 +293,7 @@ label.selected {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .partie-form {
+  .activite-form {
     .card-body {
       padding: 1rem;
     }
@@ -306,4 +306,100 @@ label.selected {
       font-size: 0.875rem;
     }
   }
+}
+
+/* Layout en colonnes pour le formulaire d'activité */
+.activite-form {
+    .drawer-content {
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    /* Grid layout pour desktop */
+    @media (min-width: 1024px) {
+        .drawer-content > div:first-child {
+            height: calc(100vh - 8rem); /* Hauteur moins les navbars */
+        }
+        
+        /* Colonnes scrollables individuellement */
+        .grid > div {
+            max-height: 100%;
+        }
+        
+        /* Éditeur Quill adaptatif */
+        #description-editor {
+            height: calc(100% - 8rem) !important;
+            min-height: 250px !important;
+        }
+        
+        .ql-editor {
+            min-height: 200px !important;
+        }
+    }
+
+    /* Mobile - comportement normal */
+    @media (max-width: 1023px) {
+        .drawer-content {
+            overflow-y: auto;
+        }
+        
+        #description-editor {
+            height: 300px !important;
+        }
+    }
+
+    /* Amélioration de l'affichage des cartes compactes */
+    .card-title.text-sm {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+    }
+    
+    .label-text.text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .label-text-alt.text-xs {
+        font-size: 0.75rem;
+    }
+    
+    /* Boutons compacts */
+    .btn-xs {
+        height: 1.5rem;
+        min-height: 1.5rem;
+        padding: 0 0.5rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Inputs compacts */
+    .input-sm {
+        height: 2rem;
+        min-height: 2rem;
+        padding: 0 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .textarea-sm {
+        min-height: 2rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .select-sm {
+        height: 2rem;
+        min-height: 2rem;
+        padding: 0 2rem 0 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .file-input-sm {
+        height: 2rem;
+        min-height: 2rem;
+        padding: 0 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .checkbox-sm {
+        width: 1rem;
+        height: 1rem;
+    }
 }

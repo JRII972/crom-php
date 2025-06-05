@@ -364,7 +364,7 @@ This document describes the endpoints for managing users and their time slots in
     {
       "status": "error",
       "data": null,
-      "message": "Le créneau n'appartient pas à cet utilisateur"
+      "message": "Le créneau n'apactivitent pas à cet utilisateur"
     }
     ```
 
@@ -389,6 +389,6 @@ This document describes the endpoints for managing users and their time slots in
     {
       "status": "error",
       "data": null,
-      "message": "Le créneau n'appartient pas à cet utilisateur"
+      "message": "Le créneau n'apactivitent pas à cet utilisateur"
     }
     ```

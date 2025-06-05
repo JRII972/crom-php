@@ -5,7 +5,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Initialiser les onglets
   initTabs({
-    'tab-parties': 'tab-content-parties',
+    'tab-activites': 'tab-content-activites',
     'tab-disponibilites': 'tab-content-disponibilites',
     'tab-historique': 'tab-content-historique',
     'tab-preference': 'tab-content-preference',

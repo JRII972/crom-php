@@ -26,7 +26,7 @@ class APIHandler
             'write' => 100, // Seulement ADMIN
             'delete' => 100
         ],
-        'PartieApi' => [
+        'ActiviteApi' => [
             'read' => 0,
             'write' => 10, // INSCRIT ou ADMIN
             'delete' => 10, // INSCRIT (si maître du jeu) ou ADMIN

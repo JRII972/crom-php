@@ -1,6 +1,6 @@
 # API Documentation
 
-This repository contains the API documentation for a role-playing game management system. The API provides endpoints to manage various resources such as games, genres, users, sessions, locations, payments, events, and parties. Each resource is documented in its own Markdown file within a dedicated subfolder.
+This repository contains the API documentation for a role-playing game management system. The API provides endpoints to manage various resources such as games, genres, users, sessions, locations, payments, events, and activites. Each resource is documented in its own Markdown file within a dedicated subfolder.
 
 ## Base URL
 All endpoints are relative to the base URL: `/api`.
@@ -17,7 +17,7 @@ The documentation is organized into subfolders, each containing a Markdown file 
 - **sessions**: Manage game sessions (SessionsApi)
 - **lieux**: Manage locations and their schedules (LieuApi)
 - **paiements**: Manage payments and notifications (PaiementsApi)
-- **parties**: Manage game parties and members (PartieApi)
+- **activites**: Manage game activites and members (ActiviteApi)
 - **evenements**: Manage events (EvenementsApi)
 
 Each file includes:

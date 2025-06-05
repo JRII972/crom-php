@@ -161,7 +161,7 @@
             <option disabled selected>Choisissez un sujet</option>
             <option>Renseignements généraux</option>
             <option>Adhésion</option>
-            <option>Événements et parties</option>
+            <option>Événements et activites</option>
             <option>Support technique</option>
             <option>Autre</option>
             </select>
@@ -235,10 +235,10 @@
         <div class="collapse collapse-arrow bg-base-100">
             <input type="radio" name="faq-accordion" /> 
             <div class="collapse-title text-lg font-medium">
-            Comment s'inscrire à une partie ?
+            Comment s'inscrire à une activite ?
             </div>
             <div class="collapse-content"> 
-            <p>Pour vous inscrire à une partie, connectez-vous à votre compte, parcourez les parties disponibles dans la section "Parties" et cliquez sur "S'inscrire" pour celle qui vous intéresse. Pour les campagnes, vous devrez d'abord être inscrit à la campagne avant de pouvoir vous inscrire aux sessions individuelles.</p>
+            <p>Pour vous inscrire à une activite, connectez-vous à votre compte, parcourez les activites disponibles dans la section "Activites" et cliquez sur "S'inscrire" pour celle qui vous intéresse. Pour les campagnes, vous devrez d'abord être inscrit à la campagne avant de pouvoir vous inscrire aux sessions individuelles.</p>
             </div>
         </div>
         

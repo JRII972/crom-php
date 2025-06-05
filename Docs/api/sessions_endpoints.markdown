@@ -20,7 +20,7 @@ This document describes the endpoints for managing game sessions in the role-pla
       "status": "success",
       "data": {
         "id": 1,
-        "id_partie": 1,
+        "id_activite": 1,
         "id_lieu": 1,
         "date_session": "2025-06-01",
         "heure_debut": "14:00:00",
@@ -44,7 +44,7 @@ This document describes the endpoints for managing game sessions in the role-pla
 - **Path**: `/api/sessions`
 - **Permissions**: None (public access)
 - **Query Parameters**:
-  - `partie_id` (integer, optional): Filter by party ID
+  - `activite_id` (integer, optional): Filter by party ID
   - `lieu_id` (integer, optional): Filter by location ID
   - `date_debut` (string, optional): Filter by start date
   - `max_joueurs` (integer, optional): Filter by maximum players
@@ -56,7 +56,7 @@ This document describes the endpoints for managing game sessions in the role-pla
       "data": [
         {
           "id": 1,
-          "id_partie": 1,
+          "id_activite": 1,
           ...
         },
         ...
@@ -80,7 +80,7 @@ This document describes the endpoints for managing game sessions in the role-pla
 - **Request Body**:
   ```json
   {
-    "id_partie": 1,
+    "id_activite": 1,
     "id_lieu": 1,
     "date_session": "2025-06-01",
     "heure_debut": "14:00:00",
@@ -89,7 +89,7 @@ This document describes the endpoints for managing game sessions in the role-pla
     "nombre_max_joueurs": 6
   }
   ```
-  - `id_partie` (integer, required): Party ID
+  - `id_activite` (integer, required): Party ID
   - `id_lieu` (integer, required): Location ID
   - `date_session` (string, required): Session date
   - `heure_debut` (string, required): Start time
@@ -113,7 +113,7 @@ This document describes the endpoints for managing game sessions in the role-pla
     {
       "status": "error",
       "data": null,
-      "message": "id_partie, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu requis"
+      "message": "id_activite, id_lieu, date_session, heure_debut, heure_fin, id_maitre_jeu requis"
     }
     ```
   - **403 Forbidden**: Not game master or admin
@@ -134,7 +134,7 @@ This document describes the endpoints for managing game sessions in the role-pla
 - **Request Body**:
   ```json
   {
-    "id_partie": 1,
+    "id_activite": 1,
     "id_lieu": 2,
     ...
   }

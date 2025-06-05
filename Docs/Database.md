@@ -4,7 +4,7 @@ Cette documentation décrit la structure de la base de données MariaDB **jdr_as
 
 - Les utilisateurs et leurs statuts
 - Le catalogue de jeux et de genres
-- Les propositions de parties (campagnes, one-shots, jeux de société, événements)
+- Les propositions de activites (campagnes, one-shots, jeux de société, événements)
 - Les sessions de jeu (rendez-vous)
 - Les lieux et leurs horaires de disponibilité
 - Les disponibilités/indisponibilités des utilisateurs
@@ -41,7 +41,7 @@ Stocke les membres de l’association (NON_INSCRIT, INSCRIT, ADMINISTRATEUR).
 
 ## 2. Table `jeux`
 
-Catalogue des jeux disponibles pour les parties.
+Catalogue des jeux disponibles pour les activites.
 
 | Colonne        | Type                | Description                            |
 |----------------|---------------------|----------------------------------------|
@@ -106,16 +106,16 @@ Périodes d’ouverture/fermeture de l’association.
 | `date_ouverture`   | DATE NOT NULL | Début de la période        |
 | `date_fermeture`   | DATE NOT NULL | Fin de la période          |
 
-## 8. Table `parties`
+## 8. Table `activites`
 
-Propositions de parties (scénarios) : campagnes, one-shots, jeux de société, événements.
+Propositions de activites (scénarios) : campagnes, one-shots, jeux de société, événements.
 
 | Colonne                  | Type                                               | Description                                    |
 |--------------------------|----------------------------------------------------|------------------------------------------------|
-| `id`                     | INT AUTO_INCREMENT PRIMARY KEY                     | Identifiant de la partie                       |
+| `id`                     | INT AUTO_INCREMENT PRIMARY KEY                     | Identifiant de la activite                       |
 | `id_jeu`                 | INT NOT NULL                                       | Référence vers `jeux.id`                       |
 | `id_maitre_jeu`          | VARCHAR(36) NOT NULL                               | Utilisateur maître du scénario (`utilisateurs.id`) |
-| `type_partie`            | ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') | Type de la proposition                        |
+| `type_activite`            | ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') | Type de la proposition                        |
 | `type_campagne`          | ENUM('OUVERTE','FERMEE') DEFAULT NULL              | Pour CAMPAGNE : ouverture de la campagne       |
 | `description_courte`     | VARCHAR(255)                                       | Résumé court                                   |
 | `description`            | TEXT                                               | Description détaillée                          |
@@ -126,10 +126,10 @@ Propositions de parties (scénarios) : campagnes, one-shots, jeux de société, 
 | `texte_alt_image`        | VARCHAR(255)                                       | Texte alternatif pour l’image                  |
 | `date_creation`          | TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP       | Date de création                               |
 
-## 9. Table `membres_partie`
+## 9. Table `membres_activite`
 
 Whitelist pour campagnes fermées.
-- `id_partie` → `parties.id`
+- `id_activite` → `activites.id`
 - `id_utilisateur` → `utilisateurs.id`
 
 ## 10. Table `sessions`
@@ -139,7 +139,7 @@ Sessions (rendez-vous) liées à une proposition.
 | Colonne            | Type                | Description                                       |
 |--------------------|---------------------|---------------------------------------------------|
 | `id`               | INT AUTO_INCREMENT PRIMARY KEY | Identifiant de session          |
-| `id_partie`        | INT NOT NULL        | Référence vers `parties.id`                        |
+| `id_activite`        | INT NOT NULL        | Référence vers `activites.id`                        |
 | `id_lieu`          | INT NOT NULL        | Référence vers `lieux.id`                          |
 | `nombre_max_joueurs`          | INT NOT NULL DEFAULT 5       | Nombre max de joueurs                          |
 | `date_session`     | DATE NOT NULL       | Date de la session                                 |

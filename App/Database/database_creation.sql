@@ -102,13 +102,13 @@ CREATE TABLE periodes_association (
   date_fermeture   DATE NOT NULL
 ) ENGINE=InnoDB;
 
--- === Parties proposées ===
-CREATE TABLE parties (
+-- === Activites proposées ===
+CREATE TABLE activites (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
   id_jeu                INT         NOT NULL,
   id_maitre_jeu         VARCHAR(36) NOT NULL,
-  type_partie           ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') NOT NULL,
+  type_activite           ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') NOT NULL,
   type_campagne         ENUM('OUVERTE','FERMEE') DEFAULT NULL,
   description_courte    VARCHAR(255),
   description           TEXT,
@@ -123,11 +123,11 @@ CREATE TABLE parties (
 ) ENGINE=InnoDB;
 
 -- === Whitelist pour campagnes fermées ===
-CREATE TABLE membres_partie (
-  id_partie    INT        NOT NULL,
+CREATE TABLE membres_activite (
+  id_activite    INT        NOT NULL,
   id_utilisateur VARCHAR(36) NOT NULL,
-  PRIMARY KEY (id_partie, id_utilisateur),
-  FOREIGN KEY (id_partie)     REFERENCES parties(id)       ON DELETE CASCADE,
+  PRIMARY KEY (id_activite, id_utilisateur),
+  FOREIGN KEY (id_activite)     REFERENCES activites(id)       ON DELETE CASCADE,
   FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -135,14 +135,14 @@ CREATE TABLE membres_partie (
 CREATE TABLE sessions (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
-  id_partie             INT         NOT NULL,
+  id_activite             INT         NOT NULL,
   id_lieu               INT         NOT NULL,
   date_session          DATE        NOT NULL,
   nombre_max_joueurs    INT         NOT NULL DEFAULT 5,
   heure_debut           TIME        NOT NULL,
   heure_fin             TIME        NOT NULL,
   id_maitre_jeu         VARCHAR(36) NOT NULL,
-  FOREIGN KEY (id_partie)     REFERENCES parties(id)       ON DELETE CASCADE,
+  FOREIGN KEY (id_activite)     REFERENCES activites(id)       ON DELETE CASCADE,
   FOREIGN KEY (id_lieu)       REFERENCES lieux(id)         ON DELETE CASCADE,
   FOREIGN KEY (id_maitre_jeu) REFERENCES utilisateurs(id)   ON DELETE CASCADE
 ) ENGINE=InnoDB;

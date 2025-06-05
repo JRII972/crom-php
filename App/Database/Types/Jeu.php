@@ -40,8 +40,8 @@ class Jeu extends DefaultDatabaseType
      * @param int|null $id Identifiant du jeu (si fourni, charge depuis la base)
      * @param string|null $nom Nom du jeu (requis si $id est null)
      * @param string|null $description Description du jeu
-     * @param Image|string|array|null $image Image de la partie
-     * @param Image|string|array|null $icon Image de la partie
+     * @param Image|string|array|null $image Image de la activite
+     * @param Image|string|array|null $icon Image de la activite
      * @param TypeJeu|null $typeJeu Type du jeu
      * @throws InvalidArgumentException Si les paramètres sont incohérents
      * @throws PDOException Si le jeu n'existe pas dans la base

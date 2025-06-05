@@ -104,13 +104,13 @@ class UtilisateurDisplay extends Utilisateur
     }
 
     /**
-     * Retourne l'URL de l'image d'affichage de la partie
+     * Retourne l'URL de l'image d'affichage de la activite
      */
     public function getImageURL(): string {
         if ($this->displayImage) {
             return $this->displayImage->getFilePath();
         }
-        return '/public/data/images/default-partie.png'; // Image par défaut
+        return '/public/data/images/default-activite.png'; // Image par défaut
     }
 
     /**
@@ -120,6 +120,6 @@ class UtilisateurDisplay extends Utilisateur
         if ($this->displayImage) {
             return $this->displayImage->getImageAlt();
         }
-        return 'Image de la partie ' . $this->getNom();
+        return 'Image de la activite ' . $this->getNom();
     }
 }

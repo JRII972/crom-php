@@ -512,7 +512,7 @@ class UtilisateursApi extends APIHandler
         try {
             $creneau = new CreneauxUtilisateur(id: (int)$data['id_creneau']);
             if ($creneau->getUtilisateur()->getId() !== $userId) {
-                return $this->sendResponse(403, 'error', null, 'Le créneau n\'appartient pas à cet utilisateur');
+                return $this->sendResponse(403, 'error', null, 'Le créneau n\'apactivitent pas à cet utilisateur');
             }
 
             if (isset($data['type_creneau'])) {
@@ -569,7 +569,7 @@ class UtilisateursApi extends APIHandler
         try {
             $creneau = new CreneauxUtilisateur(id: (int)$creneauId);
             if ($creneau->getUtilisateur()->getId() !== $userId) {
-                return $this->sendResponse(403, 'error', null, 'Le créneau n\'appartient pas à cet utilisateur');
+                return $this->sendResponse(403, 'error', null, 'Le créneau n\'apactivitent pas à cet utilisateur');
             }
             $creneau->delete();
             return $this->sendResponse(204, 'success', null, 'Créneau supprimé avec succès');

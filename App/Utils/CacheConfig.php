@@ -57,7 +57,7 @@ class CacheConfig
     /**
      * Vérifie si le cache est activé pour une classe donnée
      * 
-     * @param string $className Nom de la classe (ex: 'Session', 'Partie')
+     * @param string $className Nom de la classe (ex: 'Session', 'Activite')
      * @return bool True si le cache est activé
      */
     public static function isEnabled(string $className): bool

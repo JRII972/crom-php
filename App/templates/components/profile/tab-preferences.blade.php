@@ -9,21 +9,21 @@
         </svg>
         Préférences d'affichage des cartes
       </h2>
-      <p class="text-sm text-base-content/70 mb-4">Personnalisez l'affichage des cartes de parties et d'événements.</p>
+      <p class="text-sm text-base-content/70 mb-4">Personnalisez l'affichage des cartes de activites et d'événements.</p>
       
       <div class="space-y-4">
         <div class="flex items-center justify-between">
           <div>
             <h3 class="font-medium">Afficher les joueurs</h3>
-            <p class="text-sm text-base-content/70">Montrer la liste des joueurs inscrits sur les cartes de parties</p>
+            <p class="text-sm text-base-content/70">Montrer la liste des joueurs inscrits sur les cartes de activites</p>
           </div>
           <input type="checkbox" class="toggle toggle-primary" {{ isset($preferences->show_players) && $preferences->show_players ? 'checked' : '' }} data-pref="show_players" />
         </div>
         
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="font-medium">Afficher les noms de parties</h3>
-            <p class="text-sm text-base-content/70">Montrer les noms complets des parties plutôt que des descriptions courtes</p>
+            <h3 class="font-medium">Afficher les noms de activites</h3>
+            <p class="text-sm text-base-content/70">Montrer les noms complets des activites plutôt que des descriptions courtes</p>
           </div>
           <input type="checkbox" class="toggle toggle-primary" {{ isset($preferences->show_full_names) && $preferences->show_full_names ? 'checked' : '' }} data-pref="show_full_names" />
         </div>
@@ -48,7 +48,7 @@
         </svg>
         Notifications et rappels
       </h2>
-      <p class="text-sm text-base-content/70 mb-4">Gérez vos préférences de notifications et rappels pour les parties et événements.</p>
+      <p class="text-sm text-base-content/70 mb-4">Gérez vos préférences de notifications et rappels pour les activites et événements.</p>
       
       <div class="space-y-4">
         <div class="flex items-center justify-between">
@@ -62,7 +62,7 @@
         <div class="flex items-center justify-between">
           <div>
             <h3 class="font-medium">Envoyer des notifications de rappel</h3>
-            <p class="text-sm text-base-content/70">Recevoir des rappels pour vos parties à venir</p>
+            <p class="text-sm text-base-content/70">Recevoir des rappels pour vos activites à venir</p>
           </div>
           <input type="checkbox" class="toggle toggle-primary" {{ isset($preferences->reminders) && $preferences->reminders ? 'checked' : '' }} data-pref="reminders" />
         </div>
@@ -90,7 +90,7 @@
         </svg>
         Synchronisation du calendrier
       </h2>
-      <p class="text-sm text-base-content/70 mb-4">Synchronisez vos parties et événements avec votre calendrier personnel.</p>
+      <p class="text-sm text-base-content/70 mb-4">Synchronisez vos activites et événements avec votre calendrier personnel.</p>
       
       <div class="space-y-6">
         <div>
@@ -124,7 +124,7 @@
           </div>
           <p class="text-xs text-base-content/70 mt-2">
             Copiez ce lien et ajoutez-le à votre calendrier préféré (Google Calendar, Apple Calendar, Outlook, etc.) 
-            pour synchroniser automatiquement vos parties et événements.
+            pour synchroniser automatiquement vos activites et événements.
           </p>
         </div>
         
@@ -134,11 +134,11 @@
           <h3 class="font-medium mb-3">Données à synchroniser</h3>
           <div class="space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-sm">Mes parties en tant que MJ</span>
+              <span class="text-sm">Mes activites en tant que MJ</span>
               <input type="checkbox" class="toggle toggle-sm toggle-primary" {{ isset($preferences->sync_mj) && $preferences->sync_mj ? 'checked' : '' }} data-pref="sync_mj" />
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-sm">Mes parties en tant que joueur</span>
+              <span class="text-sm">Mes activites en tant que joueur</span>
               <input type="checkbox" class="toggle toggle-sm toggle-primary" {{ isset($preferences->sync_player) && $preferences->sync_player ? 'checked' : '' }} data-pref="sync_player" />
             </div>
             <div class="flex items-center justify-between">

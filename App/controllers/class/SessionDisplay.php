@@ -3,7 +3,7 @@
 namespace App\Controllers\Class;
 
 use App\Database\Types\Session;
-use App\Database\Types\Partie;
+use App\Database\Types\Activite;
 use App\Database\Types\Lieu;
 use App\Database\Types\Utilisateur;
 use App\Controllers\Class\UtilisateurDisplay;
@@ -22,7 +22,7 @@ class SessionDisplay extends Session
      * Constructeur de la classe SessionDisplay.
      *
      * @param int|null $id Identifiant de la session (si fourni, charge depuis la base)
-     * @param Partie|int|null $partieOuId Objet Partie ou ID de la partie (requis si $id est null)
+     * @param Activite|int|null $activiteOuId Objet Activite ou ID de la activite (requis si $id est null)
      * @param Lieu|int|null $lieuOuId Objet Lieu ou ID du lieu (requis si $id est null)
      * @param string|null $dateSession Date de la session (format Y-m-d, requis si $id est null)
      * @param string|null $heureDebut Heure de début (format H:i:s, requis si $id est null)
@@ -35,7 +35,7 @@ class SessionDisplay extends Session
      */
     public function __construct(
         ?int $id = null,
-        Partie|int|null $partieOuId = null,
+        Activite|int|null $activiteOuId = null,
         Lieu|int|null $lieuOuId = null,
         ?string $dateSession = null,
         ?string $heureDebut = null,
@@ -46,7 +46,7 @@ class SessionDisplay extends Session
     ) {
         parent::__construct(
             $id,
-            $partieOuId,
+            $activiteOuId,
             $lieuOuId,
             $dateSession,
             $heureDebut,
@@ -56,12 +56,12 @@ class SessionDisplay extends Session
             $maxJoueursSession
         );
 
-        $this->jeuDisplay = new JeuDisplay($this->getPartie()->getJeu()->getId());
+        $this->jeuDisplay = new JeuDisplay($this->getActivite()->getJeu()->getId());
         
         // Initialiser l'image d'affichage avec fallback
-        $partieImage = $this->getPartie()->getImage();
-        if ($partieImage !== null) {
-            $this->displayImage = $partieImage;
+        $activiteImage = $this->getActivite()->getImage();
+        if ($activiteImage !== null) {
+            $this->displayImage = $activiteImage;
         } else {
             $this->displayImage = $this->jeuDisplay->getImage();
         }
@@ -73,7 +73,7 @@ class SessionDisplay extends Session
      * Recherche des sessions avec filtres optionnels.
      *
      * @param PDO $pdo Instance PDO
-     * @param int $partieId ID de la partie (optionnel)
+     * @param int $activiteId ID de la activite (optionnel)
      * @param int $lieuId ID du lieu (optionnel)
      * @param string $dateDebut Date de début (format Y-m-d, optionnel)
      * @param string $dateFin Date de fin (format Y-m-d, optionnel)
@@ -86,7 +86,7 @@ class SessionDisplay extends Session
      */
     public static function search(
         PDO $pdo,
-        ?int $partieId = 0,
+        ?int $activiteId = 0,
         ?int $lieuId = 0,
         ?string $dateDebut = '',
         ?string $dateFin = '',
@@ -97,7 +97,7 @@ class SessionDisplay extends Session
     ): array {
         $sessions = parent::search(
             $pdo,
-            $partieId,
+            $activiteId,
             $lieuId,
             $dateDebut,
             $dateFin,
@@ -132,33 +132,33 @@ class SessionDisplay extends Session
         return $this->displayImage->getImageAlt();
     }
 
-    public function getNomPartie(): string {
-        return $this->getPartie()->getNom();
+    public function getNomActivite(): string {
+        return $this->getActivite()->getNom();
     }
 
     public function getNom(): string {
-        return parent::getNom() ? parent::getNom() : $this->getNomPartie();
+        return parent::getNom() ? parent::getNom() : $this->getNomActivite();
     }
 
     public function getTypeFormatted(): string {
-        $partie = $this->getPartie();
-        $typePartie = $partie->getTypePartie();
+        $activite = $this->getActivite();
+        $typeActivite = $activite->getTypeActivite();
         
         // Enum pour adapter le type à la présentation utilisateur
-        $typeDisplay = match($typePartie->value) {
+        $typeDisplay = match($typeActivite->value) {
             'CAMPAGNE' => 'Campagne',
             'ONESHOT' => 'One-Shot',
             'JEU_DE_SOCIETE' => 'Jeu de Société',
             'EVENEMENT' => 'Événement',
-            default => $typePartie->value
+            default => $typeActivite->value
         };
         
         // Si c'est une campagne, ajouter le type de campagne
-        if ($typePartie->value === 'CAMPAGNE' && $partie->getTypeCampagne()) {
-            $typeCampagne = match($partie->getTypeCampagne()->value) {
+        if ($typeActivite->value === 'CAMPAGNE' && $activite->getTypeCampagne()) {
+            $typeCampagne = match($activite->getTypeCampagne()->value) {
                 'OUVERTE' => 'Ouverte',
                 'FERMEE' => 'Fermée',
-                default => $partie->getTypeCampagne()->value
+                default => $activite->getTypeCampagne()->value
             };
             $typeDisplay .= ' ' . $typeCampagne;
         }
@@ -167,24 +167,24 @@ class SessionDisplay extends Session
     }
 
     public function getTypeFormattedShort(): string {
-        $partie = $this->getPartie();
-        $typePartie = $partie->getTypePartie();
+        $activite = $this->getActivite();
+        $typeActivite = $activite->getTypeActivite();
         
         // Enum pour adapter le type à la présentation utilisateur
-        $typeDisplay = match($typePartie->value) {
+        $typeDisplay = match($typeActivite->value) {
             'CAMPAGNE' => 'Cmp',
             'ONESHOT' => '1Sht',
             'JEU_DE_SOCIETE' => 'JdS',
             'EVENEMENT' => 'Event',
-            default => $typePartie->value
+            default => $typeActivite->value
         };
         
         // Si c'est une campagne, ajouter le type de campagne
-        if ($typePartie->value === 'CAMPAGNE' && $partie->getTypeCampagne()) {
-            $typeCampagne = match($partie->getTypeCampagne()->value) {
+        if ($typeActivite->value === 'CAMPAGNE' && $activite->getTypeCampagne()) {
+            $typeCampagne = match($activite->getTypeCampagne()->value) {
                 'OUVERTE' => 'O',
                 'FERMEE' => 'F',
-                default => $partie->getTypeCampagne()->value
+                default => $activite->getTypeCampagne()->value
             };
             $typeDisplay .= ' ' . $typeCampagne;
         }

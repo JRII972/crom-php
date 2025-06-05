@@ -23,7 +23,7 @@
       <div class="card bg-base-100 shadow-2xl h-fit m-auto" style="height: fit-content; margin: auto;">
         <div class="card-body">            
             <div class="flex flex-col lg:flex-row gap-8 w-min md:w-auto">
-            <!-- Partie gauche - Image et texte d'introduction -->
+            <!-- Activite gauche - Image et texte d'introduction -->
             <div class="lg:min-w-[300px] lg:max-w-xl flex flex-col justify-center items-center p-6 bg-base-200 rounded-box">
                 <div class="hidden lg:block">
                     <img id="login-illustration" src="https://picsum.photos/400/300" alt="Illustration connexion" class="max-w-full h-auto rounded-lg mb-6" />
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <!-- Partie droite - Formulaire de connexion -->
+            <!-- Activite droite - Formulaire de connexion -->
             <div class="p-6 md:w-md md:min-w-[460px] flex flex-col items-center">
                 <h2 class="text-2xl font-bold mb-6">Connexion</h2>
                 

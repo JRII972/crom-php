@@ -2,7 +2,7 @@ import axiosInstance from '../axiosInstance';
 import type { Session, JoueurSession, Utilisateur } from '../types/db';
 
 export interface SessionFilters {
-  partie_id?: number;        // Filtrer par l'ID de la partie
+  activite_id?: number;        // Filtrer par l'ID de la activite
   lieu_id?: number;          // Filtrer par l'ID du lieu
   date_debut?: string;       // Filtrer à partir d'une date (format YYYY-MM-DD)
   date_fin?: string;         // Filtrer jusqu'à une date (format YYYY-MM-DD)

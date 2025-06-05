@@ -37,13 +37,13 @@
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7.5 5.25v9.5L12 22l-7.5-5.25v-9.5L12 2z M12 2v7M19.5 7.25l-7.5 3M12 9l-7.5-2M4.5 16.75l7.5 1.25M12 18l7.5-1.5M12 22v-4" />
               </svg>
-              Mes Parties
+              Mes Activites
             </a></li>
             <li><a>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 6.878V6a2.25 2.25 0 0 1 2.25-2.25h7.5A2.25 2.25 0 0 1 18 6v.878m-12 0c.235-.083.487-.128.75-.128h10.5c.263 0 .515.045.75.128m-12 0A2.25 2.25 0 0 0 4.5 9v.878m13.5-3A2.25 2.25 0 0 1 19.5 9v.878m0 0a2.246 2.246 0 0 0-.75-.128H5.25c-.263 0-.515.045-.75.128m15 0A2.25 2.25 0 0 1 21 12v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6c0-.98.626-1.813 1.5-2.122" />
               </svg>
-              Toutes les parties
+              Toutes les activites
             </a></li>
             <li><a>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -186,15 +186,15 @@
             <!-- Barre de recherche avec dropdown -->
             <div class="flex flex-col sm:flex-row gap-2 mb-6">
               <div class="join sm:flex-1">
-                <div id="dropdown-parties" class="dropdown join-item">
-                  <div tabindex="0" role="button" id="dropdown-parties-btn" class="btn join-item rounded-r-none lg:w-48">
-                    <span class="hidden lg:block">Toutes les parties</span>
+                <div id="dropdown-activites" class="dropdown join-item">
+                  <div tabindex="0" role="button" id="dropdown-activites-btn" class="btn join-item rounded-r-none lg:w-48">
+                    <span class="hidden lg:block">Toutes les activites</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                     </svg>
                   </div>
                   <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-sm">
-                    <li><a data-value="all" aria-selected="true">Toutes les parties</a></li>
+                    <li><a data-value="all" aria-selected="true">Toutes les activites</a></li>
                     <li><a data-value="campaigns" aria-selected="false">Campagnes</a></li>
                     <li><a data-value="oneshot" aria-selected="false">Oneshot</a></li>
                     <li><a data-value="event" aria-selected="false">Événement</a></li>
@@ -320,7 +320,7 @@
                     <h3 class="text font-semibold md:pl-5">Fantaisie</h3>
                   </div>
               
-                  <!-- Cartes des parties -->
+                  <!-- Cartes des activites -->
                   <div class="roll-content justify-between gap-1 md:gap-2">
                     <div class="card card-md md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[250px] sm:w-[170px] sm:h-[300px] md:w-[230px] md:h-[350px]">
                       <figure class="relative">
@@ -449,7 +449,7 @@
                     <h3 class="text font-semibold md:pl-5">Nouvelle campagne</h3>
                   </div>
               
-                  <!-- Cartes des parties -->
+                  <!-- Cartes des activites -->
                   <div class="roll-content justify-between gap-1 md:gap-2">
                     <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[250px] sm:w-[170px] sm:h-[300px] md:w-[230px] md:h-[350px]">
                       <figure class="relative">
@@ -496,7 +496,7 @@
               
               <!-- Bouton "Voir plus" -->
               <div class="flex justify-center mt-6">
-                <button class="btn btn-outline">Voir plus de parties</button>
+                <button class="btn btn-outline">Voir plus de activites</button>
               </div>
             </div>
             <!-- Semaine prochaine -->
@@ -509,7 +509,7 @@
                     <h3 class="text font-semibold md:pl-5">Vendredi de 20h à 0h</h3>
                   </div>
               
-                  <!-- Cartes des parties -->
+                  <!-- Cartes des activites -->
                   <div class="roll-content justify-between gap-1 md:gap-2">
                     <div class="card card-md md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[250px] sm:w-[170px] sm:h-[300px] md:w-[230px] md:h-[350px]">
                       <figure class="relative">
@@ -638,7 +638,7 @@
                     <h3 class="text font-semibold md:pl-5">Samedi de 14h à 20H</h3>
                   </div>
               
-                  <!-- Cartes des parties -->
+                  <!-- Cartes des activites -->
                   <div class="roll-content justify-between gap-1 md:gap-2">
                     <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[250px] sm:w-[170px] sm:h-[300px] md:w-[230px] md:h-[350px]">
                       <figure class="relative">
@@ -763,7 +763,7 @@
               
               <!-- Bouton "Voir plus" -->
               <div class="flex justify-center mt-6">
-                <button class="btn btn-outline">Voir plus de parties</button>
+                <button class="btn btn-outline">Voir plus de activites</button>
               </div>
             </div>
           </div>
@@ -792,9 +792,9 @@
     <!-- Ajoutez ce script juste avant la fermeture du body -->
     <script>
       // Sélection des éléments du dropdown
-      const dropdownBtn = document.getElementById('dropdown-parties-btn');
+      const dropdownBtn = document.getElementById('dropdown-activites-btn');
       const dropdownBtnText = dropdownBtn.querySelector('span');
-      const dropdownItems = document.querySelectorAll('#dropdown-parties .dropdown-content a');
+      const dropdownItems = document.querySelectorAll('#dropdown-activites .dropdown-content a');
       
       // État actuel du filtre
       let currentFilter = 'all';

@@ -26,11 +26,11 @@ return [
             'description' => 'Cache pour les recherches de sessions'
         ],
         
-        'Partie' => [
+        'Activite' => [
             'enabled' => true,
             'ttl' => 600,           // 10 minutes
-            'prefix' => 'partie_search_',
-            'description' => 'Cache pour les recherches de parties'
+            'prefix' => 'activite_search_',
+            'description' => 'Cache pour les recherches de activites'
         ],
         
         'Jeu' => [
@@ -82,11 +82,11 @@ return [
             'description' => 'Cache pour les recherches de joueurs par session'
         ],
         
-        'MembrePartie' => [
+        'MembreActivite' => [
             'enabled' => true,
             'ttl' => 600,           // 10 minutes
-            'prefix' => 'membre_partie_search_',
-            'description' => 'Cache pour les recherches de membres de parties'
+            'prefix' => 'membre_activite_search_',
+            'description' => 'Cache pour les recherches de membres de activites'
         ],
         
         'CreneauxUtilisateur' => [
@@ -145,12 +145,12 @@ return [
     'invalidation' => [
         'auto_invalidate_related' => true,     // Invalider automatiquement les caches liés
         'invalidation_patterns' => [
-            'Session' => ['Partie', 'JoueursSession'],  // Invalider ces caches quand Session change
-            'Partie' => ['Session', 'MembrePartie'],    // Invalider ces caches quand Partie change
-            'Utilisateur' => ['JoueursSession', 'MembrePartie', 'CreneauxUtilisateur'],
+            'Session' => ['Activite', 'JoueursSession'],  // Invalider ces caches quand Session change
+            'Activite' => ['Session', 'MembreActivite'],    // Invalider ces caches quand Activite change
+            'Utilisateur' => ['JoueursSession', 'MembreActivite', 'CreneauxUtilisateur'],
             'Lieu' => ['Session', 'HorairesLieu'],
-            'Jeu' => ['Partie'],
-            'Genre' => ['Jeu', 'Partie']
+            'Jeu' => ['Activite'],
+            'Genre' => ['Jeu', 'Activite']
         ]
     ]
 ];

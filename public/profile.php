@@ -13,12 +13,12 @@ if (session_status() === PHP_SESSION_NONE) {
 $userId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
 // Récupérer l'onglet actif depuis l'URL si disponible
-$activeTab = isset($_GET['tab']) ? $_GET['tab'] : 'parties';
+$activeTab = isset($_GET['tab']) ? $_GET['tab'] : 'activites';
 
 // Valider l'onglet actif
-$validTabs = ['parties', 'disponibilites', 'historique', 'preference', 'paiements'];
+$validTabs = ['activites', 'disponibilites', 'historique', 'preference', 'paiements'];
 if (!in_array($activeTab, $validTabs)) {
-    $activeTab = 'parties';
+    $activeTab = 'activites';
 }
 
 // Instancier le contrôleur et afficher la page

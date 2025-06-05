@@ -226,9 +226,9 @@ abstract class BaseController {
             function route($name, $parameters = []) {
                 // Liste des routes disponibles avec leurs URLs correspondantes
                 $routes = [
-                    'partie.show' => '/partie?id=%d',
-                    'partie.create' => '/partie?action=create',
-                    'partie.edit' => '/parties?action=edit&id=%d',
+                    'activite.show' => '/activite?id=%d',
+                    'activite.create' => '/activite?action=create',
+                    'activite.edit' => '/activites?action=edit&id=%d',
                     'receipts.show' => '/receipts?id=%d',
                     'payments.pay' => '/payments?action=pay&id=%d',
                     'payments.renew' => '/payments?action=renew'

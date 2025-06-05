@@ -4,10 +4,10 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/BaseController.php';
 
 use App\Controllers\Class\SessionDisplay;
-use App\Controllers\Class\PartieDisplay;
+use App\Controllers\Class\ActiviteDisplay;
 use App\Database\Types\Genre;
-use App\Database\Types\Partie;
-use App\Database\Types\TypePartie;
+use App\Database\Types\Activite;
+use App\Database\Types\TypeActivite;
 
 class HomeController extends BaseController {
     /**
@@ -32,10 +32,10 @@ class HomeController extends BaseController {
         ];
         
         // Render the template
-        return $this->render('pages.parties', $data);
+        return $this->render('pages.activites', $data);
     }
 
-    public function allParties() {
+    public function allActivites() {
         // Récupération du paramètre GET group_by
         $groupBy = $_GET['group_by'] ?? 'semaine';
         
@@ -51,12 +51,12 @@ class HomeController extends BaseController {
         
         switch ($groupBy) {
             case 'categorie':
-                // Groupement par catégorie - utilise PartieDisplay
+                // Groupement par catégorie - utilise ActiviteDisplay
                 $sections = $this->groupByCategorie();
                 break;
                 
             case 'type':
-                // Groupement par type de partie - utilise PartieDisplay
+                // Groupement par type de activite - utilise ActiviteDisplay
                 $sections = $this->groupByType();
                 break;
                 
@@ -74,12 +74,12 @@ class HomeController extends BaseController {
         ];
         
         // Render the template
-        return $this->render('pages.all-parties', $data);
+        return $this->render('pages.all-activites', $data);
     }
     
     /**
-     * Groupe les parties par catégorie (genres)
-     * Retourne une liste de PartieDisplay
+     * Groupe les activites par catégorie (genres)
+     * Retourne une liste de ActiviteDisplay
      */
     private function groupByCategorie(): array {
         $sections = [];
@@ -90,13 +90,13 @@ class HomeController extends BaseController {
         foreach ($genres as $genre) {
             $genreNom = is_array($genre) ? $genre['nom'] : $genre->getNom();
             
-            // Rechercher les parties de cette catégorie
-            $parties = PartieDisplay::search(
+            // Rechercher les activites de cette catégorie
+            $activites = ActiviteDisplay::search(
                 $this->pdo, 
                 categories: [$genre]
             );
-            if (!empty($parties)) {
-                $sections[''][$genreNom] = $parties;
+            if (!empty($activites)) {
+                $sections[''][$genreNom] = $activites;
             }
         }
         
@@ -104,30 +104,30 @@ class HomeController extends BaseController {
     }
     
     /**
-     * Groupe les parties par type (TypePartie)
-     * Retourne une liste de PartieDisplay
+     * Groupe les activites par type (TypeActivite)
+     * Retourne une liste de ActiviteDisplay
      */
     private function groupByType(): array {
         $sections = [];
         
-        // Types de parties possibles
+        // Types de activites possibles
         $types = [
-            TypePartie::Campagne->value => 'Campagnes',
-            TypePartie::Oneshot->value => 'One-Shots',
-            TypePartie::JeuDeSociete->value => 'Jeux de Société',
-            TypePartie::Evenement->value => 'Événements'
+            TypeActivite::Campagne->value => 'Campagnes',
+            TypeActivite::Oneshot->value => 'One-Shots',
+            TypeActivite::JeuDeSociete->value => 'Jeux de Société',
+            TypeActivite::Evenement->value => 'Événements'
         ];
         
         foreach ($types as $typeValue => $typeLabel) {
-            // Rechercher les parties de ce type
-            $parties = PartieDisplay::search(
+            // Rechercher les activites de ce type
+            $activites = ActiviteDisplay::search(
                 $this->pdo,
-                typePartie: $typeValue
+                typeActivite: $typeValue
             );
             
-            if (!empty($parties)) {
-                foreach ($parties as $partie) {
-                    $sections[$typeLabel][$partie->getTypeCampagne()->name ?? ''][] = $partie;
+            if (!empty($activites)) {
+                foreach ($activites as $activite) {
+                    $sections[$typeLabel][$activite->getTypeCampagne()->name ?? ''][] = $activite;
                 }
             }
         }

@@ -23,11 +23,11 @@
       </div>
       
       <div class="stat">
-        <div class="stat-title">Parties jouées</div>
-        <div class="stat-value text-xl text-secondary">{{ $stats->parties_jouees ?? 42 }}</div>
+        <div class="stat-title">Activites jouées</div>
+        <div class="stat-value text-xl text-secondary">{{ $stats->activites_jouees ?? 42 }}</div>
         <div class="stat-desc">
-          @if(isset($stats->pourcentage_parties))
-            {{ $stats->pourcentage_parties > 0 ? '+' : '' }}{{ $stats->pourcentage_parties }}% par rapport à l'année dernière
+          @if(isset($stats->pourcentage_activites))
+            {{ $stats->pourcentage_activites > 0 ? '+' : '' }}{{ $stats->pourcentage_activites }}% par rapport à l'année dernière
           @else
             +8% par rapport à l'année dernière
           @endif
@@ -35,8 +35,8 @@
       </div>
       
       <div class="stat">
-        <div class="stat-title">Parties créées</div>
-        <div class="stat-value text-xl text-accent">{{ $stats->parties_creees ?? 7 }}</div>
+        <div class="stat-title">Activites créées</div>
+        <div class="stat-value text-xl text-accent">{{ $stats->activites_creees ?? 7 }}</div>
         <div class="stat-desc">En tant que maître de jeu</div>
       </div>
     </div>

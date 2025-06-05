@@ -18,14 +18,14 @@
         <div class="card bg-base-200 shadow-xl h-full">
             <div class="card-body">
                 {{-- Navigation par onglets --}}
-                @include('components.profile.tabs-navigation', ['activeTab' => $activeTab ?? 'parties'])
+                @include('components.profile.tabs-navigation', ['activeTab' => $activeTab ?? 'activites'])
                 
                 {{-- Contenu des onglets --}}
-                @include('components.profile.tab-parties', ['parties' => $parties ?? null, 'activeTab' => $activeTab ?? 'parties'])
-                @include('components.profile.tab-disponibilites', ['disponibilites' => $disponibilites ?? null, 'calendar' => $calendar ?? null, 'activeTab' => $activeTab ?? 'parties'])
-                @include('components.profile.tab-historique', ['historique' => $historique ?? null, 'activeTab' => $activeTab ?? 'parties'])
-                @include('components.profile.tab-preferences', ['preferences' => $preferences ?? null, 'calendarUrl' => $calendarUrl ?? null, 'activeTab' => $activeTab ?? 'parties'])
-                @include('components.profile.tab-paiements', ['paiements' => $paiements ?? null, 'adhesion' => $adhesion ?? null, 'activeTab' => $activeTab ?? 'parties'])
+                @include('components.profile.tab-activites', ['activites' => $activites ?? null, 'activeTab' => $activeTab ?? 'activites'])
+                @include('components.profile.tab-disponibilites', ['disponibilites' => $disponibilites ?? null, 'calendar' => $calendar ?? null, 'activeTab' => $activeTab ?? 'activites'])
+                @include('components.profile.tab-historique', ['historique' => $historique ?? null, 'activeTab' => $activeTab ?? 'activites'])
+                @include('components.profile.tab-preferences', ['preferences' => $preferences ?? null, 'calendarUrl' => $calendarUrl ?? null, 'activeTab' => $activeTab ?? 'activites'])
+                @include('components.profile.tab-paiements', ['paiements' => $paiements ?? null, 'adhesion' => $adhesion ?? null, 'activeTab' => $activeTab ?? 'activites'])
             </div>
         </div>
     </div>

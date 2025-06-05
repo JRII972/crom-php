@@ -33,7 +33,7 @@ Gérer le catalogue des jeux et leurs genres.
 ---
 
 ### **3. Lieux**
-Gérer les lieux où se déroulent les parties/sessions.
+Gérer les lieux où se déroulent les activites/sessions.
 
 | Méthode | Endpoint | Description | Rôle requis | Corps/Paramètres |
 |---------|------------------------------|-------------------------------------------|------------------|-------------------|
@@ -49,30 +49,30 @@ Gérer les lieux où se déroulent les parties/sessions.
 
 ---
 
-### **4. Parties (Campagnes)**
-Gérer les campagnes ou parties (y compris jeux de société et événements).
+### **4. Activites (Campagnes)**
+Gérer les campagnes ou activites (y compris jeux de société et événements).
 
 | Méthode | Endpoint | Description | Rôle requis | Corps/Paramètres |
 |---------|------------------------------|-------------------------------------------|------------------|-------------------|
-| GET     | `/api/parties`              | Liste des parties (filtre par type, jeu, q [mot clé : nom, description, mj, nom des joueurs inscrit]..., nombre d'insctit, place restante (bool), lieu, mj, verrouille, order (date_creation, date de la dernière/prochiane session )  ) | Aucun            | Query: `?type_partie=CAMPAGNE&jeu_id=1` |
-| GET     | `/api/parties/:id`          | Détails d’une partie                      | Aucun            | Param: `id` |
-| POST    | `/api/parties`              | Créer une partie                          | INSCRIT (maître du jeu)/ADMIN | `{ id_jeu, id_maitre_jeu, type_partie, type_campagne, description, nombre_max_joueurs, ... }` |
-| PUT     | `/api/parties/:id`          | Mettre à jour une partie                  | INSCRIT (maître du jeu)/ADMIN | `{ description, nombre_max_joueurs, ... }` |
-| PATCH     | `/api/parties/:id`          | Mettre à jour une partie                  | INSCRIT (maître du jeu)/ADMIN | `{ description, nombre_max_joueurs, ... }` |
-| DELETE  | `/api/parties/:id`          | Supprimer une partie                      | INSCRIT (maître du jeu)/ADMIN | Param: `id` |
-| POST    | `/api/parties/:id/membres`  | Ajouter un membre (campagne)       | INSCRIT/ADMIN | `{ id_utilisateur }` |
-| DELETE  | `/api/parties/:id/membres/:userId` | Retirer un membre                  | INSCRIT (maître du jeu)/ADMIN | Param: `userId` |
+| GET     | `/api/activites`              | Liste des activites (filtre par type, jeu, q [mot clé : nom, description, mj, nom des joueurs inscrit]..., nombre d'insctit, place restante (bool), lieu, mj, verrouille, order (date_creation, date de la dernière/prochiane session )  ) | Aucun            | Query: `?type_activite=CAMPAGNE&jeu_id=1` |
+| GET     | `/api/activites/:id`          | Détails d’une activite                      | Aucun            | Param: `id` |
+| POST    | `/api/activites`              | Créer une activite                          | INSCRIT (maître du jeu)/ADMIN | `{ id_jeu, id_maitre_jeu, type_activite, type_campagne, description, nombre_max_joueurs, ... }` |
+| PUT     | `/api/activites/:id`          | Mettre à jour une activite                  | INSCRIT (maître du jeu)/ADMIN | `{ description, nombre_max_joueurs, ... }` |
+| PATCH     | `/api/activites/:id`          | Mettre à jour une activite                  | INSCRIT (maître du jeu)/ADMIN | `{ description, nombre_max_joueurs, ... }` |
+| DELETE  | `/api/activites/:id`          | Supprimer une activite                      | INSCRIT (maître du jeu)/ADMIN | Param: `id` |
+| POST    | `/api/activites/:id/membres`  | Ajouter un membre (campagne)       | INSCRIT/ADMIN | `{ id_utilisateur }` |
+| DELETE  | `/api/activites/:id/membres/:userId` | Retirer un membre                  | INSCRIT (maître du jeu)/ADMIN | Param: `userId` |
 
 ---
 
 ### **5. Sessions (RDV de jeu)**
-Gérer les sessions associées à une partie.
+Gérer les sessions associées à une activite.
 
 | Méthode | Endpoint | Description | Rôle requis | Corps/Paramètres |
 |---------|------------------------------|-------------------------------------------|------------------|-------------------|
-| GET     | `/api/sessions`             | Liste des sessions (filtre par partie, lieu, date) | Aucun            | Query: `?partie_id=1&date_debut=2025-06-01` |
+| GET     | `/api/sessions`             | Liste des sessions (filtre par activite, lieu, date) | Aucun            | Query: `?activite_id=1&date_debut=2025-06-01` |
 | GET     | `/api/sessions/:id`         | Détails d’une session                     | Aucun            | Param: `id` |
-| POST    | `/api/sessions`             | Créer une session                         | INSCRIT (maître du jeu)/ADMIN | `{ id_partie, id_lieu, date_session, heure_debut, heure_fin, nombre_max_joueurs, id_maitre_jeu }` |
+| POST    | `/api/sessions`             | Créer une session                         | INSCRIT (maître du jeu)/ADMIN | `{ id_activite, id_lieu, date_session, heure_debut, heure_fin, nombre_max_joueurs, id_maitre_jeu }` |
 | PUT     | `/api/sessions/:id`         | Mettre à jour une session                 | INSCRIT (maître du jeu)/ADMIN | `{ date_session, heure_debut, ... }` |
 | DELETE  | `/api/sessions/:id`         | Supprimer une session                     | INSCRIT (maître du jeu)/ADMIN | Param: `id` |
 | POST    | `/api/sessions/:id/joueurs` | Inscription à une session                 | INSCRIT          | `{ id_utilisateur }` |
@@ -117,8 +117,8 @@ Gérer les paiements et notifications.
 ---
 
 ### **Notes sur la traduction**
-- Les termes comme "utilisateurs", "jeux", "lieux", "parties", "sessions", "événements", "périodes", et "paiements" sont directement tirés de la base de données pour rester cohérents avec le schéma SQL.
+- Les termes comme "utilisateurs", "jeux", "lieux", "activites", "sessions", "événements", "périodes", et "paiements" sont directement tirés de la base de données pour rester cohérents avec le schéma SQL.
 - Les mots comme "inscription", "connexion", "creneaux", "membres", et "joueurs" reflètent le vocabulaire francophone adapté au contexte de l’association de JDR.
 - Les paramètres de requête (query) comme `rayon` (pour radius) ou `utilisateur_id` sont traduits pour plus de clarté en français.
 
-Si vous souhaitez modifier certains termes (par exemple, utiliser "campagnes" au lieu de "parties" partout) ou adapter davantage le vocabulaire, faites-le-moi savoir !
+Si vous souhaitez modifier certains termes (par exemple, utiliser "campagnes" au lieu de "activites" partout) ou adapter davantage le vocabulaire, faites-le-moi savoir !
