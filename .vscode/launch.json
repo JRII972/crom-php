@@ -12,9 +12,25 @@
             // "log": true,
             "stopOnEntry": false,
             "xdebugSettings": {
-                "max_children": 128,
-                "max_data": 512,
-                "max_depth": 6
+                // "max_children": 128,
+                // "max_data": 512,
+                "max_depth": 8
+            }
+        },
+        {
+            "name": "Launch Built-in server & Profile",
+            "type": "php",
+            "request": "launch",
+            "runtimeArgs": [
+                "-S", "localhost:8888", "-t", ".",
+                "-dxdebug.mode=profile",
+                "-dxdebug.start_with_request=trigger",
+                "-dxdebug.profiler_output_dir=/var/www/html/profiling",
+                "-dxdebug.profiler_output_name=cachegrind.out.%t.%p"
+            ],
+            "noDebug": true,
+            "env": {
+                "XDEBUG_TRIGGER": "1"
             }
         },
         {

@@ -34,7 +34,7 @@ class PartieController extends BaseController {
             'activeTab' => 'description'
         ];
 
-        
+        $this->addBreadcrumb($partie->getNom());       
         
         return $this->render('pages.partie', $data);
     }

@@ -7,7 +7,7 @@
     <title>{{ $page_title ?? 'CROM | LBDR'}}</title>
     <link rel="stylesheet" crossorigin href="/assets/css/index.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
-  <link rel="stylesheet" crossorigin href="/assets/css/index-C2_PU_81.css">
+    <link rel="stylesheet" crossorigin href="/assets/css/module.css">
   </head>
   <body>
     {{-- Structure principale du drawer --}}

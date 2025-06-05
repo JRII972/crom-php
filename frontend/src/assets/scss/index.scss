@@ -1,16 +1,6 @@
-.dropdown a{
-  transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
-
-  &.active, &.selected, &[aria-selected="true"] {
-    color: var(--menu-active-fg);
-    background-color: var(--menu-active-bg);
-  }
-}
-
 .group-btn {
     @extend .group-btn;
     .btn {
-        @extend .join-item;
         display: flex;
         justify-items: center;
     }
@@ -61,6 +51,70 @@ label.selected {
     .roll-content{
       display: inline-flex;
       justify-content: space-between;
+    }
+  }
+}
+
+.dropdown {
+  // Feedback visuel pour les dropdowns avec sélections
+  &.dropdown-has-selection {
+    .dropdown-trigger, [role="button"] {
+      border-color: hsl(var(--p));
+      background-color: hsl(var(--p) / 0.1);
+      
+      span {
+        color: hsl(var(--p));
+        font-weight: 500;
+      }
+    }
+  }
+  
+  // Amélioration du style pour les éléments sélectionnés
+  .dropdown-content a {
+    transition: all 0.2s ease;
+    
+    &.active, &.selected, &[aria-selected="true"] {
+      color: hsl(var(--pc));
+      background-color: hsl(var(--p));
+      font-weight: 500;
+      
+      &::before {
+        content: "✓";
+        margin-right: 0.5rem;
+        opacity: 1;
+      }
+    }
+    
+    &:not(.active):not(.selected):not([aria-selected="true"]) {
+      &::before {
+        content: "";
+        margin-right: 1.125rem; // Compenser l'espace du checkmark
+        opacity: 0;
+      }
+    }
+    
+    &:hover {
+      background-color: hsl(var(--b3));
+      
+      &.active, &.selected, &[aria-selected="true"] {
+        background-color: hsl(var(--p) / 0.8);
+      }
+    }
+  }
+}
+
+// Style spécial pour les dropdowns multiples
+.dropdown.multiple {
+  .dropdown-content a {
+    &::before {
+      content: "☐";
+      margin-right: 0.5rem;
+    }
+    
+    &.active, &.selected, &[aria-selected="true"] {
+      &::before {
+        content: "✓";
+      }
     }
   }
 }

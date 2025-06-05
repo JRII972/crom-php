@@ -8,12 +8,14 @@
   <h2 class="text-2xl font-bold mb-2 text-left">{{ $titre_section }}</h2>
 
   <div class="roll">
-    @foreach($sections as $titre => $sessions)
-      @include('components.parties.categorie-section', [
-        'titre' => $titre,
-        'sessions' => $sessions
-      ])
-    @endforeach
+    @if(is_array($sections))
+      @foreach($sections as $titre => $sessions)
+        @include('components.parties.categorie-section', [
+          'titre' => $titre,
+          'sessions' => $sessions
+        ])
+      @endforeach
+    @endif
   </div>
   
 </div>

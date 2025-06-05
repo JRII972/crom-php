@@ -54,7 +54,7 @@ class Partie extends DefaultDatabaseType
     private string $dateCreation;
     
     // Cache configuration
-    private static $cacheEnabled = true; // Activer/désactiver le cache
+    private static $cacheEnabled = false; // Activer/désactiver le cache
     private static $cacheTTL = 300; // 5 minutes en secondes
     private static $cachePrefix = 'partie_search_';
 
@@ -302,10 +302,10 @@ class Partie extends DefaultDatabaseType
         $params = [];
 
         // Ajouter les jointures nécessaires selon les filtres
-        $needJeuxGenresJoin = $categories !== null && !empty($categories);
+        $activeFiltreCategorie = $categories !== null && !empty($categories);
         $needSessionsJoin = $jours !== null && !empty($jours);
         
-        if ($needJeuxGenresJoin) {
+        if ($activeFiltreCategorie) {
             $sql .= ' JOIN jeux j ON p.id_jeu = j.id';
             $sql .= ' JOIN jeux_genres jg ON j.id = jg.id_jeu';
             $sql .= ' JOIN genres g ON jg.id_genre = g.id';
@@ -338,16 +338,24 @@ class Partie extends DefaultDatabaseType
             $sql .= ' AND (p.nom LIKE :keyword OR p.description LIKE :keyword)';
             $params['keyword'] = '%' . $keyword . '%';
         }
-        
+
         // Filtre par catégories/genres
-        if ($needJeuxGenresJoin) {
+        if ($activeFiltreCategorie) {
             $placeholders = [];
             foreach ($categories as $key => $value) {
+                // Si c'est un objet Genre, on prend son id, sinon on prend la valeur brute
+                if (is_object($value) && method_exists($value, 'getId')) {
+                    $paramValue = $value->getId();
+                } else if (is_array($value) && isset($value['id'])) {
+                    $paramValue = $value['id'];
+                } else {
+                    $paramValue = $value;
+                }
                 $paramName = 'category_' . $key;
                 $placeholders[] = ':' . $paramName;
-                $params[$paramName] = $value;
+                $params[$paramName] = $paramValue;
             }
-            $sql .= ' AND g.nom IN (' . implode(', ', $placeholders) . ')';
+            $sql .= ' AND g.id IN (' . implode(', ', $placeholders) . ')';
         }
         
         // Filtre par jours de la semaine des sessions
@@ -789,6 +797,13 @@ class Partie extends DefaultDatabaseType
                 apcu_delete($key);
             }
         }
+    }
+
+    public function isLocked(): bool{
+        if( $this->getVerrouille() || $this->getNombreJoueursInscrits() >= $this->getNombreMaxJoueurs()){
+            return true;
+        }
+        return false;
     }
 
     public function jsonSerialize(): array

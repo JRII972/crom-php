@@ -8,4 +8,17 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        // Customize asset file names
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "index.css") {
+            return "assets/module.css"; // Specify your desired CSS file name
+          }
+          return "assets/[name]-[hash][extname]"; // Default for other assets
+        },
+      },
+    },
+  },
 })

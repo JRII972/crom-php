@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mon App</title>
     <link rel="stylesheet" href="/src/index.css" />
+    <link rel="stylesheet" href="/src/assets/scss/index.scss" />
   </head>
   <body>
 
@@ -234,545 +235,701 @@
             </div>
 
             <!-- Filtres additionnels -->
-            <div class="flex flex-wrap gap-4 mb-6">
-              <div class="dropdown relative group">
-                <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
-                  <span>Par Jour</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            <div class="flex justify-between">
+              <!-- Bouton pour ouvrir le drawer des filtres (mobile uniquement) -->
+              <div class="lg:hidden">
+                <label for="filters-drawer" class="btn btn-outline btn-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
                   </svg>
-                </div>
-                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
-                  <li><a>Vendredi</a></li>
-                  <li><a>Samedi</a></li>
-                  <li><a>Dimanche</a></li>
-                </ul>
+                  Filtres
+                </label>
               </div>
 
-              <div class="dropdown relative group">
-                <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
-                  <span>Par lieu</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </div>
-                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
-                  <li><a>Foyer Saint Vincent</a></li>
-                  <li><a>Maison des Association centre</a></li>
-                  <li><a>Maison des association sud</a></li>
-                </ul>
-              </div>
-
-              <div class="dropdown relative group">
-                <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
-                  <span>Par type de campagne</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </div>
-                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
-                  <li><a>Campagne fermée</a></li>
-                  <li><a>Campagne ouverte</a></li>
-                </ul>
-              </div>
-
-              <div class="dropdown relative group">
-                <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
-                  <span>Par style</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </div>
-                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
-                  <li><a>Fantaisie</a></li>
-                  <li><a>Médiéval</a></li>
-                  <li><a>Espace</a></li>
-                  <li><a>Combat</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hero section (full width) -->
-          <div class="hero h-[20vh] lg:h-[23vh] mx-auto lg:max-w-[1200px] rounded-2xl my-6 overflow-hidden " style="background-image: url('./data/images/creature-cthulhu-grand-ancien.webp'); background-position: center 20%;">
-            <div class="hero-overlay bg-black/60"></div>
-            <div class="hero-content text-left text-white w-full justify-start">
-              <div class="lg:max-w-2/3 w-full md:max-w-3/4">
-                <div class="badge badge-xs md:badge-sm lg:badge-md badge-accent mb-2">Nouveau !</div>
-                <h2 class="sm:text-2xl lg:text-3xl font-bold">La grande aventure commence</h2>
-                <p class="lg:py-4 md:py-2 py-0.5 text-xs sm:text-sm lg:text-lg">Rejoignez notre prochaine campagne épique dans un monde médiéval fantastique rempli de mystères et de dangers. Places limitées !</p>
-                <div class="w-full flex justify-end md:justify-start">
-                  <button class="btn btn-primary btn-xs md:btn-md lg:btn-lg" type="button">S'inscrire</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Reste du contenu -->
-          <div class="mx-auto lg:max-w-[1200px] w-full">
-            <!-- Semaine prochaine -->
-            <div class="my-8">
-              <h2 class="text-2xl font-bold mb-2 text-left">Pourrais vous intérésser !</h2>
-
-              <div class="roll ">
-                <div class="roll-section">
-                  <div class="roll-title gap-4 mb-6">
-                    <h3 class="text font-semibold md:pl-5">Fantaisie</h3>
+              <!-- Filtres desktop (cachés sur mobile) -->
+              <div class="hidden lg:flex flex-wrap gap-4 mb-6">
+                <div class="dropdown multiple relative group">
+                  <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <span>Par Jour</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
                   </div>
-              
-                  <!-- Cartes des parties -->
-                  <div class="roll-content justify-between gap-1 md:gap-2">
-                    <div class="card card-md md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px]md:w-[230px] md:h-[350px]">
-                      <figure class="relative ">
-                        <img src="http://localhost/data/images/default/default_jdr_image_1.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
+                  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
+                    <li><a>Vendredi</a></li>
+                    <li><a>Samedi</a></li>
+                    <li><a>Dimanche</a></li>
+                  </ul>
+                </div>
 
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <!-- TODO: améliorer ca UI -->
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <div class="flex flex-row sm:flex-col justify-around text-xs sm:text-md">
+                <div class="dropdown multiple relative group">
+                  <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <span>Par lieu</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
+                    <li><a>Foyer Saint Vincent</a></li>
+                    <li><a>Maison des Association centre</a></li>
+                    <li><a>Maison des association sud</a></li>
+                  </ul>
+                </div>
+
+                <div class="dropdown multiple relative group" data-title="Type de campagne">
+                  <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <span>Par type de campagne</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
+                    <li><a>Campagne fermée</a></li>
+                    <li><a>Campagne ouverte</a></li>
+                  </ul>
+                </div>
+
+                <div class="dropdown multiple relative group">
+                  <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <span>Par style</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
+                    <li><a>Fantaisie</a></li>
+                    <li><a>Médiéval</a></li>
+                    <li><a>Espace</a></li>
+                    <li><a>Combat</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Bouton de tri (visible sur toutes les tailles d'écran) -->
+              <div class="flex flex-wrap gap-4 mb-6">
+                <div class="dropdown relative group">
+                  <div tabindex="0" role="button" class="flex items-center gap-2 text-sm cursor-pointer select-none">
+                    <span>Trie</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 4.5h14.25M3 9h9.75M3 13.5h9.75m4.5-4.5v12m0 0-3.75-3.75M17.25 21 21 17.25" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 transition-transform group-open:rotate-180">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                  <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-10 w-52 p-2 shadow-md">
+                    <li><a>Par date</a></li>
+                    <li><a>Par type</a></li>
+                    <li><a>Par genre</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Drawer pour les filtres (mobile uniquement) -->
+            <div class="drawer drawer-end lg:hidden">
+              <input id="filters-drawer" type="checkbox" class="drawer-toggle" />
+              <div class="drawer-side z-50">
+                <label for="filters-drawer" class="drawer-overlay"></label>
+                <div class="w-80 min-h-full bg-base-100 p-4">
+                  <!-- En-tête du drawer -->
+                  <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold">Filtres</h3>
+                    <label for="filters-drawer" class="btn btn-ghost btn-sm btn-circle">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                    </label>
+                  </div>
+
+                  <!-- Contenu des filtres -->
+                  <div class="space-y-6">
+                    <!-- Filtre par jour -->
+                    <section>
+                      <h4 class="text-md font-medium mb-3">Par Jour</h4>
+                      <div class="space-y-2">
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Vendredi</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Samedi</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Dimanche</span>
+                        </label>
+                      </div>
+                    </section>
+
+                    <div class="divider my-4"></div>
+
+                    <!-- Filtre par lieu -->
+                    <section>
+                      <h4 class="text-md font-medium mb-3">Par lieu</h4>
+                      <div class="space-y-2">
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Foyer Saint Vincent</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Maison des Association centre</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Maison des association sud</span>
+                        </label>
+                      </div>
+                    </section>
+
+                    <div class="divider my-4"></div>
+
+                    <!-- Filtre par type de campagne -->
+                    <section>
+                      <h4 class="text-md font-medium mb-3">Par type de campagne</h4>
+                      <div class="space-y-2">
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Campagne fermée</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Campagne ouverte</span>
+                        </label>
+                      </div>
+                    </section>
+
+                    <div class="divider my-4"></div>
+
+                    <!-- Filtre par style -->
+                    <section>
+                      <h4 class="text-md font-medium mb-3">Par style</h4>
+                      <div class="space-y-2">
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Fantaisie</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Médiéval</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Espace</span>
+                        </label>
+                        <label class="label cursor-pointer justify-start gap-3">
+                          <input type="checkbox" class="checkbox checkbox-sm" />
+                          <span class="label-text">Combat</span>
+                        </label>
+                      </div>
+                    </section>
+                  </div>
+
+                  <!-- Boutons d'action -->
+                  <div class="flex gap-2 mt-6">
+                    <button class="btn btn-outline btn-sm flex-1">Réinitialiser</button>
+                    <label for="filters-drawer" class="btn btn-primary btn-sm flex-1">Appliquer</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hero section (full width) -->
+            <div class="hero h-[20vh] lg:h-[23vh] mx-auto lg:max-w-[1200px] rounded-2xl my-6 overflow-hidden " style="background-image: url('./data/images/creature-cthulhu-grand-ancien.webp'); background-position: center 20%;">
+              <div class="hero-overlay bg-black/60"></div>
+              <div class="hero-content text-left text-white w-full justify-start">
+                <div class="lg:max-w-2/3 w-full md:max-w-3/4">
+                  <div class="badge badge-xs md:badge-sm lg:badge-md badge-accent mb-2">Nouveau !</div>
+                  <h2 class="sm:text-2xl lg:text-3xl font-bold">La grande aventure commence</h2>
+                  <p class="lg:py-4 md:py-2 py-0.5 text-xs sm:text-sm lg:text-lg">Rejoignez notre prochaine campagne épique dans un monde médiéval fantastique rempli de mystères et de dangers. Places limitées !</p>
+                  <div class="w-full flex justify-end md:justify-start">
+                    <button class="btn btn-primary btn-xs md:btn-md lg:btn-lg" type="button">S'inscrire</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reste du contenu -->
+            <div class="mx-auto lg:max-w-[1200px] w-full">
+              <!-- Semaine prochaine -->
+              <div class="my-8">
+                <h2 class="text-2xl font-bold mb-2 text-left">Pourrais vous intérésser !</h2>
+
+                <div class="roll ">
+                  <div class="roll-section">
+                    <div class="roll-title gap-4 mb-6">
+                      <h3 class="text font-semibold md:pl-5">Fantaisie</h3>
+                    </div>
+                
+                    <!-- Cartes des parties -->
+                    <div class="roll-content justify-between gap-1 md:gap-2">
+                      
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <div class="card card-sm rounded-none image-full shadow-sm h-[38%] md:h-[43%]">
+                          <figure>
+                            <img src="http://localhost/data/images/default/default_jdr_image_1.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                          </figure>
+                          <div class="card-body items-center text-center gap-0.5 justify-end">
+                            <h2 class="card-title">Gloire ou Tombeau</h2>
+                          </div>
+                        </div>
+                        
+                        <div class="card-body p-2 pb-3 gap-0.5 justify-between">
+                          
+                          <div class="flex gap-0.5 flex-col items-center">
+                              <div class="flex">
+                                <div class="flex items-end flex-col">                            
+                                  <span class="cursor-help tooltip tooltip-accent tooltip-bottom" data-tip="OneShot">OneShot</span>
+                                  <span class="font-semibold">Julien</span>
+                                </div>
+                                <div class="divider divider-horizontal mx-0"></div>
+                                <div class="flex items-start flex-col">                            
+                                  <span class="">Warhammer</span>
+                                  <span class="">5/6 joueurs</span>
+                                </div>
+                              </div>
+                            <span class="cursor-help tooltip tooltip-accent tooltip-bottom" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+
+                          <p class=" md:text-xs pt-0.5 line-clamp-3 md:line-clamp-4"> Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+
+                          <div class="text-xs text-center h-1/4">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="http://localhost/data/images/default/default_jdr_image_1.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
                             <h4 class="text">Warhammer</h4>
                             <div class="font-semibold">Julien</div>
                           </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center h-1/4">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
                         </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge sm:hidden md:flex badge-xs md:badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs hidden sm:flex md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" text text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
+
                       </div>
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/malediction-strahd.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
 
-                    </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="http://localhost/data/images/default/default_jdr_image_1.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center h-1/4">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/malediction-strahd.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>                   
-                  </div>
-                </div>
-                <div class="roll-section">
-                  <div class="roll-title gap-4 mb-6">
-                    <h3 class="text font-semibold md:pl-5">Nouvelle campagne</h3>
-                  </div>
-              
-                  <!-- Cartes des parties -->
-                  <div class="roll-content justify-between gap-1 md:gap-2">
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/Pathfinder.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>               
-                  </div>
-                </div>
-              </div>
-              
-              <!-- Bouton "Voir plus" -->
-              <div class="flex justify-center mt-6">
-                <button class="btn btn-outline">Voir plus de parties</button>
-              </div>
-            </div>
-            <!-- Semaine prochaine -->
-            <div class="my-8">
-              <h2 class="text-2xl font-bold mb-2 text-left">La semaine prochaine</h2>
-
-              <div class="roll ">
-                <div class="roll-section">
-                  <div class="roll-title gap-4 mb-6">
-                    <h3 class="text font-semibold md:pl-5">Vendredi de 20h à 0h</h3>
-                  </div>
-              
-                  <!-- Cartes des parties -->
-                  <div class="roll-content justify-between gap-1 md:gap-2">
-                    <div class="card card-md md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/donjon&dragon.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <!-- TODO: améliorer ca UI -->
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <div class="flex flex-row sm:flex-col justify-around text-xs sm:text-md">
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
                             <h4 class="text">Warhammer</h4>
                             <div class="font-semibold">Julien</div>
                           </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
                         </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge sm:hidden md:flex badge-xs md:badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs hidden sm:flex md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" text text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
 
+                      </div>                   
                     </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/Cyberpunk RED.png" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
+                  </div>
+                  <div class="roll-section">
+                    <div class="roll-title gap-4 mb-6">
+                      <h3 class="text font-semibold md:pl-5">Nouvelle campagne</h3>
                     </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/malediction-strahd.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
+                
+                    <!-- Cartes des parties -->
+                    <div class="roll-content justify-between gap-1 md:gap-2">
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/Pathfinder.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
 
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
                         </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
 
-                    </div>                   
+                      </div>               
+                    </div>
                   </div>
                 </div>
-                <div class="roll-section">
-                  <div class="roll-title gap-4 mb-6">
-                    <h3 class="text font-semibold md:pl-5">Samedi de 14h à 20H</h3>
-                  </div>
-              
-                  <!-- Cartes des parties -->
-                  <div class="roll-content justify-between gap-1 md:gap-2">
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/Pathfinder.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/Blades in the Dark.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
-                      <figure class="relative h-1/3">
-                        <img src="https://jrii972.github.io/data/images/donjon&dragon.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
-                      </figure>
-
-                      <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
-                        <div>
-                          <h3 class="text">Gloire ou Tombeau</h3>
-                          <h4 class="text">Warhammer</h4>
-                          <div class="font-semibold">Julien</div>
-                        </div>
-                        <div class="flex gap-4 justify-between">
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
-                          <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
-                          <span class="badge badge-xs md:hidden">5/6 jrs</span>
-                          <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
-                        </div>
-                        <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
-                        <div class="divider my-0.5"></div>
-                        <div class="text-xs text-center">
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              CAMILLE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              PASCAL
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ROXANE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              ALICE
-                          </span>
-                          <span class="badge badge-soft badge-xs md:badge-sm">
-                              BASTIEN
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>                    
-                  </div>
+                
+                <!-- Bouton "Voir plus" -->
+                <div class="flex justify-center mt-6">
+                  <button class="btn btn-outline">Voir plus de parties</button>
                 </div>
               </div>
-              
-              <!-- Bouton "Voir plus" -->
-              <div class="flex justify-center mt-6">
-                <button class="btn btn-outline">Voir plus de parties</button>
+              <!-- Semaine prochaine -->
+              <div class="my-8">
+                <h2 class="text-2xl font-bold mb-2 text-left">La semaine prochaine</h2>
+
+                <div class="roll ">
+                  <div class="roll-section">
+                    <div class="roll-title gap-4 mb-6">
+                      <h3 class="text font-semibold md:pl-5">Vendredi de 20h à 0h</h3>
+                    </div>
+                
+                    <!-- Cartes des parties -->
+                    <div class="roll-content justify-between gap-1 md:gap-2">
+                      <div class="card card-md md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/donjon&dragon.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <!-- TODO: améliorer ca UI -->
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <div class="flex flex-row sm:flex-col justify-around text-xs sm:text-md">
+                              <h4 class="text">Warhammer</h4>
+                              <div class="font-semibold">Julien</div>
+                            </div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge sm:hidden md:flex badge-xs md:badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs hidden sm:flex md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" text text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/Cyberpunk RED.png" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/malediction-strahd.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>                   
+                    </div>
+                  </div>
+                  <div class="roll-section">
+                    <div class="roll-title gap-4 mb-6">
+                      <h3 class="text font-semibold md:pl-5">Samedi de 14h à 20H</h3>
+                    </div>
+                
+                    <!-- Cartes des parties -->
+                    <div class="roll-content justify-between gap-1 md:gap-2">
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/Pathfinder.webp" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/Blades in the Dark.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="card card-xs md:card-md bg-base-200 rounded-lg shadow-sm overflow-hidden mb-5 h-[280px] w-[185px] min-w-[185px] sm:h-[300px] md:w-[230px] md:h-[350px]">
+                        <figure class="relative h-1/3">
+                          <img src="https://jrii972.github.io/data/images/donjon&dragon.jpg" class="w-full h-full object-cover" alt="Gloire ou Tombeau" />
+                        </figure>
+
+                        <div class="card-body p-2 pb-3 gap-1 h-7/12 mb:h-8/12">
+                          <div>
+                            <h3 class="text">Gloire ou Tombeau</h3>
+                            <h4 class="text">Warhammer</h4>
+                            <div class="font-semibold">Julien</div>
+                          </div>
+                          <div class="flex gap-4 justify-between">
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-right" data-tip="OneShot">1Sht</span>
+                            <span class="badge hidden md:flex badge-sm">5/6 joueurs</span>
+                            <span class="badge badge-xs md:hidden">5/6 jrs</span>
+                            <span class="badge badge-xs md:badge-sm cursor-help tooltip tooltip-accent tooltip-left" data-tip="Foyer Saint Vincent">FSV</span>
+                          </div>
+                          <p class=" md:text-xs ">Une bataille brutale dans le Vieux Monde. Gloire ou mort vous attendent !</p>
+                          <div class="divider my-0.5"></div>
+                          <div class="text-xs text-center">
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                CAMILLE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                PASCAL
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ROXANE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                ALICE
+                            </span>
+                            <span class="badge badge-soft badge-xs md:badge-sm">
+                                BASTIEN
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>                    
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

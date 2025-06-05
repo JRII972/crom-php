@@ -4,6 +4,7 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+use App\Controllers\Class\SessionDisplay;
 use App\Database\Database;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
@@ -32,6 +33,8 @@ abstract class BaseController {
      * @var string Path to compiled templates cache
      */
     protected $cachePath;
+
+    protected array $breadcrumbs;
     
     /**
      * Initialize the controller with Blade template engine
@@ -40,11 +43,20 @@ abstract class BaseController {
         // Configuration globale de Carbon pour utiliser le français
         Carbon::setLocale('fr');        
         setlocale(LC_TIME, "fr_FR.UTF-8");
+        
+        // Initialiser les breadcrumbs vides
+        $this->breadcrumbs = [];
+        
         $this->setupPaths();
         $this->setupTemplateEngine();
         $this->setupHelpers();
 
         $this->pdo = Database::getConnection();
+
+        $this->addBreadcrumb(
+            'Acceuil',
+            '/'
+        );
     }
     
     /**
@@ -104,6 +116,7 @@ abstract class BaseController {
             'currentDate' => Carbon::today(),
             'appName' => 'LBDR',
             'appVersion' => '1.0.0',
+            'breadcrumbs' => $this->breadcrumbs,
             'currentYear' => date('Y'),
             // Liste des scripts JavaScript par défaut
             'scripts' => [
@@ -149,37 +162,108 @@ abstract class BaseController {
         $this->viewFactory->share($key, $value);
     }
     
+    /**
+     * Set breadcrumbs for the current page
+     *
+     * @param array $breadcrumbs Array of breadcrumb items with 'titre' and optionally 'location'
+     * @return void
+     */
+    protected function setBreadcrumbs(array $breadcrumbs): void {
+        // Valider la structure des breadcrumbs
+        foreach ($breadcrumbs as $index => $breadcrumb) {
+            if (!is_array($breadcrumb) || !isset($breadcrumb['titre'])) {
+                throw new InvalidArgumentException("Breadcrumb à l'index {$index} doit être un array avec au moins 'titre'");
+            }
+            
+            // S'assurer que les clés sont cohérentes
+            if (!isset($breadcrumb['location'])) {
+                $breadcrumbs[$index]['location'] = null;
+            }
+        }
+        
+        $this->breadcrumbs = $breadcrumbs;
+    }
+    
+    /**
+     * Add a single breadcrumb to the existing breadcrumbs
+     *
+     * @param string $titre Title of the breadcrumb
+     * @param string|null $location URL for the breadcrumb (null for current page)
+     * @return void
+     */
+    protected function addBreadcrumb(string $titre, ?string $location = null): void {
+        $this->breadcrumbs[] = [
+            'titre' => $titre,
+            'location' => $location
+        ];
+    }
+    
+    /**
+     * Clear all breadcrumbs
+     *
+     * @return void
+     */
+    protected function clearBreadcrumbs(): void {
+        $this->breadcrumbs = [];
+    }
+    
+    /**
+     * Get current breadcrumbs
+     *
+     * @return array
+     */
+    protected function getBreadcrumbs(): array {
+        return $this->breadcrumbs;
+    }
+    
     
     /**
      * Setup helper functions for Blade
      */
     protected function setupHelpers(): void {
-        // Ajout de la fonction route() pour générer des URLs
+        // Définir la fonction route() comme une fonction globale
+        if (!function_exists('route')) {
+            function route($name, $parameters = []) {
+                // Liste des routes disponibles avec leurs URLs correspondantes
+                $routes = [
+                    'partie.show' => '/partie?id=%d',
+                    'partie.create' => '/partie?action=create',
+                    'partie.edit' => '/parties?action=edit&id=%d',
+                    'receipts.show' => '/receipts?id=%d',
+                    'payments.pay' => '/payments?action=pay&id=%d',
+                    'payments.renew' => '/payments?action=renew'
+                ];
+                
+                // Si la route n'existe pas, retourner #
+                if (!isset($routes[$name])) {
+                    return '#';
+                }
+                
+                // Si des paramètres sont fournis, les insérer dans l'URL
+                $url = $routes[$name];
+                if (!empty($parameters) && is_array($parameters)) {
+                    // Pour simplifier, nous supposons que les paramètres sont dans l'ordre des %d dans l'URL
+                    $args = array_values($parameters);
+                    $url = vsprintf($url, $args);
+                }
+                
+                return $url;
+            }
+        }
+
+        if (!function_exists('isSessionDisplay')) {
+            function isSessionDisplay($object) {
+                // Liste des routes disponibles avec leurs URLs correspondantes
+                return $object instanceof SessionDisplay;
+            }
+        }
+        
+        // Partager la fonction route avec les vues Blade
         $this->viewFactory->share('route', function($name, $parameters = []) {
-            // Liste des routes disponibles avec leurs URLs correspondantes
-            $routes = [
-                'parties.show' => '/parties.php?id=%d',
-                'parties.create' => '/parties.php?action=create',
-                'parties.edit' => '/parties.php?action=edit&id=%d',
-                'receipts.show' => '/receipts.php?id=%d',
-                'payments.pay' => '/payments.php?action=pay&id=%d',
-                'payments.renew' => '/payments.php?action=renew'
-            ];
-            
-            // Si la route n'existe pas, retourner #
-            if (!isset($routes[$name])) {
-                return '#';
-            }
-            
-            // Si des paramètres sont fournis, les insérer dans l'URL
-            $url = $routes[$name];
-            if (!empty($parameters) && is_array($parameters)) {
-                // Pour simplifier, nous supposons que les paramètres sont dans l'ordre des %d dans l'URL
-                $args = array_values($parameters);
-                $url = vsprintf($url, $args);
-            }
-            
-            return $url;
+            return route($name, $parameters);
+        });
+        $this->viewFactory->share('isSessionDisplay', function($object) {
+            return isSessionDisplay($object);
         });
     }
 }

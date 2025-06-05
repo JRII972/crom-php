@@ -8,6 +8,7 @@
     "firebase/php-jwt": "^6.11",
     "ramsey/uuid": "^4.7",
     "illuminate/view": "^10.48",
-    "illuminate/filesystem": "^10.48"
+    "illuminate/filesystem": "^10.48",
+    "scssphp/scssphp": "^2.0"
   }
 }
