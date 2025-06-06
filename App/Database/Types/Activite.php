@@ -33,15 +33,27 @@ enum TypeCampagne: string
 }
 
 /**
+ * Enumération pour l'état d'une activité.
+ */
+enum EtatActivite: string
+{
+    case Active = 'ACTIVE';
+    case Fermer = 'FERMER';
+    case Terminer = 'TERMINER';
+    case Annuler = 'ANNULER';
+    case Supprimer = 'SUPPRIMER';
+}
+
+/**
  * Classe représentant une activite dans la base de données.
  */
 class Activite extends DefaultDatabaseType
-{
-    protected ?int $idJeu;
+{    protected ?int $idJeu;
     private ?string $nom;
     private ?Jeu $jeu = null;
     protected ?string $idMaitreJeu;
     private ?Utilisateur $maitreJeu = null;
+    private EtatActivite $etat = EtatActivite::Active;
     private TypeActivite $typeActivite;
     private ?TypeCampagne $typeCampagne = null;
     private ?string $descriptionCourte = null;
@@ -150,10 +162,9 @@ class Activite extends DefaultDatabaseType
 
         if ($data === false) {
             throw new PDOException('Activite non trouvée pour l\'ID : ' . $id);
-        }
-
-        $this->id = (int) $data['id'];
+        }        $this->id = (int) $data['id'];
         $this->nom = $data['nom'];
+        $this->etat = EtatActivite::from($data['etat']);
         $this->idJeu = (int) $data['id_jeu'];
         $this->idMaitreJeu = $data['id_maitre_jeu'];
         $this->typeActivite = TypeActivite::from($data['type_activite']);
@@ -174,12 +185,12 @@ class Activite extends DefaultDatabaseType
      * @throws PDOException En cas d'erreur SQL
      */
     public function save(): void
-    {
-        if (isset($this->id)) {
+    {        if (isset($this->id)) {
             // Mise à jour
             $stmt = $this->pdo->prepare('
                 UPDATE activites SET
                     nom = :nom,
+                    etat = :etat,
                     id_jeu = :id_jeu,
                     id_maitre_jeu = :id_maitre_jeu,
                     type_activite = :type_activite,
@@ -196,6 +207,7 @@ class Activite extends DefaultDatabaseType
             $stmt->execute([
                 'id' => $this->id,
                 'nom' => $this->nom,
+                'etat' => $this->etat->value,
                 'id_jeu' => $this->idJeu,
                 'id_maitre_jeu' => $this->idMaitreJeu,
                 'type_activite' => $this->typeActivite->value,
@@ -208,20 +220,20 @@ class Activite extends DefaultDatabaseType
                 'image' => $this->image ? $this->image->getFilePath() : null,
                 'texte_alt_image' => $this->texteAltImage
             ]);
-        } else {
-            // Insertion
+        } else {            // Insertion
             $stmt = $this->pdo->prepare('
                 INSERT INTO activites (
-                    nom, id_jeu, id_maitre_jeu, type_activite, type_campagne, description_courte,
+                    nom, etat, id_jeu, id_maitre_jeu, type_activite, type_campagne, description_courte,
                     description, nombre_max_joueurs, max_joueurs_session, verrouille, image, texte_alt_image
                 )
                 VALUES (
-                    :nom, :id_jeu, :id_maitre_jeu, :type_activite, :type_campagne, :description_courte,
+                    :nom, :etat, :id_jeu, :id_maitre_jeu, :type_activite, :type_campagne, :description_courte,
                     :description, :nombre_max_joueurs, :max_joueurs_session, :verrouille, :image, :texte_alt_image
                 )
             ');
             $stmt->execute([
                 'nom' => $this->nom,
+                'etat' => $this->etat->value,
                 'id_jeu' => $this->idJeu,
                 'id_maitre_jeu' => $this->idMaitreJeu,
                 'type_activite' => $this->typeActivite->value,
@@ -445,11 +457,14 @@ class Activite extends DefaultDatabaseType
     public function getTypeActivite(): TypeActivite
     {
         return $this->typeActivite;
-    }
-
-    public function getTypeCampagne(): ?TypeCampagne
+    }    public function getTypeCampagne(): ?TypeCampagne
     {
         return $this->typeCampagne;
+    }
+
+    public function getEtat(): EtatActivite
+    {
+        return $this->etat;
     }
 
     public function getDescriptionCourte(): ?string
@@ -586,14 +601,18 @@ class Activite extends DefaultDatabaseType
     {
         $this->typeActivite = $typeActivite;
         return $this;
-    }
-
-    public function setTypeCampagne(?TypeCampagne $typeCampagne): self
+    }    public function setTypeCampagne(?TypeCampagne $typeCampagne): self
     {
         if ($typeCampagne !== null && $this->typeActivite !== TypeActivite::Campagne) {
             throw new InvalidArgumentException('Le type de campagne ne peut être défini que pour une activite de type CAMPAGNE.');
         }
         $this->typeCampagne = $typeCampagne;
+        return $this;
+    }
+
+    public function setEtat(EtatActivite $etat): self
+    {
+        $this->etat = $etat;
         return $this;
     }
 
@@ -807,10 +826,10 @@ class Activite extends DefaultDatabaseType
     }
 
     public function jsonSerialize(): array
-    {
-        return [
+    {        return [
             'id' => $this->getId(),
             'nom' => $this->nom,
+            'etat' => $this->getEtat()->value,
             'id_jeu' => $this->idJeu,
             'id_maitre_jeu' => $this->idMaitreJeu,
             'jeu' => $this->getJeu()->jsonSerialize(),

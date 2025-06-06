@@ -88,7 +88,7 @@ label.selected {
     &:not(.active):not(.selected):not([aria-selected="true"]) {
       &::before {
         content: "";
-        margin-right: 1.125rem; // Compenser l'espace du checkmark
+        margin-right: 1.125rem;
         opacity: 0;
       }
     }

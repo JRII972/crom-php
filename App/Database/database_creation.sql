@@ -95,17 +95,11 @@ CREATE TABLE evenements (
   FOREIGN KEY (id_lieu) REFERENCES lieux(id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- === Périodes d'ouverture/fermeture de l'association ===
-CREATE TABLE periodes_association (
-  id               INT AUTO_INCREMENT PRIMARY KEY,
-  date_ouverture   DATE NOT NULL,
-  date_fermeture   DATE NOT NULL
-) ENGINE=InnoDB;
-
 -- === Activites proposées ===
 CREATE TABLE activites (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
+  etat                  ENUM('ACTIVE','FERMER','TERMINER','ANNULER', 'SUPPRIMER') NOT NULL DEFAULT 'ACTIVE',
   id_jeu                INT         NOT NULL,
   id_maitre_jeu         VARCHAR(36) NOT NULL,
   type_activite           ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') NOT NULL,
@@ -135,6 +129,7 @@ CREATE TABLE membres_activite (
 CREATE TABLE sessions (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
+  etat                  ENUM('OUVERTE','FERMER', 'COMPLETE', 'ANNULER', 'SUPPRIMER') NOT NULL DEFAULT 'OUVERTE',
   id_activite             INT         NOT NULL,
   id_lieu               INT         NOT NULL,
   date_session          DATE        NOT NULL,

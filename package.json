@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:css": "vite build --mode production",
-    "watch:css": "vite build --watch",
+    "build:css": "vite build --mode production && cp dist/module.css public/assets/css/module.css",
+    "watch:css": "vite build --watch & npm run copy:css:watch",
+    "copy:css:watch": "while inotifywait -e modify dist/module.css 2>/dev/null; do cp dist/module.css public/assets/css/module.css; done",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -11,18 +11,30 @@ use InvalidArgumentException;
 use PDO;
 use PDOException;
 
+/**
+ * Enumération pour l'état d'une session.
+ */
+enum EtatSession: string
+{
+    case Ouverte = 'OUVERTE';
+    case Fermer = 'FERMER';
+    case Annuler = 'ANNULER';
+    case Supprimer = 'SUPPRIMER';
+    case Complete = 'COMPLETE';
+}
+
 //FIXME: add max_joueurs_session
 
 /**
  * Classe représentant une session dans la base de données.
  */
 class Session extends DefaultDatabaseType
-{
-    private ?int $idActivite;
+{    private ?int $idActivite;
     private ?Activite $activite = null;
     private ?int $idLieu;
     private ?Lieu $lieu = null;
     private string $nom;
+    private EtatSession $etat = EtatSession::Ouverte;
     private string $dateSession;
     private string $heureDebut;
     private string $heureFin;
@@ -116,6 +128,7 @@ class Session extends DefaultDatabaseType
         $this->idActivite = (int) $data['id_activite'];
         $this->idLieu = (int) $data['id_lieu'];
         $this->nom = $data['nom'] ?? 'Session'; // Valeur par défaut si colonne nom n'existe pas
+        $this->etat = EtatSession::from($data['etat']);
         $this->dateSession = $data['date_session'];
         $this->heureDebut = $data['heure_debut'];
         $this->heureFin = $data['heure_fin'];
@@ -137,6 +150,7 @@ class Session extends DefaultDatabaseType
                     id_activite = :id_activite,
                     id_lieu = :id_lieu,
                     nom = :nom,
+                    etat = :etat,
                     date_session = :date_session,
                     heure_debut = :heure_debut,
                     heure_fin = :heure_fin,
@@ -150,6 +164,7 @@ class Session extends DefaultDatabaseType
                 'id_activite' => $this->idActivite,
                 'id_lieu' => $this->idLieu,
                 'nom' => $this->nom,
+                'etat' => $this->etat->value,
                 'date_session' => $this->dateSession,
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
@@ -160,16 +175,17 @@ class Session extends DefaultDatabaseType
         } else {            // Insertion
             $stmt = $this->pdo->prepare('
                 INSERT INTO sessions (
-                    id_activite, id_lieu, nom, date_session, heure_debut, heure_fin, id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
+                    id_activite, id_lieu, nom, etat, date_session, heure_debut, heure_fin, id_maitre_jeu, nombre_max_joueurs, max_joueurs_session
                 )
                 VALUES (
-                    :id_activite, :id_lieu, :nom, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :nombre_max_joueurs, :max_joueurs_session
+                    :id_activite, :id_lieu, :nom, :etat, :date_session, :heure_debut, :heure_fin, :id_maitre_jeu, :nombre_max_joueurs, :max_joueurs_session
                 )
             ');
             $stmt->execute([
                 'id_activite' => $this->idActivite,
                 'id_lieu' => $this->idLieu,
                 'nom' => $this->nom,
+                'etat' => $this->etat->value,
                 'date_session' => $this->dateSession,
                 'heure_debut' => $this->heureDebut,
                 'heure_fin' => $this->heureFin,
@@ -465,11 +481,14 @@ class Session extends DefaultDatabaseType
             }
         }
         return $this->lieu;
-    }
-
-    public function getNom(): string
+    }    public function getNom(): string
     {
         return $this->nom;
+    }
+
+    public function getEtat(): EtatSession
+    {
+        return $this->etat;
     }
 
     public function getDateSession(): string
@@ -660,14 +679,18 @@ class Session extends DefaultDatabaseType
             $this->lieu = null; // Lazy loading
         }
         return $this;
-    }
-
-    public function setNom(string $nom): self
+    }    public function setNom(string $nom): self
     {
         if (empty(trim($nom))) {
             throw new InvalidArgumentException('Le nom de la session ne peut pas être vide.');
         }
         $this->nom = trim($nom);
+        return $this;
+    }
+
+    public function setEtat(EtatSession $etat): self
+    {
+        $this->etat = $etat;
         return $this;
     }
 
@@ -747,12 +770,12 @@ class Session extends DefaultDatabaseType
     // Helper Methods
 
     public function jsonSerialize(): array
-    {
-        return [
+    {        return [
             'id' => $this->getId(),
             'id_activite' => $this->idActivite,
             'id_lieu' => $this->idLieu,
             'nom' => $this->getNom(),
+            'etat' => $this->getEtat()->value,
             'activite' => $this->getActivite()->jsonSerialize(),
             'lieu' => $this->getLieu()->jsonSerialize(),
             'date_session' => $this->getDateSession(),

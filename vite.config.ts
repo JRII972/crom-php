@@ -8,8 +8,10 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  publicDir: false, // Désactive la copie automatique du dossier public
   build: {
-    outDir: 'public/assets/css',
+    outDir: 'dist',
+    emptyOutDir: true,
     rollupOptions: {
       input: {
         main: './src/main.css'
@@ -18,9 +20,9 @@ export default defineConfig({
         // Customize asset file names
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === "main.css") {
-            return "module.css"; // Specify your desired CSS file name
+            return "module.css"; // Directement à la racine du dist
           }
-          return "assets/[name]-[hash][extname]"; // Default for other assets
+          return "[name]-[hash][extname]"; // Default for other assets
         },
       },
     },

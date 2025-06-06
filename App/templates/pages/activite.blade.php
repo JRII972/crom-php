@@ -2,9 +2,9 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
   {{-- Colonne de gauche - Image et info de base --}}
-  <div class="col-span-1">
+  <div class="col-span-1 hidden md:block">
     {{-- Informations de base de la activite --}}
     @include('components.activite.info-activite', ['activite' => $activite ?? []])
     
@@ -25,6 +25,10 @@
         
         {{-- Liste des sessions --}}
         @include('components.activite.liste-sessions', ['sessions' => $sessions ?? [], 'activeTab' => $activeTab])
+
+        @include('components.activite.gestion-jouers', ['activeTab' => $activeTab])
+
+        @include('components.activite.gestion-session', ['sessions' => $sessions ?? [], 'activeTab' => $activeTab])
       </div>
     </div>
   </div>

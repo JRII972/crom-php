@@ -1,7 +1,13 @@
 /* Point d'entrée principal pour les styles */
-@tailwind base;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+  themes: all;
+}
+
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
 /* Import des styles SCSS personnalisés */
 @import '../public/assets/scss/index.scss';

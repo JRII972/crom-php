@@ -31,7 +31,11 @@ class ActiviteController extends BaseController {
             'maitre_de_jeu' => $activite->getMaitreJeu(),
             'sessions' => $activite->getSessions(), // TODO: Récupérer les sessions de cette activite
             'joueurs' => $activite->getJoueursInscrits(), // TODO: Récupérer les joueurs de cette activite
-            'activeTab' => 'description'
+            'activeTab' => 'description',
+
+            'scripts' => [
+                'activite-detail.js'
+            ]
         ];
 
         $this->addBreadcrumb($activite->getNom());       
