@@ -1,0 +1,7 @@
+/* Point d'entrée principal pour les styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import des styles SCSS personnalisés */
+@import '../public/assets/scss/index.scss';

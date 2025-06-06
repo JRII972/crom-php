@@ -9,16 +9,27 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
+    outDir: 'public/assets/css',
     rollupOptions: {
+      input: {
+        main: './src/main.css'
+      },
       output: {
         // Customize asset file names
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === "index.css") {
-            return "assets/module.css"; // Specify your desired CSS file name
+          if (assetInfo.name === "main.css") {
+            return "module.css"; // Specify your desired CSS file name
           }
           return "assets/[name]-[hash][extname]"; // Default for other assets
         },
       },
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./public/assets/scss/index.scss";`
+      }
+    }
+  }
 })

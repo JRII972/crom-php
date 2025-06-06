@@ -8,7 +8,7 @@
     </div>
     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
       <h2 class="card-title text-2xl mb-1" id="activite-nom">{{ $activite->getNom() }}</h2>
-      <p class="badge badge-sm badge-secondary opacity-80" id="activite-jeu">Jeu: {{ $activite->getJeu()->getNom() }}</p>
+      <p class="badge badge-sm badge-secondary" id="activite-jeu">Jeu: {{ $activite->getJeu()->getNom() }}</p>
     </div>
   </figure>
   
@@ -37,21 +37,21 @@
     {{-- Informations de session --}}
     <div class="flex flex-col gap-2">
       <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 9.75v7.5" />
         </svg>
         <span id="activite-date-creation">Créée le {{ $activite->getDateCreation() ?? '15 Mai 2025' }}</span>
       </div>
       
       <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
         </svg>
         <span id="activite-joueurs-max">{{ $activite->getMaxJoueurs() ?? '5' }} joueurs maximum</span>
       </div>
       
       <div class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-primary">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
           <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
         </svg>
@@ -59,26 +59,32 @@
       </div>
       
       <div class="flex items-center gap-2">
-        <span class="material-symbols-outlined">info</span>
+        <span class="material-symbols-outlined ">info</span>
         <span id="activite-lieu">{{ $activite->getStatutFormatted() }}</span>
       </div>
     </div>
     
     {{-- Bouton d'inscription pour les campagnes --}}
+    @if (!$activite->isLocked()) 
     <div class="card-actions justify-end mt-6" id="inscription-activite-container">
       <button class="btn btn-primary w-full" id="inscription-activite-btn">S'inscrire à cette campagne</button>
     </div>
+    @endif
     
+    @if (!$activite->isLocked()) 
     {{-- Notification d'inscription requise pour campagnes fermées --}}
     <div class="alert alert-warning mt-4 hidden" id="inscription-required-alert">
       <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
       <span>L'inscription à cette campagne est requise pour participer aux sessions.</span>
     </div>
+    @endif
     
     {{-- Notification de campagne complète --}}
-    <div class="alert alert-error mt-4 hidden" id="campagne-complete-alert">
+    @if ($activite->isLocked())    
+    <div class="alert alert-error mt-4 " id="campagne-complete-alert">
       <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
       <span>Cette campagne est complète. Vous ne pouvez plus vous y inscrire.</span>
     </div>
+    @endif
   </div>
 </div>
