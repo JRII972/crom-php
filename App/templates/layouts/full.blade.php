@@ -23,8 +23,8 @@
         @include('components.navigation.navbar')
 
         {{-- Main content --}}
-        <main class="flex-1 bg-base-100 px-4 " id="root">
-          <div class="mx-auto w-full lg:max-w-[1200px] py-6">
+        <main class="flex-1 bg-base-100 " id="root">
+          <div class="mx-auto w-full pb-6">
             @yield('content')
           </div>            
         </main>

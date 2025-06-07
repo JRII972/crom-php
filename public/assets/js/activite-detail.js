@@ -550,3 +550,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }, 100);
 });
+
+$(document).ready(function() {
+    // Get the height of the element
+    var height = $('#activite-card-info').outerHeight();
+    var parentHeight = $('#activite-card-info').parent().outerHeight();
+    
+    // Set the CSS custom property
+    document.documentElement.style.setProperty('--activite-card-player-h', parentHeight - height + 'px');
+});

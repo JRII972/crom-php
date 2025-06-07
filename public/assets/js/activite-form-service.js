@@ -4,7 +4,7 @@
  */
 
 // Exemple d'intégration avec votre API existante
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from './api/axiosInstance.js';
 
 export class ActiviteFormService {
     

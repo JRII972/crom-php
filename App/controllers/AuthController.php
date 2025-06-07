@@ -13,6 +13,7 @@ class AuthController extends BaseController {
      */
     public function index(): string {
         // Vérifier si l'utilisateur est déjà connecté
+        
         if (isset($_SESSION['user_id'])) {
             // Rediriger vers le tableau de bord ou la page d'accueil
             if (isset($_GET['redirect']) && !empty($_GET['redirect'])) {

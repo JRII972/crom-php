@@ -12,7 +12,7 @@
       Joueurs inscrits
     </h3>
     <div class="divider my-1"></div>
-    <ul class="space-y-3" id="liste-joueurs">
+    <ul class="space-y-3 max-h-[310px] overflow-auto" id="liste-joueurs">
       @if(isset($joueurs) && count($joueurs) > 0)
         @foreach($joueurs as $joueur)
           <li class="flex items-center gap-3">

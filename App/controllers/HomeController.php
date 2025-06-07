@@ -8,6 +8,7 @@ use App\Controllers\Class\ActiviteDisplay;
 use App\Database\Types\Genre;
 use App\Database\Types\Activite;
 use App\Database\Types\TypeActivite;
+use App\Database\Types\Utilisateur;
 
 class HomeController extends BaseController {
     /**
@@ -17,6 +18,7 @@ class HomeController extends BaseController {
      */
     
     public function index() {
+        
         // Data to pass to the template
         $data = [
             'page_title' => 'CROM | BDR',

@@ -30,6 +30,7 @@ class ActiviteController extends BaseController {
             'jeu' => $activite->getJeu(),
             'maitre_de_jeu' => $activite->getMaitreJeu(),
             'sessions' => $activite->getSessions(), // TODO: Récupérer les sessions de cette activite
+            'nextSessions' => $activite->getNextSessions(), // TODO: Récupérer les sessions de cette activite
             'joueurs' => $activite->getJoueursInscrits(), // TODO: Récupérer les joueurs de cette activite
             'activeTab' => 'description',
 
@@ -41,5 +42,50 @@ class ActiviteController extends BaseController {
         $this->addBreadcrumb($activite->getNom());       
         
         return $this->render('pages.activite', $data);
+    }
+
+    public function create()
+    {
+        return $this->render('components.activite.form', [
+            'title' => 'Créer une nouvelle activite',
+        ]);
+    }
+
+    /**
+     * Affiche le formulaire de modification d'une activité
+     */
+    public function edit($id)
+    {
+        $activite = ActiviteDisplay::createSafe($id);
+        
+        // Si la activite n'existe pas, rediriger vers l'accueil
+        if ($activite === null) {
+            header('Location: /');
+            exit;
+        }
+        
+        return $this->render('pages.form.activite-form', [
+            'title' => 'Modifier une activite',
+            'activite' => $activite,
+
+            'scripts' => [
+            ]
+        ]);
+    }
+
+    /**
+     * Traite la création d'une activité
+     */
+    public function store()
+    {
+        // TODO: validation et création
+    }
+
+    /**
+     * Traite la modification d'une activité
+     */
+    public function update($id)
+    {
+        // TODO: validation et mise à jour
     }
 }

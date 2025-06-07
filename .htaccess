@@ -14,6 +14,12 @@ RewriteRule ^ - [L]
 # Redirect static assets to /public/
 RewriteRule ^(assets|data|fonts)/(.*)$ public/$1/$2 [L]
 
+# Rediriger les appels JavaScript sans extension vers leurs fichiers .js
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/assets/js/%{REQUEST_URI}\.(js)$ -f
+RewriteRule ^assets/js/(.*)$ public/assets/js/$1.js [L]
+
 # For frontend routes, redirect to corresponding files in public directory
 
 # Rediriger /nom vers public/nom.php si ce fichier existe
@@ -22,17 +28,32 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
 RewriteRule ^([^/]+)$ public/$1.php [L]
 
+# Rediriger /nom ou /nom/... vers public/nom/index.php si ce fichier existe
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/public/$1/index.php -f
-RewriteRule ^(.*)$ public/$1/index.php [L]
+RewriteRule ^(.+)$ public/$1/index.php [L]
+
+# Rediriger récursivement /nom/.../element vers public/nom/.../element.php si ce fichier existe
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
+RewriteRule ^(.+)/([^/]+)$ public/$1.php [L]
+
+# Rediriger /nom/.../element/ vers public/nom/.../element/index.php si ce fichier existe
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/$1/index.php -f
+RewriteRule ^(.+)$ public/$1/index.php [L]
+
+# Si public/nom/.../element/index.php n'existe pas mais public/nom/.../element.php existe, rediriger vers ce dernier
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/public/$1.php -f
+RewriteRule ^(.+)$ public/$1.php [L]
 
 # Fallback global : tout le reste va sur public/index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ public/index.php [L]
 
-# Rediriger la racine / vers public/index.php si aucun fichier n'est trouvé
-RewriteCond %{REQUEST_URI} ^/$
-RewriteCond %{DOCUMENT_ROOT}/public/index.php -f
-RewriteRule ^$ public/index.php [L]

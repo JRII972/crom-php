@@ -20,6 +20,14 @@
         @php $activeTab = $activeTab ?? 'description'; @endphp
         @include('components.activite.onglets', ['activeTab' => $activeTab, 'sessions' => $sessions ?? []])
         
+        <div id="tab-content-detail" class="py-4 md:hidden">          
+          @include('components.activite.info-activite', ['activite' => $activite ?? []])
+          
+          {{-- Liste des joueurs inscrits --}}
+          @include('components.activite.liste-joueurs', ['joueurs' => $joueurs ?? []])
+        </div>
+        
+        
         {{-- Description de la activite --}}
         @include('components.activite.description-activite', ['activite' => $activite ?? []])
         
@@ -33,6 +41,9 @@
     </div>
   </div>
 </div>
+
+@include('components.activite.modal-session')
+
 @endsection
 
 @section('scripts')

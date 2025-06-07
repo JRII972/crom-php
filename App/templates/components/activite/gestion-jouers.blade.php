@@ -1,9 +1,8 @@
 <div id="tab-content-gestion-joueurs" class="py-4 {{ $activeTab === 'sessions' ? '' : 'hidden' }}">
-  <h3 class="text-lg font-bold mb-4">List des joueur</h3>
+  <h3 class="text-lg font-bold mb-4">Liste des joueurs</h3>
 
   <div class="overflow-x-auto">
     <table class="table">
-      <!-- head -->
       <thead>
         <tr>
           <th>Nom</th>
@@ -13,36 +12,42 @@
         </tr>
       </thead>
       <tbody>
-        <!-- row 1 -->
-        <tr>
-          <td>
-            <div class="flex items-center gap-3">
-              <div class="avatar">
-                <div class="mask mask-squircle h-12 w-12">
-                  <img src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                    alt="Avatar Tailwind CSS Component" />
+        @if(isset($joueurs) && count($joueurs) > 0)
+          @foreach($joueurs as $joueur)
+            <tr>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="mask mask-squircle h-12 w-12">
+                      <img src="{{ $joueur->getImageURL() }}" alt="{{ $joueur->getImageALT() }}" />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="font-bold">{{ $joueur->getNom() }}</div>
+                    <div class="text-sm opacity-50">{{ $joueur->displayName() ?? '' }}</div>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div class="font-bold">Hart Hagerty</div>
-                <div class="text-sm opacity-50">United States</div>
-              </div>
-            </div>
-          </td>
-          <td class="invisible md:visible">
-            Zemlak, Daniel and Leannon
-            <br />
-            <span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
-          </td>
-          <td>
-            <button class="btn btn-soft btn-xs btn-info">Discord</button>
-          </td>
-          <td>
-            <button class="btn btn-outline btn-xs btn-warning">Désinscrire</button>
-          </td>
-        </tr>
+              </td>
+              <td class="invisible md:visible">
+                INFO<br />
+                <span class="badge badge-ghost badge-sm">Rôle</span>
+              </td>
+              <td>
+                @if($joueur->getIdDiscord())
+                  <a href="#" class="btn btn-soft btn-xs btn-info" target="_blank">Discord</a>
+                @endif
+              </td>
+              <td>
+                <button class="btn btn-outline btn-xs btn-warning">Désinscrire</button>
+              </td>
+            </tr>
+          @endforeach
+        @else
+          <tr>
+            <td colspan="4" class="text-center">Aucun joueur inscrit.</td>
+          </tr>
+        @endif
       </tbody>
-      <!-- foot -->
       <tfoot>
         <tr>
           <th>Nom</th>

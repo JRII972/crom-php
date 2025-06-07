@@ -5,12 +5,14 @@
   
   {{-- Liste des sessions --}}
   <div class="space-y-6">
-    @if(isset($sessions) && count($sessions) > 0)
-      @foreach($sessions as $session)
-        @if ($session->getDateSession() >= date('Y-m-d'))
-          @include('components.activite.session-item', ['session' => $session])        
-        @endif
-      @endforeach
-    @endif
+    @forelse($nextSessions as $session)
+      @if ($session->getDateSession() >= date('Y-m-d'))
+        @include('components.activite.session-item', ['session' => $session])        
+      @endif
+    @empty
+    <div>
+      <h4 class="text"> Pas de prochaines sessions programmé :(</h4>
+    </div>
+    @endforelse
   </div>
 </div>

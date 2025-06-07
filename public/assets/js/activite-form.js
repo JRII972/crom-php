@@ -1,3 +1,5 @@
+import jeuService from "./api/services/jeuService";
+
 /**
  * Gestionnaire pour la création et édition de activites
  */
@@ -269,23 +271,20 @@ class ActiviteFormManager {
             const finalHeight = Math.max(200, Math.min(availableHeight - 20, 600));
             editorContainer.style.height = finalHeight + 'px';
         }
-    }
-
-    /**
+    }    /**
      * Charge les données des jeux depuis l'API
      */
     async loadGameData() {
         try {
-            // Simuler un appel API - remplacer par votre endpoint
-            const response = await fetch('/api/jeux');
-            const jeux = await response.json();
+            // Appel à l'API via jeuService
+            const jeux = await jeuService.listJeux();
             
             // Ajouter les jeux à Selectize
             this.selectizeJeu.clearOptions();
             jeux.forEach(jeu => {
                 this.selectizeJeu.addOption(jeu);
-                if (jeu.image) {
-                    this.gameImageCache.set(jeu.id.toString(), jeu.image);
+                if (jeu.image && jeu.image.url) {
+                    this.gameImageCache.set(jeu.id.toString(), jeu.image.url);
                 }
             });
             
@@ -302,7 +301,11 @@ class ActiviteFormManager {
             
             demoGames.forEach(jeu => {
                 this.selectizeJeu.addOption(jeu);
-                this.gameImageCache.set(jeu.id.toString(), jeu.image);
+                if (jeu.image) {
+                    // Adapter le format pour correspondre à la structure attendue
+                    const imageUrl = typeof jeu.image === 'string' ? jeu.image : jeu.image.url;
+                    this.gameImageCache.set(jeu.id.toString(), imageUrl);
+                }
             });
         }
     }
@@ -345,7 +348,9 @@ class ActiviteFormManager {
 
         // Gérer l'image
         if (activite.image) {
-            document.getElementById('image_url').value = activite.image;
+            // Gérer le format d'image sous forme d'objet ou de string
+            const imageUrl = typeof activite.image === 'string' ? activite.image : (activite.image.url || '');
+            document.getElementById('image_url').value = imageUrl;
             document.querySelector('input[value="url"]').checked = true;
             this.handleImageSourceChange();
         }
@@ -501,7 +506,15 @@ class ActiviteFormManager {
         } else if (imageSource === 'game') {
             const selectedGameId = this.selectizeJeu?.getValue();
             if (selectedGameId && this.gameImageCache.has(selectedGameId)) {
-                formData.append('image', this.gameImageCache.get(selectedGameId));
+                // Préparer l'image pour l'API
+                const imageUrl = this.gameImageCache.get(selectedGameId);
+                formData.append('image', imageUrl);
+                
+                // Si on a besoin de fournir des métadonnées supplémentaires
+                const selectedGame = this.selectizeJeu?.getOption(selectedGameId);
+                if (selectedGame && selectedGame.nom) {
+                    formData.append('texte_alt_image', selectedGame.nom);
+                }
             }
         }
 

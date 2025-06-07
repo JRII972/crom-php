@@ -324,6 +324,28 @@ class ActiviteDisplay extends Activite
         }
     }
 
+    public function getNextSessions(): array {
+        try {
+            $sessions = [];
+
+            $stmt = $this->pdo->prepare('SELECT id FROM sessions WHERE id_activite = :id_activite AND date_session >= CURDATE() ORDER BY date_session ASC');
+            $stmt->execute(['id_activite' => $this->id]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results as $result) {
+                try {
+                    $sessions[] = new SessionDisplay($result['id']);
+                } catch (PDOException) {
+                    // Ignorer les sessions non trouvées
+                }
+            }
+
+            return $sessions;
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
     public function getStatutFormatted() : string {
         return $this->getVerrouille() ? "Fermer à l'inscription" : "Ouverte à l'inscription";
     }

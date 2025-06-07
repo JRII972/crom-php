@@ -4,8 +4,13 @@
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 use App\Controllers\Class\SessionDisplay;
 use App\Database\Database;
+use App\Database\Types\Utilisateur;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
@@ -57,6 +62,8 @@ abstract class BaseController {
             'Acceuil',
             '/'
         );
+
+        $this->registerCsrfFieldHelper();
     }
     
     /**
@@ -109,6 +116,20 @@ abstract class BaseController {
      * @return string Rendered HTML
      */
     protected function render(string $view, array $data = []): string {
+
+        $currentUser = null;
+
+        if (isset($_SESSION['user_id'])) {
+            try {
+                $currentUser = new Utilisateur($_SESSION['user_id']);
+            } catch (PDOException $e) {
+                // Si l'utilisateur n'existe pas ou erreur, on déconnecte et redirige
+                unset($_SESSION['user_id']);
+                $redirectUrl = '/login?redirect=' . urlencode($_SERVER['REQUEST_URI'] ?? '/');
+                header('Location: ' . $redirectUrl);
+                exit;
+            }
+        }
         
         // Ajout de variables globales disponibles dans toutes les vues
         $globalData = [
@@ -118,6 +139,7 @@ abstract class BaseController {
             'appVersion' => '1.0.0',
             'breadcrumbs' => $this->breadcrumbs,
             'currentYear' => date('Y'),
+            'currentUser' => $currentUser,
             // Liste des scripts JavaScript par défaut
             'scripts' => [
                 'utils.js',
@@ -264,6 +286,16 @@ abstract class BaseController {
         });
         $this->viewFactory->share('isSessionDisplay', function($object) {
             return isSessionDisplay($object);
+        });
+    }
+    
+    /**
+     * Fonction d'aide pour générer le champ CSRF dans les vues Blade
+     */
+    protected function registerCsrfFieldHelper(): void {
+        $this->viewFactory->share('csrf_field', function() {
+            $token = isset($_SESSION['_token']) ? htmlspecialchars($_SESSION['_token']) : '';
+            return '<input type="hidden" name="_token" value="' . $token . '">';
         });
     }
 }

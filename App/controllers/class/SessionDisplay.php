@@ -214,8 +214,4 @@ class SessionDisplay extends Session
         return $joueurs;
     }
 
-    public function isLocked():bool {
-        return $this->getMaxJoueurs() <= $this->getNombreJoueursInscrits();
-    }
-
 }

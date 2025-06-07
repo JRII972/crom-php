@@ -236,7 +236,7 @@ class UtilisateursApi extends APIHandler
 
                 $response['refresh_token'] = $refreshToken;
             }
-
+            $_SESSION['user_id'] = $utilisateur->getId();
             return $this->sendResponse(200, 'success', $response, 'Connexion réussie');
         } catch (PDOException $e) {
             return $this->sendResponse(500, 'error', null, 'Erreur serveur: ' . $e->getMessage());

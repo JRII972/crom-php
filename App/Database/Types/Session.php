@@ -657,6 +657,28 @@ class Session extends DefaultDatabaseType
         return $stmt->fetchColumn() > 0;
     }
 
+    // Vérifie si l'utilisateur est inscrit à la session
+    public function estInscrit(Utilisateur|string|null $utilisateurOuId): bool
+    {
+        if (is_null($utilisateurOuId)){
+            return false;
+        }
+        $id = $utilisateurOuId instanceof Utilisateur ? $utilisateurOuId->getId() : $utilisateurOuId;
+        foreach ($this->getJoueursSession() as $inscription) {
+            if (method_exists($inscription, 'getUtilisateur')) {
+                $joueur = $inscription->getUtilisateur();
+                if ($joueur instanceof Utilisateur && $joueur->getId() === $id) {
+                    return true;
+                }
+            } elseif (method_exists($inscription, 'getIdUtilisateur')) {
+                if ($inscription->getIdUtilisateur() === $id) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     // Setters
 
     public function setActivite(Activite|int $activite): self
@@ -768,6 +790,11 @@ class Session extends DefaultDatabaseType
         return $this;    }
 
     // Helper Methods
+
+    public function isLocked():bool {
+        // TODO: ajouter support de l'etat de l'activite pour definir le verouillage de la session
+        return ($this->getMaxJoueurs() <= $this->getNombreJoueursInscrits()) || ($this->getEtat() == EtatSession::Complete) || ($this->getEtat() == EtatSession::Fermer) || ($this->getEtat() == EtatSession::Supprimer);
+    }
 
     public function jsonSerialize(): array
     {        return [

@@ -846,4 +846,29 @@ class Activite extends DefaultDatabaseType
             'date_creation' => $this->getDateCreation(),
         ];
     }
+
+    // Vérifie si l'utilisateur est le maître de jeu de l'activité
+    public function estMaitreJeu(Utilisateur|string|null $utilisateurOuId): bool
+    {
+        if (is_null($utilisateurOuId)){
+            return false;
+        }
+        $id = $utilisateurOuId instanceof Utilisateur ? $utilisateurOuId->getId() : $utilisateurOuId;
+        return $this->idMaitreJeu === $id;
+    }
+
+    // Vérifie si l'utilisateur est inscrit dans la liste des membres de l'activité
+    public function estInscrit(Utilisateur|string|null $utilisateurOuId): bool
+    {
+        if (is_null($utilisateurOuId)){
+            return false;
+        }
+        $id = $utilisateurOuId instanceof Utilisateur ? $utilisateurOuId->getId() : $utilisateurOuId;
+        foreach ($this->getMembresActivite() as $membre) {
+            if ($membre instanceof Utilisateur && $membre->getId() === $id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -1,5 +1,5 @@
 {{-- Informations de base d'une activite (image, titre, type, places disponibles, etc.) --}}
-<div class="card bg-base-200 shadow-xl overflow-hidden">
+<div class="card bg-base-200 shadow-xl overflow-hidden" id="activite-card-info">
   {{-- Image de la activite --}}
   <figure class="relative">
     <img src="{{ $activite->getImageURL() }}" alt="{{ $activite->getImageALT() }}" class="w-full h-60 object-cover" />
@@ -16,9 +16,9 @@
     {{-- Type de campagne si applicable --}}
     <div class="flex gap-2 mb-4" id="campagne-info">
       @if($activite->getTypeCampagne())
-        <div class="badge badge-outline badge-accent" id="type-campagne-badge">{{ $activite->getTypeFormatted() }}</div>
+        <div class="badge badge-outline badge-accent badge-sm md:badge-md" id="type-campagne-badge">{{ $activite->getTypeFormatted() }}</div>
       @endif
-      <div class="badge badge-outline" id="activite-place-badge">{{ $activite->getNombreJoueursInscrits() }}/{{ $activite->getMaxJoueurs()}} places</div>
+      <div class="badge badge-outline badge-sm md:badge-md" id="activite-place-badge">{{ $activite->getNombreJoueursInscrits() }}/{{ $activite->getMaxJoueurs()}} places</div>
     </div>
     
     {{-- Maître du jeu --}}
@@ -64,27 +64,46 @@
       </div>
     </div>
     
-    {{-- Bouton d'inscription pour les campagnes --}}
-    @if (!$activite->isLocked()) 
-    <div class="card-actions justify-end mt-6" id="inscription-activite-container">
-      <button class="btn btn-primary w-full" id="inscription-activite-btn">S'inscrire à cette campagne</button>
-    </div>
-    @endif
-    
-    @if (!$activite->isLocked()) 
-    {{-- Notification d'inscription requise pour campagnes fermées --}}
-    <div class="alert alert-warning mt-4 hidden" id="inscription-required-alert">
-      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-      <span>L'inscription à cette campagne est requise pour participer aux sessions.</span>
-    </div>
-    @endif
-    
     {{-- Notification de campagne complète --}}
-    @if ($activite->isLocked())    
-    <div class="alert alert-error mt-4 " id="campagne-complete-alert">
-      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-      <span>Cette campagne est complète. Vous ne pouvez plus vous y inscrire.</span>
-    </div>
+    @if ($activite->getVerrouille())    
+      <div class="alert alert-error mt-4 " id="campagne-complete-alert">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Cette campagne n'est plus ouverte à l'inscription. Contacter le maître de jeu</span>
+      </div>
+    @elseif ($activite->isLocked())    
+      <div class="alert alert-error mt-4 " id="campagne-complete-alert">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span>Cette campagne est complète. Vous ne pouvez plus vous y inscrire.</span>
+      </div>
+    @elseif ($activite->estInscrit($currentUser))    
+        <div class="card-actions justify-end mt-6" id="inscription-activite-container">
+          <button class="btn btn-primary w-full" id="inscription-activite-btn">Se désinscrire</button>
+        </div>
+    @else
+      {{-- Bouton d'inscription pour les campagnes --}}
+      <div class="card-actions justify-end mt-6" id="inscription-activite-container">
+        <button class="btn btn-primary w-full" id="inscription-activite-btn">S'inscrire à cette campagne</button>
+      </div>
+      {{-- Notification d'inscription requise pour campagnes fermées --}}
+      <div class="alert alert-warning mt-4 hidden" id="inscription-required-alert">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <span>L'inscription à cette campagne est requise pour participer aux sessions.</span>
+      </div> 
+    @endif
+
+    @if ($activite->estMaitreJeu($currentUser))
+    <a class="alert alert-secondary mt-4 hidden" href="/activite/edit?id={{ $activite->getId() }}">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+      <span>Modifier</span>
+    </a> 
+    <button class="btn btn-secondary w-full mt-2" id="ajouter-session-btn"
+      onclick="document.getElementById('modal-ajouter-session').showModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+        stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+      Ajouter une session
+    </button>
     @endif
   </div>
 </div>

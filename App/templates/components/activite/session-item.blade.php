@@ -14,7 +14,11 @@
         @endif
       </div>
       <div>
-        <button class="btn btn-primary btn-sm">S'inscrire</button>
+        @if ( $session->getNombreJoueursInscrits() >=  $session->getMaxJoueurs())
+          <button class="btn btn-primary btn-sm btn-disabled">Complet</button>
+        @elseif( !$session->isLocked())
+          <button class="btn btn-secondary btn-sm">S'inscrire</button>
+        @endif
       </div>
     </div>
     
