@@ -1,0 +1,21 @@
+nav:
+  - Vue d'ensemble: index.md
+  - Base ORM: DefaultDatabaseType-base.md
+  - Entités principales:
+    - Utilisateur: Utilisateur-user.md
+    - Activité: Activite-main.md
+    - Session: Session-core.md
+  - Contenu ludique:
+    - Jeu: Jeu.md
+    - Genre: Genre.md
+  - Géographique:
+    - Lieu: Lieu.md
+    - Événement: Evenement.md
+    - Horaires: HorairesLieu.md
+  - Relations:
+    - Joueurs-Session: JoueursSession.md
+    - Membres: MembreActivite.md
+    - Créneaux: CreneauxUtilisateur.md
+  - HelloAsso:
+    - Paiements: PaiementsHelloasso.md
+    - Notifications: NotificationsHelloasso.md

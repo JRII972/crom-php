@@ -1,0 +1,5 @@
+nav:
+  - Activités (API): ActiviteController.md
+  - Authentification (API): AuthController.md
+  - Page d’accueil (Controller): HomeController.md
+  - Profil utilisateur: ProfileController.md

@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: API de gestion des genres
+  version: 1.0.0
+paths:
+  /api/genre:
+    get:
+      summary: Liste tous les genres ou recherche par mot-clé
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: Mot-clé pour filtrer les genres
+      responses:
+        '200':
+          description: Liste des genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+    post:
+      summary: Crée un nouveau genre
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  maxLength: 100
+              required: [nom]
+      responses:
+        '201':
+          description: Genre créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Données invalides
+        '409':
+          description: Genre déjà existant
+  /api/genre/{id}:
+    get:
+      summary: Récupère un genre par ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Détails du genre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '404':
+          description: Genre non trouvé
+    put:
+      summary: Met à jour un genre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nom:
+                  type: string
+                  maxLength: 100
+              required: [nom]
+      responses:
+        '200':
+          description: Genre mis à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+        '400':
+          description: Données invalides
+        '404':
+          description: Genre non trouvé
+        '409':
+          description: Genre déjà existant
+    delete:
+      summary: Supprime un genre
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Genre supprimé
+        '404':
+          description: Genre non trouvé
+components:
+  schemas:
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+        nom:
+          type: string
+          maxLength: 100
+      required: [id, nom]

@@ -1,9 +1,15 @@
-Voici la traduction en français des endpoints proposés pour l'API, en conservant la structure et la logique décrites précédemment. Les descriptions, rôles requis et corps/paramètres restent inchangés, seule la terminologie des endpoints est traduite pour correspondre à un contexte francophone.
+# API REST - Endpoints complets
 
----
+!!! info "Documentation API"
+    Voici la spécification complète des endpoints de l'API REST pour l'application de gestion d'activités ludiques.
 
-### **1. Utilisateurs**
-Gérer les utilisateurs (inscription, connexion, profil, disponibilités).
+!!! warning "Authentification"
+    Les rôles requis sont : **Aucun** (public), **INSCRIT** (utilisateur connecté), **ADMIN** (administrateur).
+
+## 1. Utilisateurs
+
+!!! abstract "Gestion des utilisateurs"
+    Endpoints pour l'inscription, connexion, profil et disponibilités des utilisateurs.
 
 | Méthode | Endpoint | Description | Rôle requis | Corps/Paramètres |
 |---------|------------------------------|-------------------------------------------|------------------|-------------------|

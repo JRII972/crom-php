@@ -1,0 +1,12 @@
+nav:
+  - Accueil: index.md
+  - Contexte du projet: README.md
+  - Architecture: Architecture/
+  - Interface utilisateur (Frontend): Frontend/
+  - Côté serveur (Backend): Backend/
+  - Modules spécialisés:
+    - Base de données: Database-Directory/
+    - Gabarits: Templates-Directory/
+    - Contrôleurs: Controllers/
+    - API: api/
+  - Guides d'utilisation: Guides/

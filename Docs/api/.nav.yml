@@ -1,0 +1,16 @@
+nav:
+  - Vue d'ensemble: api.md
+  - Endpoints:
+    - Activités: activites_endpoints.markdown
+    - Événements: evenements_endpoints.markdown
+    - Genres: genres_endpoints.markdown
+    - Jeux: jeux_endpoints.markdown
+    - Lieux: lieux_endpoints.markdown
+    - Paiements: paiements_endpoints.markdown
+    - Sessions: sessions_endpoints.markdown
+    - Utilisateurs: utilisateurs_endpoints.markdown
+  - Spécifications:
+    - Jeu: jeu.md
+    - OpenAPI Genre: genre_openAPI.yaml
+  - Gestion d'erreurs: Exception.md
+  - Guide API: README.markdown

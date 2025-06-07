@@ -1,0 +1,8 @@
+title: Frontend
+nav:
+  - Introduction: index.md
+  - Moteurs de templates: Template-Engines.md
+  - Templates Blade: Blade-Templates.md
+  - Composants d'affichage: Classes-Display.md
+  - DaisyUI & Tailwind CSS: DaisyUI-Tailwind.md
+  - Construction du frontend: Frontend-Build.md

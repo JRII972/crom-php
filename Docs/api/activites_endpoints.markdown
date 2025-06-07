@@ -1,18 +1,27 @@
-# Activites API Endpoints
+# API Activités - Endpoints
 
-This document describes the endpoints for managing game activites and their members in the role-playing game system.
+Cette documentation décrit les endpoints pour la gestion des activités de jeu et de leurs membres dans le système de jeu de rôle.
 
-## Base Path
+!!! info "API REST"
+    L'API suit les conventions REST avec des réponses JSON standardisées.
+
+## Chemin de base
 `/api/activites`
 
-## Endpoints
+!!! tip "Authentification"
+    La plupart des endpoints nécessitent une authentification JWT via l'en-tête `Authorization: Bearer <token>`.
 
-### Get a Party by ID
-- **Method**: GET
-- **Path**: `/api/activites/{id}`
-- **Permissions**: None (public access)
-- **Path Parameters**:
-  - `id` (integer, required): The ID of the party
+## Endpoints disponibles
+
+### Récupérer une activité par ID
+
+!!! example "GET /api/activites/{id}"
+    **Méthode**: GET  
+    **Chemin**: `/api/activites/{id}`  
+    **Permissions**: Aucune (accès public)
+
+**Paramètres de chemin**:
+- `id` (integer, requis): L'ID de l'activité
 - **Response**:
   - **200 Success**: Returns party details
     ```json

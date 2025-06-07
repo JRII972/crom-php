@@ -1,0 +1,7 @@
+title: Architecture
+nav:
+  - Vue d'ensemble: index.md
+  - Architecture générale: Structure.md
+  - Répertoire application: App-Directory.md
+  - Répertoire public: Public-Directory.md
+  - Programmation orientée objet: Programmation-Orientee-Objet.md
