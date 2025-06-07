@@ -5,4 +5,3 @@ require_once __DIR__ . '/../app/controllers/HomeController.php';
 
 $controller = new HomeController();
 echo $controller->index();
-var_dump
