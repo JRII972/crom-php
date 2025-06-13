@@ -75,7 +75,7 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
+        window.location.href = '/login?redirect=' + window.location.pathname;
         return Promise.reject(refreshError);
       }
     }
@@ -98,5 +98,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;

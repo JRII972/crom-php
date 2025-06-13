@@ -1,14 +1,10 @@
 <?php
-// Base controller with Blade template engine setup
-// filepath: /var/www/html/App/controllers/BaseController.php
+namespace App\Controllers;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../Utils/helpers.php';
+require_once __DIR__ . '/Utils/helpers.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-use App\Controllers\Class\SessionDisplay;
 use App\Database\Database;
 use App\Database\Types\Utilisateur;
 use Illuminate\Container\Container;
@@ -17,121 +13,95 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\Engines\CompilerEngine;
 use Illuminate\View\Engines\EngineResolver;
-use Illuminate\View\Engines\PhpEngine;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Carbon\Carbon;
+use PDO;
+use PDOException;
 
-abstract class BaseController {
+
+class BaseController
+{
     protected PDO $pdo;
-    /**
-     * @var Factory View factory instance
-     */
     protected $viewFactory;
-    
-    /**
-     * @var string Path to view templates
-     */
-    protected $viewsPath;
-    
-    /**
-     * @var string Path to compiled templates cache
-     */
-    protected $cachePath;
-
+    private string $viewsPath = __DIR__ . '/../templates';
+    private string $cachePath = __DIR__ . '/../cache';
     protected array $breadcrumbs;
-    
-    /**
-     * Initialize the controller with Blade template engine
-     */
-    public function __construct() {
-        // Configuration globale de Carbon pour utiliser le français
-        Carbon::setLocale('fr');        
+
+    public function __construct()
+    {
+        Carbon::setLocale('fr');
         setlocale(LC_TIME, "fr_FR.UTF-8");
-        
-        // Initialiser les breadcrumbs vides
         $this->breadcrumbs = [];
-        
-        $this->setupPaths();
-        $this->setupTemplateEngine();
-        $this->setupHelpers();
-
         $this->pdo = Database::getConnection();
-
-        $this->addBreadcrumb(
-            'Acceuil',
-            '/'
-        );
-
-        $this->registerCsrfFieldHelper();
+        $this->setupBlade();
     }
-    
+
     /**
-     * Setup template and cache paths
+     * Setup minimal Blade environment
      */
-    protected function setupPaths() {
-        $this->viewsPath = __DIR__ . '/../templates';
-        $this->cachePath = __DIR__ . '/../cache';
-        
-        // Ensure cache directory exists and is writable
+    protected function setupBlade(): void
+    {
+        // Ensure cache directory exists
         if (!is_dir($this->cachePath)) {
             mkdir($this->cachePath, 0777, true);
         }
-    }
-    
-    /**
-     * Setup the Blade template engine
-     */
-    protected function setupTemplateEngine() {
-        // Create necessary components
-        $filesystem = new Filesystem();
-        $eventDispatcher = new Dispatcher(new Container);
-        
-        // Create the engine resolver
-        $resolver = new EngineResolver();
-        
-        // Register PHP engine
-        $resolver->register('php', function () use ($filesystem) {
-            return new PhpEngine($filesystem);
-        });
-        
-        // Register Blade engine
-        $resolver->register('blade', function () use ($filesystem) {
-            $compiler = new BladeCompiler($filesystem, $this->cachePath);
-            return new CompilerEngine($compiler, $filesystem);
-        });
-        
-        // Create the view finder
-        $finder = new FileViewFinder($filesystem, [$this->viewsPath]);
-        
-        // Create the view factory
-        $this->viewFactory = new Factory($resolver, $finder, $eventDispatcher);
-    }
-    
-    /**
-     * Render a view with the given data
-     *
-     * @param string $view View name
-     * @param array $data Data to pass to the view
-     * @return string Rendered HTML
-     */
-    protected function render(string $view, array $data = []): string {
 
+        $container = new Container;
+        $filesystem = new Filesystem;
+        $eventDispatcher = new Dispatcher($container);
+
+        // Configure Blade compiler
+        $bladeCompiler = new BladeCompiler($filesystem, $this->cachePath);
+
+        // Set up engine resolver
+        $resolver = new EngineResolver;
+        $resolver->register('blade', function () use ($bladeCompiler) {
+            return new CompilerEngine($bladeCompiler);
+        });
+
+        // Set up view finder
+        $finder = new FileViewFinder($filesystem, [$this->viewsPath]);
+
+        // Create view factory
+        $this->viewFactory = new Factory($resolver, $finder, $eventDispatcher);
+        $this->viewFactory->setContainer($container);
+
+        // Share helper functions with Blade templates
+        $this->viewFactory->share('route', function ($name, $parameters = []) {
+            return route($name, $parameters);
+        });
+
+        $this->viewFactory->share('isSessionDisplay', function ($object) {
+            return isSessionDisplay($object);
+        });
+    }
+
+    /**
+     * Render a Blade template with given data
+     *
+     * @param string $view The name of the Blade view (without .blade.php)
+     * @param array $data Data to pass to the view
+     * @return string Rendered HTML content
+     */
+    protected function render(string $view, array $data = []): string
+    {
         $currentUser = null;
 
-        if (isset($_SESSION['user_id'])) {
+        // Basic authentication check
+        $authUser = getAuthenticatedUser();
+        if ($authUser) {
             try {
-                $currentUser = new Utilisateur($_SESSION['user_id']);
+                $currentUser = new Utilisateur($authUser['sub']);
             } catch (PDOException $e) {
-                // Si l'utilisateur n'existe pas ou erreur, on déconnecte et redirige
-                unset($_SESSION['user_id']);
+                clearJwtCookie();
                 $redirectUrl = '/login?redirect=' . urlencode($_SERVER['REQUEST_URI'] ?? '/');
                 header('Location: ' . $redirectUrl);
                 exit;
             }
         }
-        
-        // Ajout de variables globales disponibles dans toutes les vues
+
+        // Minimal global data
         $globalData = [
             'currentDateTime' => Carbon::now(),
             'currentDate' => Carbon::today(),
@@ -143,47 +113,27 @@ abstract class BaseController {
             // Liste des scripts JavaScript par défaut
             'scripts' => [
                 'utils.js',
-                'main.js'
+            ],
+            'modules' => [
+                'main.js',
+                'api/axiosInstance.js'
             ]
         ];
-        
-        // Fusion des données spécifiques à la vue avec les données globales
-        // Si des scripts supplémentaires sont fournis, les ajouter aux scripts par défaut
+
         if (isset($data['scripts']) && is_array($data['scripts'])) {
             $globalData['scripts'] = array_merge($globalData['scripts'], $data['scripts']);
-            unset($data['scripts']); // Éviter la duplication
+            unset($data['scripts']);
         }
-        
-        // Les données spécifiques ont priorité en cas de conflit de noms
+
+        if (isset($data['modules']) && is_array($data['modules'])) {
+            $globalData['modules'] = array_merge($globalData['modules'], $data['modules']);
+            unset($data['modules']);
+        }
+
         $mergedData = array_merge($globalData, $data);
-        
         return $this->viewFactory->make($view, $mergedData)->render();
     }
 
-    /**
-     * Add a custom Blade directive
-     *
-     * @param string $name Directive name
-     * @param callable $handler Directive handler
-     */
-    protected function addDirective(string $name, callable $handler): void {
-        // Note: Cette méthode pourrait nécessiter d'être adaptée selon l'implémentation exacte
-        if (method_exists($this->viewFactory->getEngineResolver()->resolve('blade'), 'getCompiler')) {
-            $blade = $this->viewFactory->getEngineResolver()->resolve('blade')->getCompiler();
-            $blade->directive($name, $handler);
-        }
-    }
-    
-    /**
-     * Add a shared variable available to all views
-     *
-     * @param string $key Variable name
-     * @param mixed $value Variable value
-     */
-    protected function share(string $key, $value): void {
-        $this->viewFactory->share($key, $value);
-    }
-    
     /**
      * Set breadcrumbs for the current page
      *
@@ -194,7 +144,7 @@ abstract class BaseController {
         // Valider la structure des breadcrumbs
         foreach ($breadcrumbs as $index => $breadcrumb) {
             if (!is_array($breadcrumb) || !isset($breadcrumb['titre'])) {
-                throw new InvalidArgumentException("Breadcrumb à l'index {$index} doit être un array avec au moins 'titre'");
+                throw new \InvalidArgumentException  ("Breadcrumb à l'index {$index} doit être un array avec au moins 'titre'");
             }
             
             // S'assurer que les clés sont cohérentes
@@ -236,66 +186,5 @@ abstract class BaseController {
      */
     protected function getBreadcrumbs(): array {
         return $this->breadcrumbs;
-    }
-    
-    
-    /**
-     * Setup helper functions for Blade
-     */
-    protected function setupHelpers(): void {
-        // Définir la fonction route() comme une fonction globale
-        if (!function_exists('route')) {
-            function route($name, $parameters = []) {
-                // Liste des routes disponibles avec leurs URLs correspondantes
-                $routes = [
-                    'activite.show' => '/activite?id=%d',
-                    'activite.create' => '/activite?action=create',
-                    'activite.edit' => '/activites?action=edit&id=%d',
-                    'receipts.show' => '/receipts?id=%d',
-                    'payments.pay' => '/payments?action=pay&id=%d',
-                    'payments.renew' => '/payments?action=renew'
-                ];
-                
-                // Si la route n'existe pas, retourner #
-                if (!isset($routes[$name])) {
-                    return '#';
-                }
-                
-                // Si des paramètres sont fournis, les insérer dans l'URL
-                $url = $routes[$name];
-                if (!empty($parameters) && is_array($parameters)) {
-                    // Pour simplifier, nous supposons que les paramètres sont dans l'ordre des %d dans l'URL
-                    $args = array_values($parameters);
-                    $url = vsprintf($url, $args);
-                }
-                
-                return $url;
-            }
-        }
-
-        if (!function_exists('isSessionDisplay')) {
-            function isSessionDisplay($object) {
-                // Liste des routes disponibles avec leurs URLs correspondantes
-                return $object instanceof SessionDisplay;
-            }
-        }
-        
-        // Partager la fonction route avec les vues Blade
-        $this->viewFactory->share('route', function($name, $parameters = []) {
-            return route($name, $parameters);
-        });
-        $this->viewFactory->share('isSessionDisplay', function($object) {
-            return isSessionDisplay($object);
-        });
-    }
-    
-    /**
-     * Fonction d'aide pour générer le champ CSRF dans les vues Blade
-     */
-    protected function registerCsrfFieldHelper(): void {
-        $this->viewFactory->share('csrf_field', function() {
-            $token = isset($_SESSION['_token']) ? htmlspecialchars($_SESSION['_token']) : '';
-            return '<input type="hidden" name="_token" value="' . $token . '">';
-        });
     }
 }

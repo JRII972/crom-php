@@ -1,8 +1,9 @@
 <?php
 // Contrôleur pour la page de connexion
-// filepath: /var/www/html/App/controllers/AuthController.php
 
-require_once __DIR__ . '/BaseController.php';
+namespace App\Controllers;
+
+require_once __DIR__ . '/../Utils/helpers.php';
 
 class AuthController extends BaseController {
     
@@ -12,9 +13,10 @@ class AuthController extends BaseController {
      * @return string Rendu HTML de la page
      */
     public function index(): string {
-        // Vérifier si l'utilisateur est déjà connecté
+        // Vérifier si l'utilisateur est déjà connecté via les cookies JWT
+        $authenticatedUser = getAuthenticatedUser();
         
-        if (isset($_SESSION['user_id'])) {
+        if ($authenticatedUser) {
             // Rediriger vers le tableau de bord ou la page d'accueil
             if (isset($_GET['redirect']) && !empty($_GET['redirect'])) {
                 header('Location: ' . $_GET['redirect']);

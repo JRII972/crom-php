@@ -33,7 +33,7 @@ class Image implements JsonSerializable
     private ?string $name;
     private ?string $imageAlt;
     private string $format;
-    private array $supportedFormats = ['jpeg', 'png', 'gif', 'bmp', 'wbmp', 'gd2', 'webp', 'avif'];
+    private array $supportedFormats = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'wbmp', 'gd2', 'webp', 'avif'];
 
     /**
      * Constructor for the Image class.
@@ -53,48 +53,28 @@ class Image implements JsonSerializable
         ?string $imageAlt = null,
         bool $isUpload = true
     ) {
-        $isLocalFile = false;
+        if ($source === null) {
+            return;
+        }
 
-        if ($source == null) {
-            return null;
-        } 
-        
-        if (!realpath(DEFAULT_IMAGE_STORAGE_PATH)){
-            if (!mkdir(DEFAULT_IMAGE_STORAGE_PATH, 0755, true)){
-                throw new RuntimeException('Dossier Images inaccessible');
+        // Ensure storage directory exists
+        if (!realpath(DEFAULT_IMAGE_STORAGE_PATH)) {
+            if (!mkdir(DEFAULT_IMAGE_STORAGE_PATH, 0755, true)) {
+                throw new RuntimeException('Cannot create images directory: ' . DEFAULT_IMAGE_STORAGE_PATH);
             }
         }
 
         // Set storage path
         $storagePath = realpath(rtrim(DEFAULT_IMAGE_STORAGE_PATH, '/'));
 
-        // TODO: Add support of URL 
+        $isLocalFile = false;
+        $sourcePath = null;
+        $tempFile = null;
+
+        // Handle different source types
         if (is_string($source)) {
-            if (!file_exists(rtrim(DEFAULT_STORAGE_PATH, '/') . $source) || !is_readable(rtrim(DEFAULT_STORAGE_PATH, '/') . $source)){
-                //TODO: make a new type of execption
-                throw new RuntimeException('Fichier non trouver ' . $source);
-            }
-            $sourcePath = rtrim(DEFAULT_STORAGE_PATH, '/') . $source;
-            $isUpload = false; //Prevent double '/upload'
-            $isLocalFile = true;
-            
-        } else {
-
-            // Handle different source types
-            $sourcePath = null;
-            $tempFile = null;
-
-            if (is_array($source) && isset($source['tmp_name'], $source['name'], $source['error'])) {
-                // Handle form upload ($_FILES)
-                if ($source['error'] !== UPLOAD_ERR_OK) {
-                    throw new InvalidArgumentException('Upload error: ' . $this->getUploadErrorMessage($source['error']));
-                }
-                if (!is_uploaded_file($source['tmp_name'])) {
-                    throw new InvalidArgumentException('Invalid uploaded file');
-                }
-                $sourcePath = $source['tmp_name'];
-            } elseif (filter_var($source, FILTER_VALIDATE_URL)) {
-                // Handle URL
+            // URL
+            if (filter_var($source, FILTER_VALIDATE_URL)) {
                 $imageData = @file_get_contents($source);
                 if ($imageData === false) {
                     throw new InvalidArgumentException('Failed to fetch image from URL: ' . $source);
@@ -102,8 +82,9 @@ class Image implements JsonSerializable
                 $tempFile = tempnam(sys_get_temp_dir(), 'img');
                 file_put_contents($tempFile, $imageData);
                 $sourcePath = $tempFile;
-            } elseif (strpos($source, 'data:image/') === 0) {
-                // Handle data URL (blob)
+            }
+            // Data URL
+            elseif (strpos($source, 'data:image/') === 0) {
                 $data = explode(',', $source);
                 if (count($data) !== 2 || !str_contains($data[0], 'base64')) {
                     throw new InvalidArgumentException('Invalid data URL format');
@@ -115,30 +96,60 @@ class Image implements JsonSerializable
                 $tempFile = tempnam(sys_get_temp_dir(), 'img');
                 file_put_contents($tempFile, $imageData);
                 $sourcePath = $tempFile;
-            } 
+            }
+            // Local file
+            else {
+                $fullPath = rtrim(DEFAULT_STORAGE_PATH, '/') . '/' . ltrim($source, '/');
+                if (!file_exists($fullPath) || !is_readable($fullPath)) {
+                    throw new InvalidArgumentException('Local file not found or not readable: ' . $source);
+                }
+                $sourcePath = $fullPath;
+                $isLocalFile = true;
+                $isUpload = false; // Prevent adding '/uploads' for local files
+            }
+        }
+        // Handle form upload ($_FILES)
+        elseif (is_array($source) && isset($source['tmp_name'], $source['name'], $source['error'])) {
+            if ($source['error'] !== UPLOAD_ERR_OK) {
+                throw new InvalidArgumentException('Upload error: ' . $this->getUploadErrorMessage($source['error']));
+            }
+            if (!is_uploaded_file($source['tmp_name'])) {
+                throw new InvalidArgumentException('Invalid uploaded file');
+            }
+            $sourcePath = $source['tmp_name'];
+        }
+        else {
+            throw new InvalidArgumentException('Invalid source provided');
         }
 
-
-        // Get image info
-        $imageInfo = @getimagesize($sourcePath);
-        if ($imageInfo === false) {
-            if (isset($tempFile)) {
-                unlink($tempFile);
+        // Determine image format
+        if ($isLocalFile) {
+            // For local files, get format from extension
+            $extension = strtolower(pathinfo($sourcePath, PATHINFO_EXTENSION));
+            if (!in_array($extension, $this->supportedFormats)) {
+                throw new InvalidArgumentException('Unsupported image format for local file: ' . $extension);
             }
-            throw new InvalidArgumentException('Invalid or unsupported image format');
-        }
-
-        // Extract extension and validate
-        $this->format = image_type_to_extension($imageInfo[2], false);
-        if (!in_array(strtolower($this->format), $this->supportedFormats)) {
-            if (isset($tempFile)) {
-                unlink($tempFile);
+            $this->format = $extension;
+        } else {
+            // For non-local files, use getimagesize
+            $imageInfo = @getimagesize($sourcePath);
+            if ($imageInfo === false) {
+                if (isset($tempFile)) {
+                    unlink($tempFile);
+                }
+                throw new InvalidArgumentException('Invalid or unsupported image format');
             }
-            throw new InvalidArgumentException('Unsupported image format: ' . $this->format);
+            $this->format = image_type_to_extension($imageInfo[2], false);
+            if (!in_array(strtolower($this->format), $this->supportedFormats)) {
+                if (isset($tempFile)) {
+                    unlink($tempFile);
+                }
+                throw new InvalidArgumentException('Unsupported image format: ' . $this->format);
+            }
         }
 
         // Set name
-        $this->name = $name ? $name . image_type_to_extension($imageInfo[2]) : (is_array($source) ? $source['name'] : basename($source));
+        $this->name = $name ? $name . '.' . $this->format : (is_array($source) ? $source['name'] : basename($source));
         if (empty($this->name)) {
             $this->name = 'image_' . uniqid() . '.' . $this->format;
         }
@@ -146,37 +157,33 @@ class Image implements JsonSerializable
         // Set alt text
         $this->imageAlt = $imageAlt ?? $name;
 
-        if ($isLocalFile){
-            $this->filePath = $source;
+        if ($isLocalFile) {
+            $this->filePath = '/' . ltrim($source, '/');
         } else {
-
-            // Set relative file path
+            // Relative file path
             $relativePath = ($isUpload && $subdirectory === null) ? UPLOAD_SUBFOLDER : '';
             if ($subdirectory) {
                 $relativePath .= '/' . trim($subdirectory, '/') . '/';
             }
-            
-            // Ensure storage path exists and is writable
+
+            // Check folder right
             if (!is_dir($storagePath . $relativePath) && !mkdir($storagePath . $relativePath, 0755, true)) {
                 throw new RuntimeException('Cannot create storage directory: ' . $storagePath . $relativePath);
             }
             if (!is_writable($storagePath . $relativePath)) {
                 throw new RuntimeException('Storage directory is not writable: ' . $storagePath . $relativePath);
             }
-            
-            // Ensure unique filename
+
+            // Unique filename
             $this->filePath = $relativePath . $this->name;
             $counter = 1;
             $baseName = pathinfo($this->name, PATHINFO_FILENAME);
-            if ( file_exists($storagePath . $this->filePath) ){ //TODO: Retirer le if il ne sert a rien
-                while (file_exists($storagePath . $this->filePath)) {
-                    $this->filePath = $relativePath . $baseName . '_' . $counter . '.' . $this->format;
-                    $counter++;
-                }
+            while (file_exists($storagePath . $this->filePath)) {
+                $this->filePath = $relativePath . $baseName . '_' . $counter . '.' . $this->format;
+                $counter++;
             }
 
-
-            // Store the image if not already local
+            // Store the image
             if (isset($tempFile)) {
                 if (!copy($sourcePath, $storagePath . $this->filePath)) {
                     unlink($tempFile);
@@ -187,25 +194,19 @@ class Image implements JsonSerializable
                 if (!move_uploaded_file($sourcePath, $storagePath . $this->filePath)) {
                     throw new RuntimeException('Failed to move uploaded image to: ' . $storagePath . $this->filePath);
                 }
-            } elseif ($source !== $storagePath . $this->filePath) {
-                if (!copy($source, $storagePath . $this->filePath)) {
-                    throw new RuntimeException('Failed to copy image to: ' . $storagePath . $this->filePath);
-                }
             }
         }
-
     }
 
     /**
-     * Constructor for the Image class witch catched error.
+     * Constructor for the Image class which catches errors.
      *
      * @param string|array|null $source Image source (local file path, URL, data URL, or $_FILES array)
      * @param string|null $name Optional name for the image; defaults to source filename if not provided
      * @param string|null $subdirectory Optional subdirectory within storage path
      * @param string|null $imageAlt Optional alt text for the image; defaults to name if not provided
      * @param bool $isUpload Indicates if the source is an upload (default: true)
-     * @throws InvalidArgumentException If the source is invalid or unsupported
-     * @throws RuntimeException If image processing or file operations fail
+     * @return ?self
      */
     public static function load(
         string|array|null $source,
@@ -214,18 +215,17 @@ class Image implements JsonSerializable
         ?string $imageAlt = null,
         bool $isUpload = true
     ): ?self {
-        if (is_null($source)){
+        if ($source === null) {
             return null;
         }
         try {
             return new self($source, $name, $subdirectory, $imageAlt, $isUpload);
         } catch (\Throwable $th) {
-            // Log l'erreur si besoin
-            // error_log('Erreur lors du chargement de l\'image: ' . $th->getMessage());
+            // Log error if needed
+            // error_log('Error loading image: ' . $th->getMessage());
             return null;
         }
     }
-
 
     /**
      * Deletes the image file.
@@ -234,8 +234,7 @@ class Image implements JsonSerializable
      */
     public function delete(): void
     {
-        return;
-        $fullPath = DEFAULT_STORAGE_PATH . $this->filePath;
+        $fullPath = DEFAULT_IMAGE_STORAGE_PATH . $this->filePath;
         if (file_exists($fullPath) && !unlink($fullPath)) {
             throw new RuntimeException('Failed to delete image file: ' . $fullPath);
         }
@@ -275,7 +274,7 @@ class Image implements JsonSerializable
             throw new RuntimeException('Failed to create image copy at: ' . DEFAULT_IMAGE_STORAGE_PATH . $newFilePath);
         }
 
-        return new Image(DEFAULT_IMAGE_STORAGE_PATH . $newFilePath, pathinfo($newFilePath, PATHINFO_BASENAME), null, $newAlt ?? $this->imageAlt, false);
+        return new Image($newFilePath, pathinfo($newFilePath, PATHINFO_BASENAME), null, $newAlt ?? $this->imageAlt, false);
     }
 
     /**
@@ -315,7 +314,6 @@ class Image implements JsonSerializable
         $this->name = pathinfo($newFilePath, PATHINFO_BASENAME);
         $this->imageAlt = $newAlt ?? $this->name;
     }
-
 
     /**
      * Returns the image file path as a string.
@@ -364,10 +362,7 @@ class Image implements JsonSerializable
      */
     public function getImageAlt(): string
     {
-        if (is_null($this->imageAlt)){
-            $this->imageAlt = $this->name;
-        }
-        return $this->imageAlt;
+        return $this->imageAlt ?? $this->name;
     }
 
     /**
@@ -411,16 +406,16 @@ class Image implements JsonSerializable
     /**
      * Serializes the object to JSON.
      *
-     * @return array
+     * @return array|null
      */
     public function jsonSerialize(): ?array
     {
-        if (!$this->isValid()){
+        if (!$this->isValid()) {
             return null;
         }
 
         return [
-            'url' => $this->getFilePath(),
+            'url' => RELATIVE_IMAGE_PATH . $this->getFilePath(),
             'imageAlt' => $this->getImageAlt(),
             'name' => $this->getName(),
             'format' => $this->getFormat(),
@@ -428,36 +423,33 @@ class Image implements JsonSerializable
     }
 
     /**
-     * Vérifie si l'image est valide en s'assurant que toutes les propriétés nécessaires sont initialisées
+     * Checks if the image is valid by ensuring all necessary properties are set.
+     *
+     * @return bool
      */
-    public function isValid(): bool {
-        // Vérifier que le chemin du fichier est défini et non vide
+    public function isValid(): bool
+    {
+        // Check if file path is set and not empty
         if (empty($this->filePath)) {
             return false;
         }
-        
-        // Vérifier que le nom est défini et non vide
+
+        // Check if name is set and not empty
         if (empty($this->name)) {
             return false;
         }
-        
-        // Vérifier que le format est défini et supporté
+
+        // Check if format is set and supported
         if (empty($this->format) || !in_array(strtolower($this->format), $this->supportedFormats)) {
             return false;
         }
-        
-        // Vérifier que le fichier existe physiquement
-        $fullPath = rtrim(DEFAULT_STORAGE_PATH, '/') . $this->filePath;
+
+        // Check if file exists and is readable
+        $fullPath = rtrim(DEFAULT_IMAGE_STORAGE_PATH, '/') . $this->filePath;
         if (!file_exists($fullPath) || !is_readable($fullPath)) {
             return false;
         }
-        
-        // Vérifier que c'est bien un fichier image valide
-        $imageInfo = @getimagesize($fullPath);
-        if ($imageInfo === false) {
-            return false;
-        }
-        
+
         return true;
     }
 }

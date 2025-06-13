@@ -102,4 +102,5 @@ class DefaultDatabaseType implements JsonSerializable
 
         return $stmt->execute(['id' => $this->id]);
     }
+
 }

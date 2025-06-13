@@ -52,10 +52,17 @@ class Jeu extends DefaultDatabaseType
         ?string $description = null,
         Image|string|array|null $image = null,
         Image|string|array|null $icon = null,
-        ?TypeJeu $typeJeu = null
+        ?TypeJeu $typeJeu = null,
+
+        array $data = []
     ) {
         parent::__construct();
         $this->table = 'jeux';
+
+        if ($data) {
+            $this->updateFromDatabaseData($data);
+            return;
+        }
 
         if ($id !== null && $nom === null && $description === null && $typeJeu === null) {
             // Mode : Charger le jeu depuis la base
@@ -87,9 +94,13 @@ class Jeu extends DefaultDatabaseType
      *
      * @param int $id Identifiant du jeu
      * @throws PDOException Si le jeu n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    
+    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
+        
         $stmt = $this->pdo->prepare('SELECT * FROM jeux WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -98,6 +109,11 @@ class Jeu extends DefaultDatabaseType
             throw new PDOException('Jeu non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = (int) $data['id'];
         $this->nom = $data['nom'];
         $this->description = $data['description'];
@@ -143,7 +159,8 @@ class Jeu extends DefaultDatabaseType
                 'description' => $this->description,
                 'image' => $this->image ? $this->image->getFilePath() : null,
                 'icon' => $this->icon ? $this->icon->getFilePath() : null,
-                'type_jeu' => $this->typeJeu->value,            ]);
+                'type_jeu' => $this->typeJeu->value,            
+            ]);
             $this->id = (int) $this->pdo->lastInsertId();
         }
         
@@ -193,7 +210,7 @@ class Jeu extends DefaultDatabaseType
             }
         }
         
-        $sql = 'SELECT DISTINCT j.id, j.nom, j.description, j.type_jeu
+        $sql = 'SELECT DISTINCT j.id, j.nom, j.description, j.type_jeu, image, icon
                 FROM jeux j
                 LEFT JOIN jeux_genres jg ON j.id = jg.id_jeu
                 WHERE 1=1';
@@ -208,16 +225,17 @@ class Jeu extends DefaultDatabaseType
         if ($typeJeu !== '' && in_array($typeJeu, ['JDR', 'JEU_DE_SOCIETE', 'AUTRE'])) {
             $sql .= ' AND j.type_jeu = :type_jeu';
             $params['type_jeu'] = $typeJeu;
-        }
-
-        if ($genres !== '') {
+        }        if ($genres !== '') {
             $genreIds = array_filter(explode(',', $genres), 'is_numeric');
             if (!empty($genreIds)) {
-                $placeholders = implode(',', array_fill(0, count($genreIds), '?'));
-                $sql .= " AND jg.id_genre IN ($placeholders)";
+                $placeholders = [];
                 foreach ($genreIds as $index => $genreId) {
-                    $params[$index + 1] = (int)$genreId;
+                    $paramName = "genre_$index";
+                    $placeholders[] = ":$paramName";
+                    $params[$paramName] = (int)$genreId;
                 }
+                $placeholderString = implode(',', $placeholders);
+                $sql .= " AND jg.id_genre IN ($placeholderString)";
             }
         }
 
@@ -228,8 +246,7 @@ class Jeu extends DefaultDatabaseType
         $results = [];
         foreach ($jeux as $jeuData) {
             try {
-                $jeu = new Jeu(id: (int)$jeuData['id']);
-                $results[] = $jeu->jsonSerialize();
+                $results[] = new Jeu(data: $jeuData);
             } catch (\Throwable $e) {
                 continue;
             }

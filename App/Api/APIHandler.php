@@ -70,7 +70,7 @@ class APIHandler
      */
     protected function requirePermission(string $class, string $action): void
     {
-        return;
+        return; //TODO: enable permission
         $this->requireAuth();
         $requiredLevel = self::PERMISSION_LEVELS[$class][$action] ?? 100;
         $userLevel = self::ROLE_LEVELS[$this->user['type_utilisateur']] ?? 0;

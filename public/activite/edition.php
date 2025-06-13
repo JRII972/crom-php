@@ -1,4 +1,6 @@
 <?php
+
+use App\Controllers\ActiviteController;
 // Fichier d'entrée pour la page de profil
 // filepath: /var/www/html/public/profile.php
 

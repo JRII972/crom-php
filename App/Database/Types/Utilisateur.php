@@ -13,7 +13,6 @@ use PDOException;
 use RuntimeException;
 
 require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../Utils/helpers.php';
 
 /**
  * Enumération pour le sexe de l'utilisateur.
@@ -152,9 +151,12 @@ class Utilisateur extends DefaultDatabaseType
      * @param string $id Identifiant UUID de l'utilisateur
      * @throws PDOException Si l'utilisateur n'existe pas
      * @throws InvalidArgumentException Si l'ID est invalide
-     */
-    private function loadFromDatabase(string $id): void
+     */    
+    private function loadFromDatabase(string|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         if (!isValidUuid($id)) {
             throw new InvalidArgumentException('L\'identifiant doit être un UUID valide.');
         }
@@ -167,6 +169,11 @@ class Utilisateur extends DefaultDatabaseType
             throw new PDOException('Utilisateur non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = $data['id'];
         $this->prenom = $data['prenom'];
         $this->nom = $data['nom'];

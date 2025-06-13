@@ -43,9 +43,12 @@ class Genre extends DefaultDatabaseType
      *
      * @param int $id Identifiant du genre
      * @throws PDOException Si le genre n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    
+    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM genres WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -54,6 +57,11 @@ class Genre extends DefaultDatabaseType
             throw new PDOException('Genre non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = (int) $data['id'];
         $this->nom = $data['nom'];
     }

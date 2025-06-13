@@ -5,9 +5,16 @@
 
 @if(isset($scripts) && is_array($scripts))
     @foreach($scripts as $script)
-        <script src="./assets/js/{{ $script }}"></script>
+        <script src="/assets/js/{{ $script }}"></script>
     @endforeach
 @endif
+
+@if(isset($modules) && is_array($modules))
+    @foreach($modules as $module)
+        <script type="module" src="/assets/js/{{ $module }}"></script>
+    @endforeach
+@endif
+
 
 {{-- Scripts supplémentaires spécifiques à certaines pages --}}
 @yield('scripts')

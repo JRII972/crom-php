@@ -84,9 +84,12 @@ class CreneauxUtilisateur extends DefaultDatabaseType
      *
      * @param int $id Identifiant du créneau
      * @throws PDOException Si le créneau n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    
+    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM creneaux_utilisateur WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -95,6 +98,11 @@ class CreneauxUtilisateur extends DefaultDatabaseType
             throw new PDOException('Créneau non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = (int) $data['id'];
         $this->idUtilisateur = $data['id_utilisateur'];
         $this->typeCreneau = TypeCreneau::from($data['type_creneau']);

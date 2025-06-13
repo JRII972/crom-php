@@ -1,7 +1,8 @@
 <?php // /app/controllers/ContactController.php
-// filepath: /var/www/html/App/controllers/ContactController.php
+
+namespace App\Controllers;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/BaseController.php';
 
 class ContactController extends BaseController {
     /**

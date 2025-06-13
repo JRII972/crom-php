@@ -9,7 +9,7 @@ const activiteService = {
    */
   getActivite: async (id) => {
     const response = await axiosInstance.get(`/activites/${id}`);
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -17,23 +17,40 @@ const activiteService = {
    */
   listActivites: async (filters = {}) => {
     const response = await axiosInstance.get('/activites', { params: filters });
-    return response.data.data;
+    return response.data;
   },
 
   /**
    * Creates a new party (game master or admin only).
+   * @param {Object|FormData} activiteData - The party data (object or FormData for file uploads)
+   * @param {boolean} hasFile - Set to true if FormData contains a file upload
    */
-  createActivite: async (activiteData) => {
-    const response = await axiosInstance.post('/activites', activiteData);
-    return response.data.data;
+  createActivite: async (activiteData, hasFile = false) => {
+    const config = {};
+    if (hasFile) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+    }
+    const response = await axiosInstance.post('/activites', activiteData, config);
+    return response.data;
   },
 
   /**
    * Updates a party by ID (game master or admin only).
+   * @param {number|string} id - The party ID
+   * @param {Object|FormData} activiteData - The party data (object or FormData for file uploads)
+   * @param {boolean} hasFile - Set to true if FormData contains a file upload
    */
-  updateActivite: async (id, activiteData) => {
-    const response = await axiosInstance.put(`/activites/${id}`, activiteData);
-    return response.data.data;
+  updateActivite: async (id, activiteData, hasFile = false) => {
+    const config = {};
+    if (hasFile) {
+      config.headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+    }
+    const response = await axiosInstance.put(`/activites/${id}`, activiteData, config);
+    return response.data;
   },
 
   /**
@@ -41,7 +58,7 @@ const activiteService = {
    */
   patchActivite: async (id, activiteData) => {
     const response = await axiosInstance.patch(`/activites/${id}`, activiteData);
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -49,7 +66,7 @@ const activiteService = {
    */
   deleteActivite: async (id) => {
     const response = await axiosInstance.delete(`/activites/${id}`);
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -57,7 +74,7 @@ const activiteService = {
    */
   addMember: async (id, memberData) => {
     const response = await axiosInstance.post(`/activites/${id}/membres`, memberData);
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -65,7 +82,7 @@ const activiteService = {
    */
   removeMember: async (id, userId) => {
     const response = await axiosInstance.delete(`/activites/${id}/membres/${userId}`);
-    return response.data.data;
+    return response.data;
   },
 };
 

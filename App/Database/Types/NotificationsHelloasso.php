@@ -68,9 +68,12 @@ class NotificationsHelloasso extends DefaultDatabaseType
      *
      * @param string $id Identifiant de la notification
      * @throws PDOException Si la notification n'existe pas
-     */
-    private function loadFromDatabase(string $id): void
+     */    
+    private function loadFromDatabase(string|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM notifications_helloasso WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -79,6 +82,11 @@ class NotificationsHelloasso extends DefaultDatabaseType
             throw new PDOException('Notification non trouvée pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = $data['id'];
         $this->typeEvenement = $data['type_evenement'];
         $this->dateEvenement = $data['date_evenement'];

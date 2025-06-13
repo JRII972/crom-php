@@ -11,11 +11,11 @@
             {{-- Nombre max de joueurs total --}}
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text font-semibold">Nombre maximum de joueurs (total)</span>
+                    <span class="label-text font-semibold">Nombre maximum d'inscriptions (total)</span>
                 </label>
                 <input type="number" id="nombre_max_joueurs" name="nombre_max_joueurs" class="input input-bordered" min="0" max="50" value="0" placeholder="0 = illimité">
                 <label class="label">
-                    <span class="label-text-alt">Nombre total de joueurs pour toute la activite (0 = illimité)</span>
+                    <span class="label-text-alt">Nombre total de joueurs pour toute l'activite (0 = illimité)</span>
                 </label>
             </div>
             {{-- Nombre max de joueurs par session --}}

@@ -11,6 +11,9 @@ RewriteRule ^.*$ - [L]
 # Redirection spéciale pour la racine
 RewriteRule ^/?$ /public/index.php [L]
 
+# Redirection spéciale pour l'API (ajouter avant les autres règles)
+RewriteRule ^api(/.*)?$ /public/api/index.php [L]
+
 # 1. Essayer d'abord le fichier exact dans /public (pour gérer les sous-dossiers)
 RewriteCond %{DOCUMENT_ROOT}/public/$1 -f
 RewriteRule ^(.+)$ /public/$1 [L]

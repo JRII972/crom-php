@@ -75,11 +75,15 @@ class ActiviteDisplay extends Activite
      * Méthode statique pour créer une ActiviteDisplay de manière sécurisée.
      * Retourne null si la activite n'existe pas au lieu de lever une exception.
      *
-     * @param int $id Identifiant de la activite
+     * @param int|null $id Identifiant de la activite
      * @return ActiviteDisplay|null La activite ou null si elle n'existe pas
      */
-    public static function createSafe(int $id): ?ActiviteDisplay
+    public static function createSafe(int|null $id): ?ActiviteDisplay
     {
+        if ( is_null($id)) { 
+            return null;
+        }
+        
         try {
             return new self($id);
         } catch (PDOException $e) {
@@ -116,6 +120,7 @@ class ActiviteDisplay extends Activite
      * @param string $typeActivite Type de activite (optionnel)
      * @param array|null $categories Liste des catégories/genres pour filtrer (optionnel)
      * @param array|null $jours Liste des jours de la semaine pour filtrer (optionnel)
+     * @param string|array $etats État(s) de l'activité pour filtrer (optionnel, ACTIVE, FERMER, TERMINER, ANNULER, SUPPRIMER, BROUILLON)
      * @return array Liste des activites
      */
     public static function search(
@@ -125,7 +130,8 @@ class ActiviteDisplay extends Activite
         string $idMaitreJeu = '',
         string $typeActivite = '',
         ?array $categories = null,
-        ?array $jours = null
+        ?array $jours = null,
+        string|array $etats = ''
     ): array {
         $activites = parent::search(
             $pdo,
@@ -134,7 +140,8 @@ class ActiviteDisplay extends Activite
             $idMaitreJeu,
             $typeActivite,
             $categories,
-            $jours
+            $jours,
+            $etats
         );
         
         $activiteDisplays = [];

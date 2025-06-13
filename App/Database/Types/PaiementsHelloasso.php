@@ -108,9 +108,12 @@ class PaiementsHelloasso extends DefaultDatabaseType
      *
      * @param string $id Identifiant du paiement
      * @throws PDOException Si le paiement n'existe pas
-     */
-    private function loadFromDatabase(string $id): void
+     */    
+    private function loadFromDatabase(string|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM paiements_helloasso WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -119,6 +122,11 @@ class PaiementsHelloasso extends DefaultDatabaseType
             throw new PDOException('Paiement non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = $data['id'];
         $this->idNotification = $data['id_notification'];
         $this->idUtilisateur = $data['id_utilisateur'];

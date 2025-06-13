@@ -66,7 +66,7 @@ class JoueursSession extends DefaultDatabaseType
      * @param string $idUtilisateur ID de l'utilisateur
      * @throws PDOException Si l'inscription n'existe pas
      * @throws InvalidArgumentException Si l'ID utilisateur est invalide
-     */
+     */    
     private function loadFromDatabase(int $idSession, string $idUtilisateur): void
     {
         if (!isValidUuid($idUtilisateur)) {
@@ -84,6 +84,11 @@ class JoueursSession extends DefaultDatabaseType
             throw new PDOException('Inscription non trouvée pour id_session : ' . $idSession . ' et id_utilisateur : ' . $idUtilisateur);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->idSession = (int) $data['id_session'];
         $this->idUtilisateur = $data['id_utilisateur'];
         $this->dateInscription = $data['date_inscription'];

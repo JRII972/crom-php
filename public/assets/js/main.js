@@ -1,3 +1,5 @@
+import utilisateurService from "./api/services/utilisateurService";
+
 /**
  * Scripts généraux pour toutes les pages
  */
@@ -77,4 +79,11 @@ function initNavbarScroll() {
       lastScrollTop = st <= 0 ? 0 : st;
     }, 50);
   }, { passive: true });
+}
+
+try {
+  utilisateurService.reconnect();
+  console.log('Reconnect succes');
+} catch {
+  console.log('Reconnect faild');
 }

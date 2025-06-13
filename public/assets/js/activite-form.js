@@ -1,4 +1,5 @@
 import jeuService from "./api/services/jeuService";
+import activiteService   from "./api/services/activiteService ";
 
 /**
  * Gestionnaire pour la création et édition de activites
@@ -134,21 +135,24 @@ class ActiviteFormManager {
         // Affichage conditionnel du type de campagne
         const typeActivite = document.getElementById('type_activite');
         const typeCampagneContainer = document.getElementById('type-campagne-container');
-        const typeCampagne = document.getElementById('type_campagne');
+        const typeCampagne = $('input[name="type_campagne"]');
         
         if (typeActivite && typeCampagneContainer && typeCampagne) {
             typeActivite.addEventListener('change', (e) => {
                 typeCampagneContainer.style.display = e.target.value === 'CAMPAGNE' ? 'block' : 'none';
                 
-                if (e.target.value !== 'CAMPAGNE') {
-                    typeCampagne.value = '';
-                }
             });
-        }        // Validation des nombres de joueurs
+        }        
+        
+        // Validation des nombres de joueurs
         const maxJoueurs = document.getElementById('nombre_max_joueurs');
         const maxSession = document.getElementById('max_joueurs_session');
         
         if (maxJoueurs && maxSession) {
+            if (typeActivite && typeCampagne && typeActivite.value == 'CAMPAGNE' && typeCampagne.value == '') {
+               
+            }  
+
             const validatePlayerNumbers = () => {
                 const maxJoueursVal = parseInt(maxJoueurs.value) || 0;
                 const maxSessionVal = parseInt(maxSession.value) || 0;
@@ -291,22 +295,6 @@ class ActiviteFormManager {
         } catch (error) {
             console.error('Erreur lors du chargement des jeux:', error);
             
-            // Données de démonstration
-            const demoGames = [
-                { id: 1, nom: 'Dungeons & Dragons 5e', description: 'Le célèbre jeu de rôle fantasy', image: 'public/data/images/donjon&dragon.jpg' },
-                { id: 2, nom: 'Pathfinder', description: 'Jeu de rôle fantasy avancé', image: 'public/data/images/Pathfinder.webp' },
-                { id: 3, nom: 'Cyberpunk RED', description: 'Jeu de rôle cyberpunk futuriste', image: 'public/data/images/Cyberpunk RED.png' },
-                { id: 4, nom: 'Chroniques Oubliées', description: 'JDR français médiéval-fantastique', image: 'public/data/images/Chroniques_Oubliees.jpg' }
-            ];
-            
-            demoGames.forEach(jeu => {
-                this.selectizeJeu.addOption(jeu);
-                if (jeu.image) {
-                    // Adapter le format pour correspondre à la structure attendue
-                    const imageUrl = typeof jeu.image === 'string' ? jeu.image : jeu.image.url;
-                    this.gameImageCache.set(jeu.id.toString(), imageUrl);
-                }
-            });
         }
     }
 
@@ -315,10 +303,11 @@ class ActiviteFormManager {
      */
     async loadActiviteData() {
         try {
+            await this.loadGameData();
             const response = await fetch(`/api/activites/${this.activiteId}`);
             const activite = await response.json();
             
-            this.populateForm(activite);
+            this.populateForm(activite.data);
             
         } catch (error) {
             console.error('Erreur lors du chargement de la activite:', error);
@@ -334,7 +323,10 @@ class ActiviteFormManager {
     populateForm(activite) {
         document.getElementById('nom').value = activite.nom || '';
         document.getElementById('type_activite').value = activite.type_activite || '';
-        document.getElementById('type_campagne').value = activite.type_campagne || '';
+        if (activite.type_campagne == 'FERMEE'){
+            document.getElementById('type_campagne_fermee').checked = true;
+            document.getElementById('type_campagne_ouverte').checked = false;
+        }
         document.getElementById('description_courte').value = activite.description_courte || '';
         document.getElementById('nombre_max_joueurs').value = activite.nombre_max_joueurs || 0;
         document.getElementById('max_joueurs_session').value = activite.max_joueurs_session || 5;
@@ -474,123 +466,212 @@ class ActiviteFormManager {
         }
 
         return errors;
-    }
-
-    /**
+    }    /**
      * Collecte les données du formulaire
+     * @returns {FormData|Object} Les données du formulaire formatées pour l'API
+     * @param {boolean} isFormData Si true, retourne un FormData, sinon un Object JSON
      */
-    collectFormData() {
-        const formData = new FormData();
-        
-        formData.append('nom', document.getElementById('nom').value.trim());
-        formData.append('id_jeu', this.selectizeJeu?.getValue() || '');
-        formData.append('type_activite', document.getElementById('type_activite').value);
-        formData.append('type_campagne', document.getElementById('type_campagne').value || null);
-        formData.append('description_courte', document.getElementById('description_courte').value.trim());
-        formData.append('description', this.quillEditor.root.innerHTML);
-        formData.append('nombre_max_joueurs', document.getElementById('nombre_max_joueurs').value || 0);
-        formData.append('max_joueurs_session', document.getElementById('max_joueurs_session').value);
-        formData.append('verrouille', document.getElementById('verrouille').checked);
-        formData.append('texte_alt_image', document.getElementById('texte_alt_image').value.trim());
+    collectFormData(isFormData = false) {
+        // Récupérer les données de l'éditeur Quill
+        const descriptionHTML = this.quillEditor ? this.quillEditor.root.innerHTML : '';
+        document.getElementById('description').value = descriptionHTML;
 
-        // Gestion de l'image
-        const imageSource = document.querySelector('input[name="image_source"]:checked').value;
-        
-        if (imageSource === 'url') {
-            formData.append('image', document.getElementById('image_url').value);
-        } else if (imageSource === 'upload') {
-            const fileInput = document.getElementById('image_file');
-            if (fileInput.files && fileInput.files[0]) {
-                formData.append('image_file', fileInput.files[0]);
-            }
-        } else if (imageSource === 'game') {
-            const selectedGameId = this.selectizeJeu?.getValue();
-            if (selectedGameId && this.gameImageCache.has(selectedGameId)) {
-                // Préparer l'image pour l'API
-                const imageUrl = this.gameImageCache.get(selectedGameId);
-                formData.append('image', imageUrl);
-                
-                // Si on a besoin de fournir des métadonnées supplémentaires
-                const selectedGame = this.selectizeJeu?.getOption(selectedGameId);
-                if (selectedGame && selectedGame.nom) {
-                    formData.append('texte_alt_image', selectedGame.nom);
-                }
-            }
+        // Récupérer le type de campagne si applicable
+        const typeActivite = document.getElementById('type_activite').value;
+        let typeCampagne = null;
+        if (typeActivite === 'CAMPAGNE') {
+            typeCampagne = document.querySelector('input[name="type_campagne"]:checked').value;
         }
 
-        return formData;
-    }
+        // Récupérer la source d'image sélectionnée
+        const imageSource = document.querySelector('input[name="image_source"]:checked').value;
+        let imageData = null;        // Traiter les différentes sources d'image
+        if (imageSource === 'game') {
+            // Image du jeu sélectionné
+            const jeuId = document.getElementById('jeu').value;
+            if (jeuId && this.gameImageCache.has(jeuId)) {
+                imageData = {
+                    url: this.gameImageCache.get(jeuId),
+                    texte_alt: document.getElementById('texte_alt_image').value || 'Image du jeu'
+                };
+            }
+        } else if (imageSource === 'url') {
+            // URL d'image personnalisée
+            const imageUrl = document.getElementById('image_url').value;
+            if (imageUrl) {
+                imageData = {
+                    url: imageUrl,
+                    texte_alt: document.getElementById('texte_alt_image').value || 'Image de la activité'
+                };
+            }
+        }
+        // Pour l'upload de fichier, on le traitera différemment dans le FormData
 
-    /**
+        // Pour FormData (utilisé pour l'upload de fichier)
+        if (isFormData) {
+            const formData = new FormData();
+            
+            // Ajouter toutes les données de base
+            formData.append('nom', document.getElementById('nom').value);
+            formData.append('id_jeu', document.getElementById('jeu').value);
+            formData.append('type_activite', typeActivite);
+            if (typeCampagne) formData.append('type_campagne', typeCampagne);
+            formData.append('description_courte', document.getElementById('description_courte').value);
+            formData.append('description', descriptionHTML);
+            formData.append('nombre_max_joueurs', document.getElementById('nombre_max_joueurs')?.value || 0);
+            formData.append('max_joueurs_session', document.getElementById('max_joueurs_session')?.value || 0);
+            formData.append('statut', document.getElementById('statut')?.value || 'PUBLIE');
+            
+            // Traiter le fichier image si présent
+            if (imageSource === 'upload' && document.getElementById('image_file').files.length > 0) {
+                formData.append('image', document.getElementById('image_file').files[0]);
+                formData.append('texte_alt_image', document.getElementById('texte_alt_image').value || 'Image de la activité');
+            } else if (imageData) {
+                // Pour les autres sources, on ajoute les données JSON
+                formData.append('image', JSON.stringify(imageData));
+                formData.append('texte_alt_image', document.getElementById('texte_alt_image').value || 'Image de l\'activité');
+            }
+            
+            return formData;
+        }
+
+        // Pour les requêtes JSON standard (sans fichier)
+        const formData = {
+            nom: document.getElementById('nom').value,
+            id_jeu: parseInt(document.getElementById('jeu').value, 10),
+            type_activite: typeActivite,
+            type_campagne: typeCampagne,
+            description_courte: document.getElementById('description_courte').value,
+            description: descriptionHTML,
+            image: imageData,
+            nombre_max_joueurs: parseInt(document.getElementById('nombre_max_joueurs')?.value || 0, 10),
+            max_joueurs_session: parseInt(document.getElementById('max_joueurs_session')?.value || 0, 10),
+            statut: document.getElementById('statut')?.value || 'PUBLIE' // Par défaut publié, à modifier selon les besoins
+        };        // Vérifier et formater les valeurs numériques
+        Object.keys(formData).forEach(key => {
+            if (typeof formData[key] === 'number' && isNaN(formData[key])) {
+                formData[key] = 0; // Valeur par défaut pour les champs numériques invalides
+            }
+        });
+
+        return formData;
+    }    /**
      * Sauvegarde la activite
      */
     async saveActivite() {
-        const errors = this.validateForm();
-        
-        if (errors.length > 0) {
-            alert('Erreurs de validation:\n' + errors.join('\n'));
-            return;
-        }
-
-        const formData = this.collectFormData();
-        const saveBtn = document.getElementById('save-btn');
-        
         try {
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sauvegarde...';
+            const errors = this.validateForm();
+            if (errors.length > 0) {
+                alert('Veuillez corriger les erreurs suivantes:\n- ' + errors.join('\n- '));
+                return false;
+            }
 
-            const url = this.isEditing ? `/api/activites/${this.activiteId}` : '/api/activites';
-            const method = this.isEditing ? 'PUT' : 'POST';
+            // Afficher un indicateur de chargement
+            const submitBtn = document.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
             
-            const response = await fetch(url, {
-                method: method,
-                body: formData
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                
-                // Afficher un message de succès
-                const message = this.isEditing ? 'Activite mise à jour avec succès!' : 'Activite créée avec succès!';
-                alert(message);
-                
-                // Rediriger vers la liste des activites ou la page de détail
-                window.location.href = `activite-detail.html?id=${result.id}`;
-                
+            // Vérifier si nous avons besoin d'uploader un fichier image
+            const imageSource = document.querySelector('input[name="image_source"]:checked').value;
+            const hasImageFile = imageSource === 'upload' && document.getElementById('image_file').files.length > 0;
+            
+            // Récupérer les données du formulaire (avec ou sans fichier)
+            const formData = this.collectFormData(hasImageFile);
+            
+            let responseData;
+            
+            if (this.isEditing) {
+                // Mise à jour d'une activité existante
+                responseData = await activiteService.updateActivite(this.activiteId, formData, hasImageFile);
             } else {
-                throw new Error('Erreur lors de la sauvegarde');
+                // Création d'une nouvelle activité
+                responseData = await activiteService.createActivite(formData, hasImageFile);
             }
             
+            // Vérifier si la réponse contient une erreur
+            if (responseData.status !== 'success') {
+                throw new Error(responseData.message || 'Erreur lors de l\'opération');
+            }
+            
+            // Redirection vers la page de détail de l'activité
+            window.location.href = `/activite?id=${responseData.data.id}`;
+            return true;
+            
         } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur lors de la sauvegarde de la activite');
-        } finally {
-            saveBtn.disabled = false;
-            saveBtn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
+            console.error('Erreur lors de la sauvegarde:', error);
+            
+            // Afficher l'erreur à l'utilisateur
+            alert(`Erreur lors de la sauvegarde : ${error.response.data.message || 'Erreur inconnue'}`);
+            
+            // Réactiver le bouton
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-check"></i> ' + 
+                (this.isEditing ? 'Mettre à jour' : 'Créer la activite');
+            
+            return false;
         }
-    }
-
-    /**
+    }    /**
      * Sauvegarde comme brouillon
      */
     async saveDraft() {
-        const formData = this.collectFormData();
-        formData.append('is_draft', 'true');
-        
         try {
-            const response = await fetch('/api/activites/draft', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                alert('Brouillon sauvegardé!');
-            } else {
-                throw new Error('Erreur lors de la sauvegarde du brouillon');
+            // Même validation minimale que pour la sauvegarde complète
+            if (!document.getElementById('nom').value) {
+                alert('Veuillez au moins donner un nom à votre activité');
+                return false;
             }
+            
+            // Afficher un indicateur de chargement
+            const draftBtn = document.getElementById('save-draft-btn');
+            const originalText = draftBtn.innerHTML;
+            draftBtn.disabled = true;
+            draftBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
+            
+            // Vérifier si nous avons besoin d'uploader un fichier image
+            const imageSource = document.querySelector('input[name="image_source"]:checked').value;
+            const hasImageFile = imageSource === 'upload' && document.getElementById('image_file').files.length > 0;
+            
+            // Récupérer les données du formulaire et définir le statut comme brouillon
+            const formData = this.collectFormData(hasImageFile);
+            if (hasImageFile) {
+                formData.append('statut', 'BROUILLON');
+            } else {
+                formData.statut = 'BROUILLON';
+            }
+            
+            let responseData;
+            
+            if (this.isEditing) {
+                // Mise à jour d'une activité existante
+                responseData = await activiteService.updateActivite(this.activiteId, formData, hasImageFile);
+            } else {
+                // Création d'une nouvelle activité
+                responseData = await activiteService.createActivite(formData, hasImageFile);
+            }
+            
+            // Vérifier si la réponse contient une erreur
+            if (responseData.status !== 'success') {
+                throw new Error(responseData.message || 'Erreur lors de l\'enregistrement du brouillon');
+            }
+            
+            // Redirection vers la page de gestion des activités
+            window.location.href = '/activites.php?tab=drafts';
+            return true;
+            
         } catch (error) {
-            console.error('Erreur:', error);
-            alert('Erreur lors de la sauvegarde du brouillon');
+            console.error('Erreur lors de la sauvegarde du brouillon:', error);
+            
+            // Afficher l'erreur à l'utilisateur
+            alert(`Erreur lors de la sauvegarde du brouillon : ${error.message || 'Erreur inconnue'}`);
+            
+            // Réactiver le bouton
+            const draftBtn = document.getElementById('save-draft-btn');
+            draftBtn.disabled = false;
+            draftBtn.innerHTML = '<i class="fas fa-save"></i> Sauvegarder brouillon';
+            
+            return false;
         }
     }
 

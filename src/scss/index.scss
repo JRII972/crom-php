@@ -1,0 +1,122 @@
+@import './gridjs.scss';
+
+.group-btn {
+    @extend .group-btn;
+    .btn {
+        display: flex;
+        justify-items: center;
+    }
+}
+
+label.selected {
+    --btn-color: var(--color-primary);
+    --btn-fg: var(--color-primary-content);
+    isolation: isolate;
+    background-color: aqua;
+}
+
+.roll {
+  overflow: auto;
+  width: 100%;
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: calc(var(--spacing) * 4);
+
+  .roll-section, & > *{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    &:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      right: calc(var(--spacing) * -2 - 1px);
+      top: 10%;
+      height: 85%;
+      width: 3px; 
+      background-color: var(--color-accent, hsl(var(--b3)));
+      opacity: 1;
+      border-radius: 1.5px;
+    }
+
+    .roll-title{
+      display: inline-flex;   
+      flex-direction: column;
+
+      & > * {
+        width: min-content;
+        position: sticky;
+        white-space: nowrap;
+        left: 0;
+      }
+    }
+    .roll-content{
+      display: inline-flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+.dropdown {
+  // Feedback visuel pour les dropdowns avec sélections
+  &.dropdown-has-selection {
+    .dropdown-trigger, [role="button"] {
+      border-color: hsl(var(--p));
+      background-color: hsl(var(--p) / 0.1);
+      
+      span {
+        color: hsl(var(--p));
+        font-weight: 500;
+      }
+    }
+  }
+  
+  // Amélioration du style pour les éléments sélectionnés
+  .dropdown-content a {
+    transition: all 0.2s ease;
+    
+    &.active, &.selected, &[aria-selected="true"] {
+      color: hsl(var(--pc));
+      background-color: hsl(var(--p));
+      font-weight: 500;
+      
+      &::before {
+        content: "✓";
+        margin-right: 0.5rem;
+        opacity: 1;
+      }
+    }
+    
+    &:not(.active):not(.selected):not([aria-selected="true"]) {
+      &::before {
+        content: "";
+        margin-right: 1.125rem;
+        opacity: 0;
+      }
+    }
+    
+    &:hover {
+      background-color: hsl(var(--b3));
+      
+      &.active, &.selected, &[aria-selected="true"] {
+        background-color: hsl(var(--p) / 0.8);
+      }
+    }
+  }
+}
+
+// Style spécial pour les dropdowns multiples
+.dropdown.multiple {
+  .dropdown-content a {
+    &::before {
+      content: "☐";
+      margin-right: 0.5rem;
+    }
+    
+    &.active, &.selected, &[aria-selected="true"] {
+      &::before {
+        content: "✓";
+      }
+    }
+  }
+}

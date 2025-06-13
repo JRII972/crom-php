@@ -1,26 +1,6 @@
 import axiosInstance from '../axiosInstance';
 
 const utilisateurService = {
-  login: async (login, mot_de_passe, keep_logged_in = false) => {
-    const response = await axiosInstance.post('/utilisateurs/connexion', {
-      login,
-      mot_de_passe,
-      keep_logged_in,
-    });
-    return response.data.data;
-  },
-
-  inscription: async (userData) => {
-    const response = await axiosInstance.post('/utilisateurs/inscription', userData);
-    return response.data.data;
-  },
-
-  refreshToken: async (refreshToken) => {
-    const response = await axiosInstance.post('/utilisateurs/refresh', {
-      refresh_token: refreshToken,
-    });
-    return response.data.data;
-  },
 
   getUtilisateur: async (id) => {
     const response = await axiosInstance.get(`/utilisateurs/${id}`);
@@ -56,6 +36,7 @@ const utilisateurService = {
     const response = await axiosInstance.delete(`/utilisateurs/${userId}/creneaux/${creneauId}`);
     return response.data.data;
   },
+
 };
 
 export default utilisateurService;

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Database\Types;
 
-require_once __DIR__ ."/../../Utils/helpers.php";
-
 use DateTime;
 use InvalidArgumentException;
 use PDO;
@@ -115,16 +113,26 @@ class Session extends DefaultDatabaseType
      *
      * @param int $id Identifiant de la session
      * @throws PDOException Si la session n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    
+    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM sessions WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data === false) {
             throw new PDOException('Session non trouvée pour l\'ID : ' . $id);
-        }        $this->id = (int) $data['id'];
+        }
+
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
+        $this->id = (int) $data['id'];
         $this->idActivite = (int) $data['id_activite'];
         $this->idLieu = (int) $data['id_lieu'];
         $this->nom = $data['nom'] ?? 'Session'; // Valeur par défaut si colonne nom n'existe pas

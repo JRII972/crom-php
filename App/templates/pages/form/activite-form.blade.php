@@ -53,6 +53,4 @@
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<script type="module" src="./assets/js/activite-form.js"></script>
-@include('components.activite.scripts')
 @endsection

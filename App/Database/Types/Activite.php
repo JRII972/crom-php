@@ -10,7 +10,6 @@ use PDO;
 use DateTime;
 use PDOException;
 
-require_once __DIR__ . '/../../Utils/helpers.php';
 
 /**
  * Enumération pour le type de activite.
@@ -42,6 +41,7 @@ enum EtatActivite: string
     case Terminer = 'TERMINER';
     case Annuler = 'ANNULER';
     case Supprimer = 'SUPPRIMER';
+    case Brouillon = 'BROUILLON';
 }
 
 /**
@@ -81,15 +81,14 @@ class Activite extends DefaultDatabaseType
      * @param TypeCampagne|null $typeCampagne Type de campagne
      * @param string|null $descriptionCourte Description courte
      * @param string|null $description Description complète
-     * @param int|null $nombreMaxJoueurs Nombre maximum de joueurs
-     * @param int|null $maxJoueursSession Nombre maximum de joueurs par session
+     * @param int|null $nombreMaxJoueurs Nombre maximum de joueurs     * @param int|null $maxJoueursSession Nombre maximum de joueurs par session
      * @param Image|string|array|null $image Image de la activite
      * @param string|null $texteAltImage Texte alternatif de l'image
      * @param string|null $dateCreation Date de création (format Y-m-d H:i:s)
+     * @param EtatActivite|null $etat État de l'activité (optionnel, par défaut ACTIVE)
      * @throws InvalidArgumentException Si les paramètres sont incohérents
      * @throws PDOException Si la activite n'existe pas dans la base
-     */
-    public function __construct(
+     */public function __construct(
         ?int $id = null,
         ?string $nom = null,
         Jeu|int|null $jeuOuId = null,
@@ -102,7 +101,8 @@ class Activite extends DefaultDatabaseType
         ?int $maxJoueursSession = null,
         Image|string|array|null $image = null,
         ?string $texteAltImage = null,
-        ?string $dateCreation = null
+        ?string $dateCreation = null,
+        ?EtatActivite $etat = null
     ) {
         parent::__construct();
         $this->table = 'activites';
@@ -135,9 +135,11 @@ class Activite extends DefaultDatabaseType
             }
             if ($texteAltImage !== null) {
                 $this->setTexteAltImage($texteAltImage);
-            }
-            if ($maxJoueursSession !== null) {
+            }            if ($maxJoueursSession !== null) {
                 $this->setMaxJoueursSession($maxJoueursSession);
+            }
+            if ($etat !== null) {
+                $this->setEtat($etat);
             }
             $this->dateCreation = $dateCreation ?? date('Y-m-d H:i:s');
         } else {
@@ -153,16 +155,26 @@ class Activite extends DefaultDatabaseType
      *
      * @param int $id Identifiant de la activite
      * @throws PDOException Si la activite n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    
+    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM activites WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($data === false) {
             throw new PDOException('Activite non trouvée pour l\'ID : ' . $id);
-        }        $this->id = (int) $data['id'];
+        }
+
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
+        $this->id = (int) $data['id'];
         $this->nom = $data['nom'];
         $this->etat = EtatActivite::from($data['etat']);
         $this->idJeu = (int) $data['id_jeu'];
@@ -271,9 +283,7 @@ class Activite extends DefaultDatabaseType
         $this->invalidateCache();
 
         return true;
-    }
-
-    /**
+    }    /**
      * Recherche des activites avec filtres optionnels.
      *
      * @param PDO $pdo Instance PDO
@@ -283,6 +293,7 @@ class Activite extends DefaultDatabaseType
      * @param string $typeActivite Type de activite (optionnel, CAMPAGNE, ONESHOT, JEU_DE_SOCIETE, EVENEMENT)
      * @param array|null $categories Liste des catégories/genres pour filtrer (optionnel)
      * @param array|null $jours Liste des jours de la semaine pour filtrer les sessions associées (optionnel)
+     * @param string|array $etats État(s) de l'activité pour filtrer (optionnel, ACTIVE, FERMER, TERMINER, ANNULER, SUPPRIMER, BROUILLON)
      * @return array Liste des activites
      * @throws PDOException En cas d'erreur SQL
      */
@@ -293,10 +304,10 @@ class Activite extends DefaultDatabaseType
         string $idMaitreJeu = '', 
         string $typeActivite = '',
         ?array $categories = null,
-        ?array $jours = null
-    ): array {
-        // Générer une clé de cache unique basée sur les paramètres
-        $cacheKey = self::$cachePrefix . md5(serialize([$keyword, $idJeu, $idMaitreJeu, $typeActivite, $categories, $jours]));
+        ?array $jours = null,
+        string|array $etats = ''
+    ): array {        // Générer une clé de cache unique basée sur les paramètres
+        $cacheKey = self::$cachePrefix . md5(serialize([$keyword, $idJeu, $idMaitreJeu, $typeActivite, $categories, $jours, $etats]));
 
         // Vérifier le cache
         if (self::$cacheEnabled && extension_loaded('apcu')) {
@@ -336,8 +347,7 @@ class Activite extends DefaultDatabaseType
         if ($idMaitreJeu !== '') {
             $sql .= ' AND p.id_maitre_jeu = :id_maitre_jeu';
             $params['id_maitre_jeu'] = $idMaitreJeu;
-        }
-        if ($typeActivite !== '' && in_array($typeActivite, [
+        }        if ($typeActivite !== '' && in_array($typeActivite, [
             TypeActivite::Campagne->value,
             TypeActivite::Oneshot->value,
             TypeActivite::JeuDeSociete->value,
@@ -346,6 +356,40 @@ class Activite extends DefaultDatabaseType
             $sql .= ' AND p.type_activite = :type_activite';
             $params['type_activite'] = $typeActivite;
         }
+        
+        // Traitement du filtre par état
+        if ($etats !== '') {
+            
+            $etatsValides = [
+                EtatActivite::Active->value,
+                EtatActivite::Fermer->value,
+                EtatActivite::Terminer->value,
+                EtatActivite::Annuler->value,
+                EtatActivite::Supprimer->value,
+                EtatActivite::Brouillon->value
+            ];
+
+            if (is_array($etats)) {
+                // Cas où $etats est un tableau d'états
+                $etatsFiltre = array_filter($etats, fn($e) => in_array($e, $etatsValides, true));
+                if (!empty($etatsFiltre)) {
+                    $placeholders = [];
+                    foreach ($etatsFiltre as $key => $etat) {
+                        $paramName = 'etat_' . $key;
+                        $placeholders[] = ':' . $paramName;
+                        $params[$paramName] = $etat;
+                    }
+                    $sql .= ' AND p.etat IN (' . implode(', ', $placeholders) . ')';
+                }
+            } else {
+                // Cas où $etats est une chaîne unique
+                if (in_array($etats, $etatsValides, true)) {
+                    $sql .= ' AND p.etat = :etat';
+                    $params['etat'] = $etats;
+                }
+            }
+        }
+
         if ($keyword !== '') {
             $sql .= ' AND (p.nom LIKE :keyword OR p.description LIKE :keyword)';
             $params['keyword'] = '%' . $keyword . '%';
@@ -636,7 +680,7 @@ class Activite extends DefaultDatabaseType
         if ($nombreMaxJoueurs < 0) {
             throw new InvalidArgumentException('Le nombre maximum de joueurs ne peut pas être négatif.');
         }
-        if ($this->verrouille) {
+        if ($this->verrouille) { //FIXME: move this (verouillage session)
             throw new InvalidArgumentException('Impossible de modifier le nombre maximum de joueurs : la activite est verrouillée.');
         }
         if ($nombreMaxJoueurs > 0) {
@@ -646,18 +690,20 @@ class Activite extends DefaultDatabaseType
                     'Le nombre maximum de joueurs ne peut pas être inférieur au nombre de joueurs inscrits (' . $currentPlayers . ').'
                 );
             }
+        } else {
+            if ($this->getTypeCampagne() == TypeCampagne::Fermee) {
+                throw new InvalidArgumentException(
+                    'Le nombre maximum de joueurs ne peux pas être illimité'
+                );
+            }
         }
         $this->nombreMaxJoueurs = $nombreMaxJoueurs;
         return $this;
     }
 
     public function setMaxJoueursSession(int $maxJoueursSession): self
-    {
-        if ($maxJoueursSession < 0) {
-            throw new InvalidArgumentException('Le nombre maximum de joueurs ne peut pas être négatif.');
-        }
-        
-        if ($maxJoueursSession > 0) {
+    {        
+        if ($maxJoueursSession > 0 && $this->nombreMaxJoueurs > 0){
             if ($this->nombreMaxJoueurs < $maxJoueursSession) {
                 if ($this->getTypeCampagne() == TypeCampagne::Fermee) {
                     throw new InvalidArgumentException(

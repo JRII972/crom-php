@@ -30,7 +30,7 @@ public function show(?int $userId = null, ?string $activeTab = 'activites'): str
     // Détermination de l'utilisateur à afficher
     if (!$userId) {
         // Utilise l'utilisateur connecté par défaut
-        $userId = $_SESSION['user_id'] ?? 1;
+        $userId = $_SESSION['user_id'];
     }
     
     // Récupération des données utilisateur

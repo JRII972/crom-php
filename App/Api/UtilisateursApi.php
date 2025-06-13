@@ -16,6 +16,7 @@ use PDOException;
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use DateTime;
+use ScssPhp\ScssPhp\SassCallable\UserDefinedCallable;
 
 require_once __DIR__ . '/../Database/Types/Utilisateur.php';
 require_once __DIR__ . '/../Database/Types/CreneauxUtilisateur.php';
@@ -56,8 +57,20 @@ class UtilisateursApi extends APIHandler
             return $this->handleRefresh();
         }
 
+        if ($method === 'POST' && $id === 'deconnexion') {
+            return $this->handleLogout();
+        }
+
+        if ($method === 'GET' && $id === 'me') {
+            $this->requirePermission('UtilisateurApi', 'read');
+            return $this->handleMe();
+        }
+
         if ($method === 'GET' && $id === 'suggestions') {
             return $this->handleRefresh();
+        }
+        if ($method === 'GET' && $id === 'reconnect') {
+            return $this->handleReconnect();
         }
 
         // TODO: Ajoutez un endpoint /api/utilisateurs/deconnexion pour invalider les refresh tokens
@@ -170,7 +183,10 @@ class UtilisateursApi extends APIHandler
                 'sub' => $utilisateur->getId(),
                 'type_utilisateur' => $utilisateur->getTypeUtilisateur()->value
             ];
-            $jwt = JWT::encode($payload, 'votre_secret_jwt_ici', 'HS256');
+            $jwt = generateJwtToken($utilisateur->getId(), $utilisateur->getTypeUtilisateur()->value);
+            
+            // Définir le cookie JWT
+            setJwtCookie($jwt);
 
             return $this->sendResponse(201, 'success', [
                 'token' => $jwt,
@@ -183,6 +199,16 @@ class UtilisateursApi extends APIHandler
             return $this->sendResponse(500, 'error', null, 'Erreur lors de la création de l\'utilisateur: ' . $e->getMessage());
         } catch (InvalidArgumentException $e) {
             return $this->sendResponse(400, 'error', null, $e->getMessage());
+        }
+    }
+
+    private function handleReconnect()
+    {
+        try {
+            new Utilisateur($this->user['sub']);
+            return $this->sendResponse(200,'success', null,'');
+        } catch (\Exception $e) {
+            return $this->sendResponse(500,'', null, $e->getMessage());  
         }
     }
 
@@ -210,7 +236,10 @@ class UtilisateursApi extends APIHandler
                 'sub' => $utilisateur->getId(),
                 'type_utilisateur' => $utilisateur->getTypeUtilisateur()->value
             ];
-            $jwt = JWT::encode($payload, 'votre_secret_jwt_ici', 'HS256');
+            $jwt = generateJwtToken($utilisateur->getId(), $utilisateur->getTypeUtilisateur()->value);
+            
+            // Définir le cookie JWT
+            setJwtCookie($jwt);
 
             $response = [
                 'token' => $jwt,
@@ -236,7 +265,6 @@ class UtilisateursApi extends APIHandler
 
                 $response['refresh_token'] = $refreshToken;
             }
-            $_SESSION['user_id'] = $utilisateur->getId();
             return $this->sendResponse(200, 'success', $response, 'Connexion réussie');
         } catch (PDOException $e) {
             return $this->sendResponse(500, 'error', null, 'Erreur serveur: ' . $e->getMessage());
@@ -277,7 +305,10 @@ class UtilisateursApi extends APIHandler
                 'sub' => $utilisateur->getId(),
                 'type_utilisateur' => $utilisateur->getTypeUtilisateur()->value
             ];
-            $jwt = JWT::encode($payload, 'votre_secret_jwt_ici', 'HS256');
+            $jwt = generateJwtToken($utilisateur->getId(), $utilisateur->getTypeUtilisateur()->value);
+            
+            // Définir le cookie JWT
+            setJwtCookie($jwt);
 
             return $this->sendResponse(200, 'success', [
                 'token' => $jwt,
@@ -580,5 +611,47 @@ class UtilisateursApi extends APIHandler
         }
     }
 
-    
+    /**
+     * Gère la déconnexion d'un utilisateur.
+     *
+     * @return array Réponse JSON
+     */
+    private function handleLogout(): array
+    {
+        // Supprimer le cookie JWT
+        clearJwtCookie();
+        
+        // Optionnel: Invalider le refresh token si fourni
+        $data = json_decode(file_get_contents('php://input'), true);
+        if ($data && isset($data['refresh_token'])) {
+            try {
+                $stmt = $this->pdo->prepare('DELETE FROM refresh_tokens WHERE token = :token');
+                $stmt->execute(['token' => $data['refresh_token']]);
+            } catch (PDOException $e) {
+                // Ignorer les erreurs de suppression du refresh token
+                error_log('Erreur lors de la suppression du refresh token: ' . $e->getMessage());
+            }
+        }
+        
+        return $this->sendResponse(200, 'success', null, 'Déconnexion réussie');
+    }
+
+    /**
+     * Gère la récupération des informations de l'utilisateur connecté.
+     *
+     * @return array Réponse JSON
+     */
+    private function handleMe(): array
+    {
+        if (!$this->user) {
+            return $this->sendResponse(401, 'error', null, 'Utilisateur non authentifié');
+        }
+
+        try {
+            $utilisateur = new Utilisateur($this->user['sub']);
+            return $this->sendResponse(200, 'success', $utilisateur->private_jsonSerialize());
+        } catch (PDOException $e) {
+            return $this->sendResponse(404, 'error', null, 'Utilisateur non trouvé: ' . $e->getMessage());
+        }
+    }
 }

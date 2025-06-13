@@ -1,6 +1,8 @@
 <?php
+
+namespace App\Controllers;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
-require_once __DIR__ . '/BaseController.php';
 
 use App\Controllers\Class\SessionDisplay;
 use App\Controllers\Class\ActiviteDisplay;
@@ -14,7 +16,7 @@ class ActiviteController extends BaseController {
      * @return string Rendered HTML
      */
     
-    public function index(int $id) {
+    public function index(int $id): string {
         // Utiliser la méthode sécurisée de ActiviteDisplay
         $activite = ActiviteDisplay::createSafe($id);
         
@@ -34,7 +36,7 @@ class ActiviteController extends BaseController {
             'joueurs' => $activite->getJoueursInscrits(), // TODO: Récupérer les joueurs de cette activite
             'activeTab' => 'description',
 
-            'scripts' => [
+            'modules' => [
                 'activite-detail.js'
             ]
         ];
@@ -46,8 +48,12 @@ class ActiviteController extends BaseController {
 
     public function create()
     {
-        return $this->render('components.activite.form', [
+        return $this->render('pages.form.activite-form', [
             'title' => 'Créer une nouvelle activite',
+
+            'modules' => [
+                'activite-form.js'
+            ]
         ]);
     }
 
@@ -68,7 +74,8 @@ class ActiviteController extends BaseController {
             'title' => 'Modifier une activite',
             'activite' => $activite,
 
-            'scripts' => [
+            'modules' => [
+                'activite-form.js'
             ]
         ]);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Api;
 
 use App\Database\Types\Activite;
+use App\Database\Types\EtatActivite;
 use App\Database\Types\MembreActivite;
 use App\Database\Types\TypeActivite;
 use App\Database\Types\TypeCampagne;
@@ -41,11 +42,9 @@ class ActivitesApi extends APIHandler
                 $this->requirePermission('ActiviteApi', 'write');
                 return $this->handlePost();
             case 'PUT':
-                $this->requirePermission('ActiviteApi', 'write');
-                return $this->handlePut($id);
             case 'PATCH':
                 $this->requirePermission('ActiviteApi', 'write');
-                return $this->handlePatch($id);
+                return $this->handlePut($id);
             case 'DELETE':
                 $this->requirePermission('ActiviteApi', 'delete');
                 return $this->handleDelete($id);
@@ -108,6 +107,23 @@ class ActivitesApi extends APIHandler
                     $jours = [$queryParams['jours']];
                 }
             }
+            
+            // Récupération du paramètre 'etat' qui peut être une chaîne ou un tableau
+            $etats = '';
+            if (isset($queryParams['etat'])) {
+                // Si c'est une chaîne JSON, on la décode
+                if (is_string($queryParams['etat']) && $this->isJson($queryParams['etat'])) {
+                    $etats = json_decode($queryParams['etat'], true);
+                } 
+                // Si c'est une chaîne CSV, on la divise
+                else if (is_string($queryParams['etat']) && str_contains($queryParams['etat'], ',')) {
+                    $etats = array_map('trim', explode(',', $queryParams['etat']));
+                }
+                // Si c'est une valeur unique
+                else if (is_string($queryParams['etat'])) {
+                    $etats = $queryParams['etat'];
+                }
+            }
 
             $activites = Activite::search(
                 $this->pdo,
@@ -116,7 +132,8 @@ class ActivitesApi extends APIHandler
                 $maitreJeu,
                 $typeActivite,
                 $categories,
-                $jours
+                $jours,
+                $etats
             );
 
             // Filtrer par place_restante et verrouille
@@ -163,9 +180,13 @@ class ActivitesApi extends APIHandler
 
     private function handlePost(): array
     {
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data || !isset($data['id_jeu'], $data['id_maitre_jeu'], $data['type_activite'], $data['nom'])) {
-            return $this->sendResponse(400, 'error', null, 'id_jeu, id_maitre_jeu, type_activite et nom requis');
+        $data = array_merge(
+            json_decode(file_get_contents('php://input'), true) ?? [],
+            $_POST
+        );
+        
+        if (!$data || !isset($data['id_jeu'], $data['type_activite'], $data['nom'])) {
+            return $this->sendResponse(400, 'error', null, 'id_jeu, type_activite et nom requis');
         }
 
         try {
@@ -180,19 +201,28 @@ class ActivitesApi extends APIHandler
             }
 
             // Vérifier que l'utilisateur est le maître du jeu ou admin
-            if ($this->user['sub'] !== $data['id_maitre_jeu'] && $this->user['type_utilisateur'] !== 'ADMINISTRATEUR') {
-                return $this->sendResponse(403, 'error', null, 'Seul le maître du jeu ou un admin peut créer une activite');
-            }
+            // if ($this->user['sub'] !== $data['id_maitre_jeu'] && $this->user['type_utilisateur'] !== 'ADMINISTRATEUR') {
+            //     return $this->sendResponse(403, 'error', null, 'Seul le maître du jeu ou un admin peut créer une activite');
+            // }
 
             $image = isset($data['image']) ? $data['image'] : null;
             if ($image && !is_array($image) && !is_string($image)) {
                 return $this->sendResponse(400, 'error', null, 'Image invalide');
             }
+            
+            // Traitement de l'état
+            $etat = null;
+            if (isset($data['etat'])) {
+                $etat = EtatActivite::tryFrom($data['etat']);
+                if ($etat === null) {
+                    return $this->sendResponse(400, 'error', null, 'État d\'activité invalide');
+                }
+            }
 
             $activite = new Activite(
                 nom: trim($data['nom']),
                 jeuOuId: (int)$data['id_jeu'],
-                maitreJeuOuId: $data['id_maitre_jeu'], //$this->user['sub']
+                maitreJeuOuId: $this->user['sub'],
                 typeActivite: $typeActivite,
                 typeCampagne: $typeCampagne,
                 descriptionCourte: $data['description_courte'] ?? null,
@@ -200,7 +230,8 @@ class ActivitesApi extends APIHandler
                 nombreMaxJoueurs: isset($data['nombre_max_joueurs']) ? (int)$data['nombre_max_joueurs'] : 0,
                 maxJoueursSession: isset($data['max_joueurs_session']) ? (int)$data['max_joueurs_session'] : 5,
                 image: $image,
-                texteAltImage: $data['texte_alt_image'] ?? null
+                texteAltImage: $data['texte_alt_image'] ?? null,
+                etat: $etat
             );
             $activite->save();
 
@@ -231,68 +262,8 @@ class ActivitesApi extends APIHandler
             if (isset($data['id_jeu'])) {
                 $activite->setJeu((int)$data['id_jeu']);
             }
-            if (isset($data['id_maitre_jeu'])) {
-                $activite->setMaitreJeu($data['id_maitre_jeu']);
-            }
-            if (isset($data['type_activite'])) {
-                $typeActivite = TypeActivite::tryFrom($data['type_activite']);
-                if ($typeActivite === null) {
-                    return $this->sendResponse(400, 'error', null, 'Type de activite invalide');
-                }
-                $activite->setTypeActivite($typeActivite);
-            }
-            if (isset($data['type_campagne'])) {
-                $typeCampagne = TypeCampagne::tryFrom($data['type_campagne']);
-                $activite->setTypeCampagne($typeCampagne);
-            }
-            if (isset($data['description_courte'])) {
-                $activite->setDescriptionCourte($data['description_courte']);
-            }
-            if (isset($data['description'])) {
-                $activite->setDescription($data['description']);
-            }
-            if (isset($data['nombre_max_joueurs'])) {
-                $activite->setNombreMaxJoueurs((int)$data['nombre_max_joueurs']);
-            }
-            if (isset($data['max_joueurs_session'])) {
-                $activite->setMaxJoueursSession((int)$data['max_joueurs_session']);
-            }
-            if (isset($data['image'])) {
-                $activite->setImage($data['image']);
-            }
-            if (isset($data['texte_alt_image'])) {
-                $activite->setTexteAltImage($data['texte_alt_image']);
-            }
-
-            $activite->save();
-            return $this->sendResponse(200, 'success', $activite->jsonSerialize(), 'Activite mise à jour avec succès');
-        } catch (PDOException $e) {
-            return $this->sendResponse(404, 'error', null, 'Activite non trouvée: ' . $e->getMessage());
-        } catch (InvalidArgumentException $e) {
-            return $this->sendResponse(400, 'error', null, $e->getMessage());
-        }
-    }
-
-    private function handlePatch(?string $id): array
-    {
-        if ($id === null || !is_numeric($id)) {
-            return $this->sendResponse(400, 'error', null, 'ID de la activite requis');
-        }
-
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (!$data) {
-            return $this->sendResponse(400, 'error', null, 'Données requises');
-        }
-
-        try {
-            $activite = new Activite(id: (int)$id);
-            $this->verifyMasterOrAdmin($activite);
-
-            if (isset($data['nom'])) {
-                $activite->setNom(trim($data['nom']));
-            }
-            if (isset($data['id_jeu'])) {
-                $activite->setJeu((int)$data['id_jeu']);
+            if (isset($data['etat'])) {
+                $activite->setEtat($data['etat']);
             }
             if (isset($data['id_maitre_jeu'])) {
                 $activite->setMaitreJeu($data['id_maitre_jeu']);

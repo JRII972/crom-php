@@ -1,4 +1,4 @@
-<div id="tab-content-gestion-sessions" class="py-4 {{ $activeTab === 'sessions' ? '' : 'hidden' }}">
+<div id="tab-content-gestion-sessions" class="tab-content">
   <h3 class="text-lg font-bold mb-4">Liste des sessions</h3>
 
   <div class="overflow-x-auto">

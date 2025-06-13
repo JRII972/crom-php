@@ -1,4 +1,6 @@
 <?php
+
+use App\Controllers\ContactController;
 // Charger l'autoloader de Composer
 require_once __DIR__ . '/../app/controllers/ContactController.php';
 

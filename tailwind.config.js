@@ -2,12 +2,15 @@
 module.exports = {
     content: [
         './App/templates/**/*.blade.php', // Scanner les fichiers Blade
-        // './public/assets/js/**/*.js', // Scanner les fichiers JS
-        // './public/**/*.php', // Scanner les fichiers PHP
-        // './App/**/*.php', // Scanner les fichiers PHP de l'app
+        './public/assets/js/**/*.js', // Scanner les fichiers JS
+        './public/**/*.php', // Scanner les fichiers PHP
+        './App/**/*.php', // Scanner les fichiers PHP de l'app
     ],
     theme: {
         extend: {},
     },
     plugins: [require('daisyui')],
+    daisyui: {
+        themes: ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"],
+    },
 };

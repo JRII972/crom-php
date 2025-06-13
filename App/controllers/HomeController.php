@@ -1,5 +1,7 @@
 <?php // /app/controllers/HomeController.php
-// filepath: /var/www/html/App/controllers/HomeController.php
+
+namespace App\Controllers;
+
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/BaseController.php';
 
@@ -23,7 +25,7 @@ class HomeController extends BaseController {
         $data = [
             'page_title' => 'CROM | BDR',
             'suggestion' => [
-                'Fantaisie' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'fantasy'), serialize:false),
+                // 'Fantaisie' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'fantasy'), serialize:false),
                 'Enquête' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'Enquête'), serialize:false),
                 'Coopératif' => SessionDisplay::search($this->pdo, categories:Genre::search($this->pdo, 'Coopératif'), serialize:false)
             ],

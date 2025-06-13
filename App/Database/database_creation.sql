@@ -81,28 +81,14 @@ CREATE TABLE lieux (
   description      TEXT
 ) ENGINE=InnoDB;
 
--- === Événements de l'association ===
-CREATE TABLE evenements (
-  id                   INT AUTO_INCREMENT PRIMARY KEY,
-  nom                  VARCHAR(255) NOT NULL,
-  description          TEXT,
-  date_debut           DATE        NOT NULL,
-  date_fin             DATE        NOT NULL,
-  id_lieu              INT,
-  regle_recurrence     JSON,
-  exceptions           JSON,
-  date_creation        TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (id_lieu) REFERENCES lieux(id) ON DELETE SET NULL
-) ENGINE=InnoDB;
-
 -- === Activites proposées ===
 CREATE TABLE activites (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
-  etat                  ENUM('ACTIVE','FERMER','TERMINER','ANNULER', 'SUPPRIMER') NOT NULL DEFAULT 'ACTIVE',
+  etat                  ENUM('ACTIVE','FERMER','TERMINER','ANNULER', 'SUPPRIMER', 'BROUILLON') NOT NULL DEFAULT 'ACTIVE',
   id_jeu                INT         NOT NULL,
   id_maitre_jeu         VARCHAR(36) NOT NULL,
-  type_activite           ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') NOT NULL,
+  type_activite         ENUM('CAMPAGNE','ONESHOT','JEU_DE_SOCIETE','EVENEMENT') NOT NULL,
   type_campagne         ENUM('OUVERTE','FERMEE') DEFAULT NULL,
   description_courte    VARCHAR(255),
   description           TEXT,
@@ -130,7 +116,7 @@ CREATE TABLE sessions (
   id                    INT AUTO_INCREMENT PRIMARY KEY,
   nom                   VARCHAR(255) NOT NULL,
   etat                  ENUM('OUVERTE','FERMER', 'COMPLETE', 'ANNULER', 'SUPPRIMER') NOT NULL DEFAULT 'OUVERTE',
-  id_activite             INT         NOT NULL,
+  id_activite           INT         NOT NULL,
   id_lieu               INT         NOT NULL,
   date_session          DATE        NOT NULL,
   nombre_max_joueurs    INT         NOT NULL DEFAULT 5,
@@ -155,17 +141,36 @@ CREATE TABLE joueurs_session (
 -- === Horaires et récurrences de lieux ===
 CREATE TABLE horaires_lieu (
   id                   INT AUTO_INCREMENT PRIMARY KEY,
-  id_lieu              INT         NOT NULL,
-  heure_debut          TIME        NOT NULL,
-  heure_fin            TIME        NOT NULL,
-  type_recurrence      ENUM('AUCUNE','QUOTIDIENNE','HEBDOMADAIRE','MENSUELLE','ANNUELLE')
-                         NOT NULL DEFAULT 'AUCUNE',
+  id_lieu              INT NOT NULL,
+  num_jour             INT NULL,
+  heure_debut          TIME NOT NULL,
+  heure_fin            TIME NOT NULL,
+  date_debut           DATE NULL,
+  date_fin             DATE NULL,
+  exceptionnelle       BOOLEAN DEFAULT FALSE,
   regle_recurrence     JSON,
-  exceptions           JSON,
-  id_evenement         INT,
+  is_closed            BOOLEAN NOT NULL DEFAULT FALSE,
   FOREIGN KEY (id_lieu)      REFERENCES lieux(id)       ON DELETE CASCADE,
-  FOREIGN KEY (id_evenement) REFERENCES evenements(id)  ON DELETE SET NULL
-) ENGINE=InnoDB;
+
+  CONSTRAINT `chk_num_jour`
+    CHECK (
+      `num_jour` IS NULL
+      OR (`num_jour` >= 0 AND `num_jour` <= 6)
+    ),
+
+  CONSTRAINT `chk_dates`
+    CHECK (
+      (`date_debut` IS NULL
+      AND `date_fin` IS NULL)
+      OR `date_debut` <= `date_fin`
+    ),
+
+  CONSTRAINT `chk_heures`
+    CHECK (`heure_debut` < `heure_fin`)
+
+) ENGINE=InnoDB
+DEFAULT CHARSET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 -- === Disponibilités / Indisponibilités utilisateurs ===
 CREATE TABLE creneaux_utilisateur (

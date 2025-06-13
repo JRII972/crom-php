@@ -65,7 +65,20 @@
     </div>
     
     {{-- Notification de campagne complète --}}
-    @if ($activite->getVerrouille())    
+    @if ($activite->estMaitreJeu($currentUser))
+      <a class="btn btn-secondary w-full mt-2" href="./activite/edition?id={{ $activite->getId() }}">
+        <span class="material-symbols-outlined">edit_square</span>
+        Modifier l'activite
+      </a>
+      <button class="btn btn-secondary w-full mt-2" id="ajouter-session-btn"
+        onclick="document.getElementById('modal-ajouter-session').showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+          stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Ajouter une session
+      </button>
+    @elseif ($activite->getVerrouille())    
       <div class="alert alert-error mt-4 " id="campagne-complete-alert">
         <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Cette campagne n'est plus ouverte à l'inscription. Contacter le maître de jeu</span>
@@ -90,20 +103,7 @@
         <span>L'inscription à cette campagne est requise pour participer aux sessions.</span>
       </div> 
     @endif
-
-    @if ($activite->estMaitreJeu($currentUser))
-    <a class="alert alert-secondary mt-4 hidden" href="./activite/edit?id={{ $activite->getId() }}">
-      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-      <span>Modifier</span>
-    </a> 
-    <button class="btn btn-secondary w-full mt-2" id="ajouter-session-btn"
-      onclick="document.getElementById('modal-ajouter-session').showModal()">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-        stroke="currentColor" class="w-5 h-5">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-      </svg>
-      Ajouter une session
-    </button>
-    @endif
+    
+    
   </div>
 </div>

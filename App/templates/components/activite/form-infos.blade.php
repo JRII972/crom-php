@@ -43,15 +43,14 @@
                     <option value="EVENEMENT">Événement</option>
                 </select>
             </div>
-            <div class="form-control" id="type-campagne-container" style="display: none;">
+            <div class="form-control flex md:flex-col" id="type-campagne-container" >
                 <label class="label">
                     <span class="label-text font-semibold">Type de campagne</span>
                 </label>
-                <select id="type_campagne" name="type_campagne" class="select select-bordered">
-                    <option value="">Sélectionnez un type</option>
-                    <option value="OUVERTE">Ouverte</option>
-                    <option value="FERMEE">Fermée</option>
-                </select>
+                <div class="join">
+                    <input name="type_campagne" id="type_campagne_ouverte" class="join-item btn btn-sm" type="radio" value="OUVERTE" aria-label="Ouverte" />
+                    <input name="type_campagne" id="type_campagne_fermee" class="join-item btn btn-sm" type="radio" value="FERMEE" aria-label="Fermée" checked="checked" />
+                </div>
             </div>
         </div>
         {{-- Description courte --}}

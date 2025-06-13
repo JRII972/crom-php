@@ -99,9 +99,11 @@ class Lieu extends DefaultDatabaseType
      *
      * @param int $id Identifiant du lieu
      * @throws PDOException Si le lieu n'existe pas
-     */
-    private function loadFromDatabase(int $id): void
+     */    private function loadFromDatabase(int|null $id): void
     {
+        if ($id === null) {
+            $id = $this->id;
+        }
         $stmt = $this->pdo->prepare('SELECT * FROM lieux WHERE id = :id');
         $stmt->execute(['id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -110,6 +112,11 @@ class Lieu extends DefaultDatabaseType
             throw new PDOException('Lieu non trouvé pour l\'ID : ' . $id);
         }
 
+        $this->updateFromDatabaseData($data);
+    }
+
+    private function updateFromDatabaseData(array $data): void
+    {
         $this->id = (int) $data['id'];
         $this->nom = $data['nom'];
         $this->short_nom = $data['short_nom'] ?? $this->generateShortNom();

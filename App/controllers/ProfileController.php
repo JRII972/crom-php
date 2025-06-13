@@ -1,6 +1,7 @@
 <?php
 // Contrôleur pour la page de profil utilisateur
-// filepath: /var/www/html/App/controllers/ProfileController.php
+
+namespace App\Controllers;
 
 require_once __DIR__ . '/BaseController.php';
 use Carbon\Carbon;
@@ -18,7 +19,12 @@ class ProfileController extends BaseController {
         // Si l'utilisateur n'est pas spécifié, utiliser l'utilisateur connecté
         if (!$userId) {
             // Logique pour obtenir l'utilisateur connecté (à adapter selon l'authentification)
-            $userId = $_SESSION['user_id'] ?? 1; // Exemple, à remplacer par la logique d'authentification réelle
+            $userId = $_SESSION['user_id'];
+            if (!$userId) {
+                $redirectUrl = '/login?redirect=' . urlencode($_SERVER['REQUEST_URI'] ?? '/');
+                header('Location: ' . $redirectUrl);
+                exit;
+            }
         }
         
         // Récupérer les données de l'utilisateur (simulé pour l'exemple)
