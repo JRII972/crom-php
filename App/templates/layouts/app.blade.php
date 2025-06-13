@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $page_title ?? 'Mon Application' }}</title>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    @if(isset($styles) && is_array($styles))
+    @foreach($styles as $style)        
+    <link rel="stylesheet" href="{{ $baseURL }}/assets/css/{{ $style }}">
+    @endforeach
+    @endif
+@endif
 </head>
 <body>
     <header>

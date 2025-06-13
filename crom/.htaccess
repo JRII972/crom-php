@@ -1,0 +1,44 @@
+SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0
+
+RewriteEngine On
+RewriteBase /crom/
+
+# Ne traiter que les fichiers qui existent dans /public/, pas à la racine
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_URI} ^/crom/public/
+RewriteRule ^.*$ - [L]
+
+# Redirection spéciale pour la racine
+RewriteRule ^/?$ public/index.php [L]
+
+# Redirection spéciale pour l'API (ajouter avant les autres règles)
+RewriteRule ^api(/.*)?$ public/api/index.php [L]
+
+# 1. Essayer d'abord le fichier exact dans /public (pour gérer les sous-dossiers)
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1 -f
+RewriteRule ^(.+)$ public/$1 [L]
+
+# 2. Essayer un fichier PHP dans /public
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1.php -f
+RewriteRule ^(.+)$ public/$1.php [L]
+
+# 3. Essayer un fichier JS dans /public (pour les fichiers sans extension)
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1.js -f
+RewriteRule ^(.+)$ public/$1.js [L]
+
+# 4. Essayer un fichier CSS dans /public (pour les fichiers sans extension)
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1.css -f
+RewriteRule ^(.+)$ public/$1.css [L]
+
+# 4. Essayer un index.php dans le dossier
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1/index.php -f
+RewriteRule ^(.+)$ public/$1/index.php [L]
+
+# 5. Essayer un index.html dans le dossier
+RewriteCond %{DOCUMENT_ROOT}/crom/public/$1/index.html -f
+RewriteRule ^(.+)$ public/$1/index.html [L]
+
+# 6. Par défaut, rediriger vers /public/index.php
+RewriteRule ^.*$ /crom/public/index.php [L]
+
+RewriteRule ^.*$ public/index.php [L]

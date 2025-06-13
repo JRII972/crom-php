@@ -16,6 +16,7 @@ use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use PDO;
 use PDOException;
 
@@ -28,6 +29,10 @@ class BaseController
     private string $cachePath = __DIR__ . '/../cache';
     protected array $breadcrumbs;
 
+    private array $scripts = [];
+    private array $modules = [];
+    private array $styles = [];
+
     public function __construct()
     {
         Carbon::setLocale('fr');
@@ -35,6 +40,11 @@ class BaseController
         $this->breadcrumbs = [];
         $this->pdo = Database::getConnection();
         $this->setupBlade();
+
+        $this->addScript("utils.js");
+        $this->addModules("api/axiosInstance.js");
+        $this->addModules("main.js");
+        $this->addStyle("styles.css");
     }
 
     /**
@@ -111,13 +121,11 @@ class BaseController
             'currentYear' => date('Y'),
             'currentUser' => $currentUser,
             // Liste des scripts JavaScript par défaut
-            'scripts' => [
-                'utils.js',
-            ],
-            'modules' => [
-                'main.js',
-                'api/axiosInstance.js'
-            ]
+            'scripts' => $this->scripts,
+            'modules' => $this->modules,
+            'styles' => $this->styles,
+
+            'baseURL' => ''
         ];
 
         if (isset($data['scripts']) && is_array($data['scripts'])) {
@@ -186,5 +194,15 @@ class BaseController
      */
     protected function getBreadcrumbs(): array {
         return $this->breadcrumbs;
+    }
+
+    public function addStyle(string $style): void {
+        $this->styles[] = $style;
+    }
+    public function addScript(string $script): void {
+        $this->scripts[] = $script;
+    }
+    public function addModules(string $module): void {
+        $this->modules[] = $module;
     }
 }

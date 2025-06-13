@@ -11,7 +11,7 @@
 
 @if(isset($modules) && is_array($modules))
     @foreach($modules as $module)
-        <script type="module" src="/assets/js/{{ $module }}"></script>
+        <script type="module" src="{{ $baseURL }}/assets/js/{{ $module }}"></script>
     @endforeach
 @endif
 

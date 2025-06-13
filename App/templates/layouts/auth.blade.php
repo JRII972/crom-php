@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ $pageTitle ?? 'LBDR' }} - LBDR</title>
-  <link rel="stylesheet" crossorigin href="/assets/css/styles.css">
+  @if(isset($styles) && is_array($styles))
+    @foreach($styles as $style)        
+    <link rel="stylesheet" href="{{ $baseURL }}/assets/css/{{ $style }}">
+    @endforeach
+    @endif
   <style>
     @font-face {
       font-family: 'Ravenholm-Bold';
@@ -16,7 +20,6 @@
       font-family: 'Ravenholm-Bold', sans-serif;
     }
   </style>
-  <script src="assets/js/main.js"></script>
 </head>
 <body class="bg-base-200">
   <div class="min-h-screen flex items-center justify-center px-4">
